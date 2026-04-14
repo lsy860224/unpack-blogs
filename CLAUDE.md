@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # CLAUDE.md — AIGrit
 
 ## 프로젝트 개요

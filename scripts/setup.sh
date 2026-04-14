@@ -31,7 +31,9 @@ if [ ! -f "package.json" ]; then
     --src-dir \
     --eslint \
     --import-alias "@/*" \
-    --no-git
+    --turbopack \
+    --no-git \
+    --yes
   echo "✅ Next.js 프로젝트 생성 완료"
 else
   echo "✅ package.json 이미 존재 — 프로젝트 생성 스킵"
