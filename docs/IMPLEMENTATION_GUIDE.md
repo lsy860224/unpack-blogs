@@ -1,277 +1,324 @@
-# IMPLEMENTATION_GUIDE.md — 단계별 구현 가이드
+# 구현 가이드: unpack-blogs 모노레포 리팩터링
 
-> 각 Phase의 프롬프트를 Claude Code에 순서대로 입력하세요.
-> 예상 총 소요: 5~6일 (하루 2~3시간 기준)
+> 예상 소요: 2~3일
+> 전제: AIGrit 프로젝트가 이미 초기 셋업된 상태
+> 각 단계의 프롬프트를 Claude Code에 순서대로 입력하세요.
 
 ---
 
-## Phase 0: 프로젝트 초기화 (Day 1 전반)
+## Phase 0: 모노레포 전환 (Day 1 전반)
 
-### 0-1. setup.sh 실행
+### 0-1. Turborepo + pnpm 워크스페이스 초기화
 
+Claude Code 프롬프트:
+```
+현재 AIGrit 프로젝트를 Turborepo 모노레포로 리팩터링해줘.
+
+지금 상태: 단일 Next.js 프로젝트 (aigrit/)
+목표 상태: Turborepo 모노레포 (unpack-blogs/)
+
+순서:
+1. 루트에 pnpm-workspace.yaml 생성
+   - packages: ["packages/*", "apps/*"]
+
+2. 루트 package.json 생성
+   - name: "unpack-blogs"
+   - scripts: dev/build/lint을 turbo로 래핑
+   - devDependencies: turbo
+
+3. turbo.json 생성
+   - build: dependsOn ["^build"]
+   - dev: cache false, persistent true
+   - lint: {}
+
+4. 기존 AIGrit 코드를 apps/aigrit/로 이동
+   - package.json의 name을 "@unpack/aigrit"로 변경
+
+5. apps/babipanote/ 디렉토리 생성 (빈 Next.js 앱)
+   - apps/aigrit를 복사하되 content/posts/는 비우기
+   - package.json name을 "@unpack/babipanote"로 변경
+
+6. packages/blog-core/ 디렉토리 생성
+   - package.json name: "@unpack/blog-core"
+   - tsconfig.json 설정
+
+모든 경로 참조와 import가 정상 동작하는지 확인.
+```
+
+### 0-2. 공유 코드 추출 (blog-core)
+
+Claude Code 프롬프트:
+```
+apps/aigrit/에서 재사용 가능한 코드를 packages/blog-core/로 추출해줘.
+
+추출 대상:
+1. lib/mdx.ts → packages/blog-core/lib/mdx.ts
+2. lib/posts.ts → packages/blog-core/lib/posts.ts
+3. lib/seo.ts → packages/blog-core/lib/seo.ts
+4. types/post.ts → packages/blog-core/types/post.ts
+5. components/blog/* → packages/blog-core/components/blog/
+   (PostCard, PostHeader, TableOfContents, RelatedPosts, Comments)
+6. components/mdx/* → packages/blog-core/components/mdx/
+   (Callout, CompareTable, ProCon, AffiliateLink)
+7. components/ads/* → packages/blog-core/components/ads/
+   (AdBanner, AdInArticle)
+8. hooks/* → packages/blog-core/hooks/
+
+packages/blog-core/index.ts에서 모든 export를 barrel export.
+
+apps/aigrit/의 import를 "@unpack/blog-core"로 전부 변경.
+apps/babipanote/에서도 동일하게 "@unpack/blog-core"에서 import.
+
+빌드 확인: turbo run build
+```
+
+---
+
+## Phase 1: 브랜드 분리 시스템 (Day 1 후반)
+
+### 1-1. brand.config.ts 타입 정의
+
+Claude Code 프롬프트:
+```
+packages/blog-core/types/brand.ts에 BrandConfig 타입을 정의해줘:
+
+export interface BrandConfig {
+  // 사이트 기본
+  name: string;              // "AIGrit" | "babipanote"
+  tagline: string;           // 한 줄 설명
+  description: string;       // SEO용 설명 (150자)
+  url: string;               // "https://aigrit.dev"
+  locale: string;            // "ko-KR"
+
+  // 네비게이션
+  nav: { label: string; href: string }[];
+
+  // 소셜 링크
+  social: {
+    github?: string;
+    x?: string;
+    instagram?: string;
+  };
+
+  // 테마
+  theme: {
+    primary: string;          // HEX
+    secondary: string;        // HEX
+    accent: string;           // HEX
+    fontHeading: string;      // "Pretendard"
+    fontBody: string;         // "Pretendard"
+    fontCode: string;         // "JetBrains Mono"
+  };
+
+  // 수익화
+  monetization: {
+    adsense: boolean;
+    affiliateLinks: boolean;
+  };
+
+  // 레이아웃
+  layout: {
+    style: "category" | "timeline";  // 홈 레이아웃
+    showSidebar: boolean;
+    postsPerPage: number;
+  };
+
+  // GA/Giscus
+  analytics: {
+    gaId?: string;
+  };
+  comments: {
+    giscusRepo?: string;
+    giscusRepoId?: string;
+    giscusCategory?: string;
+  };
+}
+```
+
+### 1-2. 사이트별 brand.config.ts 생성
+
+Claude Code 프롬프트:
+```
+두 사이트의 brand.config.ts를 생성해줘.
+
+apps/aigrit/brand.config.ts:
+- name: "AIGrit"
+- tagline: "AI 도구, 직접 쓰고 솔직하게 씁니다"
+- url: "https://aigrit.dev"
+- nav: Home, Blog, About, Disclaimer
+- theme.primary: "#6366F1" (Indigo)
+- theme.secondary: "#10B981" (Emerald)
+- theme.accent: "#F59E0B" (Amber)
+- monetization: adsense true, affiliateLinks true
+- layout.style: "category"
+- layout.showSidebar: true
+
+apps/babipanote/brand.config.ts:
+- name: "babipanote"
+- tagline: "만드는 과정을 기록합니다"
+- url: "https://babipanote.com"
+- nav: Home, Blog, Projects, About
+- theme.primary: "#8B5CF6" (Violet)
+- theme.secondary: "#F97316" (Orange)
+- theme.accent: "#06B6D4" (Cyan)
+- monetization: adsense false, affiliateLinks false
+- layout.style: "timeline"
+- layout.showSidebar: false
+
+BrandConfig 타입을 import해서 타입 안전하게 작성.
+```
+
+### 1-3. BrandProvider 컨텍스트 생성
+
+Claude Code 프롬프트:
+```
+packages/blog-core/에 BrandProvider를 만들어줘.
+
+1. contexts/brand-context.tsx
+   - React Context로 BrandConfig를 앱 전체에 주입
+   - useBrand() 훅으로 어디서든 접근
+
+2. 기존 blog-core 컴포넌트들을 수정:
+   - 하드코딩된 사이트명 → useBrand().name
+   - 하드코딩된 색상 → CSS 변수 또는 useBrand().theme
+   - AdBanner/AdInArticle → useBrand().monetization.adsense로 on/off
+   - AffiliateLink → useBrand().monetization.affiliateLinks로 on/off
+
+3. 각 앱의 layout.tsx에서 BrandProvider로 감싸기:
+   - import { brandConfig } from "@/brand.config"
+   - <BrandProvider config={brandConfig}>
+
+4. Tailwind에서 CSS 변수 기반 색상 사용:
+   - tailwind.config.ts에 extend.colors에 brand-primary 등 추가
+   - BrandProvider가 :root에 --brand-primary 등 CSS 변수 설정
+```
+
+---
+
+## Phase 2: babipanote 사이트 구현 (Day 2)
+
+### 2-1. babipanote 레이아웃
+
+Claude Code 프롬프트:
+```
+apps/babipanote/의 레이아웃을 빌더 저널 스타일로 만들어줘.
+
+AIGrit과 다른 점:
+1. 홈 페이지: 타임라인형 (날짜순 스크롤, 사이드바 없음)
+2. Header: 미니멀 (로고 + 네비게이션만, 검색 없음)
+3. Footer: 소셜 링크 + "AIGrit" / "GentleLab" 프로젝트 링크
+4. /projects 페이지 추가:
+   - AIGrit 블로그 카드 (링크: aigrit.dev)
+   - GentleLab 앱 시리즈 카드 (GentleDo, GentleFast, GentleStudy)
+   - 각 프로젝트 상태 뱃지 (개발중/운영중)
+
+폰트: Pretendard (한글) + Inter (영문) + JetBrains Mono (코드)
+babipanote는 광고 없음 — AdBanner/AdInArticle 비활성.
+```
+
+### 2-2. babipanote 첫 글
+
+Claude Code 프롬프트:
+```
+apps/babipanote/content/posts/에 첫 글을 생성해줘.
+
+파일: hello-world.mdx
+
+frontmatter:
+  title: "빌더 저널을 시작합니다"
+  date: "2026-04-14"
+  slug: "hello-world"
+  description: "1인 개발자 바비파가 AIGrit 블로그와 GentleLab 앱을 만들어가는 과정을 기록합니다."
+  tags: ["빌더저널", "시작"]
+  thumbnail: "/images/hello-world.png"
+  category: "저널"
+
+내용 (200자 내외 placeholder):
+- 자기소개 (바비파, 1인 개발자, 가족)
+- 왜 빌더 저널을 시작하는지
+- AIGrit: AI 도구 리뷰 블로그 (aigrit.dev)
+- GentleLab: 가족용 앱 시리즈
+- 앞으로 공유할 내용 (수익 공개, 개발 과정, 실패담)
+```
+
+---
+
+## Phase 3: 배포 설정 (Day 2~3)
+
+### 3-1. Vercel 프로젝트 설정
+
+Claude Code 프롬프트:
+```
+Vercel 배포를 위한 설정을 정리해줘.
+
+1. .github/workflows/ci.yml 생성:
+   - push/PR 시 turbo run lint && turbo run build
+   - pnpm 캐시 사용
+
+2. apps/aigrit/vercel.json (필요 시):
+   - headers, redirects 등
+
+3. apps/babipanote/vercel.json (필요 시):
+   - headers, redirects 등
+
+4. 루트 .gitignore 업데이트:
+   - node_modules, .next, .turbo, .env.local, dist
+
+Vercel에서 수동 설정할 것 (Claude Code 외부):
+- 모노레포 → 프로젝트 2개 생성
+- AIGrit: Root Directory = apps/aigrit
+- babipanote: Root Directory = apps/babipanote
+- 각 프로젝트에 환경변수 설정
+- 각 프로젝트에 도메인 연결
+```
+
+### 3-2. 최종 빌드 확인
+
+Claude Code 프롬프트:
+```
+배포 전 전체 점검을 해줘:
+
+1. pnpm install — 의존성 정상 설치
+2. turbo run build — 양쪽 사이트 빌드 성공
+3. turbo run lint — lint 에러 없음
+4. blog-core에서 양쪽 앱으로의 import 정상 확인
+5. 각 앱의 brand.config.ts 반영 확인
+   - aigrit: 카테고리 레이아웃 + 광고 활성
+   - babipanote: 타임라인 레이아웃 + 광고 비활성
+6. MDX 글 렌더링 정상 확인 (양쪽 각 1개 이상)
+7. .env.example 업데이트 (양쪽 환경변수 모두 포함)
+8. console.log 정리
+9. CLAUDE.md와 실제 구조 일치 여부 확인
+```
+
+---
+
+## 리팩터링 후 워크플로우
+
+### 글 추가
 ```bash
-chmod +x scripts/setup.sh && ./scripts/setup.sh
+# AIGrit에 글 추가
+apps/aigrit/content/posts/새-글.mdx 생성
+git add . && git commit -m "post(aigrit): 글 제목" && git push
+
+# babipanote에 글 추가
+apps/babipanote/content/posts/새-글.mdx 생성
+git add . && git commit -m "post(babipanote): 글 제목" && git push
 ```
 
-### 0-2. 기본 설정 파일 확인
-
-Claude Code 프롬프트:
-```
-CLAUDE.md를 읽고, docs/SETUP.md를 참조해서 다음을 확인/수정해줘:
-
-1. tailwind.config.ts — 브랜드 컬러 + 폰트 + typography 플러그인 적용
-2. tsconfig.json — strict mode, path alias (@/*)
-3. .eslintrc.json — Next.js 기본 + import 순서 규칙
-4. next.config.ts — MDX, 이미지 도메인 설정
-5. .gitignore — .env.local, .next/, node_modules/
-
-docs/SETUP.md에 있는 Tailwind Config 코드를 그대로 적용해.
+### 공유 컴포넌트 수정
+```bash
+# blog-core 수정 → 양쪽 사이트 모두 재배포
+packages/blog-core/components/... 수정
+turbo run build  # 양쪽 빌드 확인 후 push
 ```
 
----
+### 새 MDX 컴포넌트 추가
+```bash
+# 1. blog-core에 컴포넌트 생성
+packages/blog-core/components/mdx/NewComponent.tsx
 
-## Phase 1: 블로그 엔진 (Day 1 후반 ~ Day 2)
+# 2. blog-core/index.ts에 export 추가
 
-### 1-1. 타입 + 유틸리티
-
-Claude Code 프롬프트:
+# 3. 양쪽 앱의 MDX 설정에 컴포넌트 등록
 ```
-CLAUDE.md를 읽고, docs/MDX_ENGINE.md를 참조해서 다음을 구현해줘:
-
-1. src/types/post.ts — PostMeta, PostData 타입 정의
-2. src/lib/posts.ts — getAllPosts, getPostBySlug, getAllSlugs, getPostsByTag, getRelatedPosts, getAllTags 함수
-3. src/lib/mdx.ts — compileMDX 함수 (next-mdx-remote + rehype 플러그인 체인)
-4. src/lib/seo.ts — generateSiteMetadata, generatePostMetadata, SITE_CONFIG
-
-docs/MDX_ENGINE.md의 타입과 함수 시그니처를 정확히 따라줘.
-gray-matter로 frontmatter 파싱, reading-time으로 읽기 시간 계산.
-```
-
-### 1-2. 레이아웃 + 홈
-
-Claude Code 프롬프트:
-```
-docs/COMPONENTS.md를 참조해서 다음을 구현해줘:
-
-1. src/app/layout.tsx — 루트 레이아웃
-   - Pretendard + Inter + JetBrains Mono 폰트 로드
-   - 브랜드 메타데이터 (lib/seo.ts 사용)
-   - GA4 스크립트 (환경변수 조건부)
-   - AdSense 스크립트 (환경변수 조건부)
-   - ThemeProvider (next-themes)
-   - Header + Footer
-
-2. src/components/layout/Header.tsx — 스펙 참조
-3. src/components/layout/Footer.tsx — 스펙 참조
-4. src/components/layout/ThemeToggle.tsx — 다크/라이트 전환
-
-5. src/app/page.tsx — 홈 페이지
-   - 히어로 섹션: AIGrit 소개 + UVP
-   - Featured 글 목록 (PostCard featured variant)
-   - 최신 글 목록
-```
-
-### 1-3. 블로그 목록 + 개별 글 페이지
-
-Claude Code 프롬프트:
-```
-docs/MDX_ENGINE.md와 docs/COMPONENTS.md를 참조해서 다음을 구현해줘:
-
-1. src/components/blog/PostCard.tsx — default + featured variant
-2. src/components/blog/PostList.tsx — PostCard 목록 래퍼
-3. src/components/blog/PostHeader.tsx — 글 상단 (태그, 제목, 메타)
-4. src/components/blog/TableOfContents.tsx — H2/H3 기반 목차 (Intersection Observer)
-5. src/components/blog/TagList.tsx — 태그 필터 UI
-
-6. src/app/blog/page.tsx — 전체 글 목록 페이지
-   - 태그 필터링
-   - PostCard 그리드
-
-7. src/app/blog/[slug]/page.tsx — 개별 글 페이지
-   - generateStaticParams로 SSG
-   - generateMetadata로 글별 SEO
-   - MDX 렌더링 (커스텀 컴포넌트 매핑)
-   - TableOfContents (사이드바)
-   - RelatedPosts (하단)
-```
-
-### 1-4. 샘플 글 + 사이트맵
-
-Claude Code 프롬프트:
-```
-다음을 생성해줘:
-
-1. content/posts/hello-world.mdx — 샘플 글
-   frontmatter:
-   - title: "AIGrit 첫 번째 글 — 이 블로그는 무엇인가"
-   - date: "2026-04-15"
-   - slug: "hello-world"
-   - description: "AIGrit 블로그를 시작합니다. AI 도구를 직접 써보고 솔직하게 비교하는 공간입니다."
-   - tags: ["AIGrit", "소개"]
-   - thumbnail: "/images/hello-world/thumbnail.png"
-   - featured: true
-
-2. src/app/sitemap.ts — 자동 사이트맵 (docs/SEO_MONETIZATION.md 참조)
-3. src/app/robots.ts — robots.txt
-
-빌드 확인: npm run build
-```
-
----
-
-## Phase 2: MDX 커스텀 컴포넌트 (Day 3)
-
-### 2-1. MDX 컴포넌트
-
-Claude Code 프롬프트:
-```
-docs/COMPONENTS.md의 mdx/ 섹션을 참조해서 다음을 구현해줘:
-
-1. src/components/mdx/AffiliateLink.tsx
-   - 카드형 CTA 박스
-   - rel="nofollow sponsored" 자동 적용
-   - 클릭 시 GA4 이벤트 (affiliate_click)
-   - "제휴 링크" 라벨 표시
-
-2. src/components/mdx/CompareTable.tsx
-   - 비교표 (boolean → ✅/❌ 아이콘)
-   - 추천 칼럼 하이라이트
-   - 모바일 가로 스크롤
-
-3. src/components/mdx/Callout.tsx
-   - info/warning/tip/danger 4종류
-   - 좌측 컬러 바 + 아이콘
-
-4. src/components/mdx/ProCon.tsx
-   - 2열: 장점(Emerald) / 단점(Red)
-   - 모바일 1열 스택
-
-5. src/lib/mdx.ts의 components 매핑에 위 4개 추가
-
-hello-world.mdx에 각 컴포넌트 사용 예시를 추가해서 테스트.
-```
-
----
-
-## Phase 3: SEO + 수익화 (Day 4)
-
-### 3-1. 광고 + 분석
-
-Claude Code 프롬프트:
-```
-docs/SEO_MONETIZATION.md를 참조해서 다음을 구현해줘:
-
-1. src/components/ads/AdBanner.tsx — 애드센스 배너
-   - 개발 환경: placeholder 박스 표시
-   - 프로덕션: 실제 광고 로드
-
-2. src/components/ads/AdInArticle.tsx — 인아티클 광고
-
-3. src/components/layout/Analytics.tsx — GA4 스크립트 컴포넌트
-   - @vercel/analytics, @vercel/speed-insights 연결
-
-4. 구조화 데이터 (JSON-LD)
-   - Article 스키마 (글 페이지에 자동 삽입)
-   - WebSite 스키마 (루트 레이아웃)
-```
-
-### 3-2. 필수 페이지
-
-Claude Code 프롬프트:
-```
-docs/SEO_MONETIZATION.md의 필수 페이지 섹션을 참조해서:
-
-1. src/app/about/page.tsx — About 페이지
-   - AIGrit 소개, 저자 소개
-   - 블로그 방법론 ("직접 써보고 리뷰")
-   - E-E-A-T에 유리한 콘텐츠
-
-2. src/app/privacy/page.tsx — 개인정보처리방침
-   - GA4, AdSense, Giscus 데이터 수집 고지
-   - 쿠키 정책
-
-3. src/app/disclaimer/page.tsx — 면책 고지
-   - 제휴 마케팅 고지
-   - 리뷰 독립성 선언
-
-각 페이지에 적절한 SEO 메타데이터 포함.
-```
-
----
-
-## Phase 4: 마무리 (Day 5~6)
-
-### 4-1. 댓글 + 관련 글
-
-Claude Code 프롬프트:
-```
-docs/COMPONENTS.md를 참조해서:
-
-1. src/components/blog/Comments.tsx — Giscus 댓글
-   - 다크모드 자동 감지
-   - lazy loading
-
-2. src/components/blog/RelatedPosts.tsx — 관련 글 3개
-   - 같은 태그 기반 추천
-
-3. app/blog/[slug]/page.tsx에 Comments + RelatedPosts 추가
-```
-
-### 4-2. 다크모드 + 반응형 점검
-
-Claude Code 프롬프트:
-```
-전체 페이지의 다크모드 + 반응형을 점검해줘:
-
-1. next-themes 설정이 정상 작동하는지 확인
-2. 모든 컴포넌트에 dark: 프리픽스 적용 여부 확인
-3. 모바일(sm), 태블릿(md), 데스크탑(lg) 레이아웃 확인
-4. Header 모바일 메뉴 동작 확인
-5. 이미지 lazy loading + Next.js Image 최적화 확인
-```
-
-### 4-3. /publish-post 커맨드 설치
-
-Claude Code 프롬프트:
-```
-docs/PUBLISH_WORKFLOW.md를 참조해서 .claude/commands/publish-post.md 파일을 생성해줘.
-
-이 파일은 Claude Code에서 /publish-post 슬래시 커맨드로 사용된다.
-PUBLISH_WORKFLOW.md의 마커 변환 규칙, 처리 순서, 결과 출력 형식을 정확히 따라줘.
-```
-
-### 4-4. 배포 전 체크 + 첫 배포
-
-Claude Code 프롬프트:
-```
-docs/DEPLOYMENT.md의 배포 전 체크리스트를 실행해줘:
-
-1. npm run lint
-2. npx tsc --noEmit
-3. npm run build
-4. console.log 확인
-5. 하드코딩된 URL 확인
-6. .github/workflows/ci.yml 생성 (docs/DEPLOYMENT.md 참조)
-
-모두 통과하면:
-git add .
-git commit -m "feat: initial blog setup"
-git push origin main
-```
-
----
-
-## Phase 5: 콘텐츠 시작 (Day 7~)
-
-### 5-1. 첫 실전 글 발행
-
-```
-1. Obsidian에서 2026-04-20-claude-vs-chatgpt.md 열기
-2. Claude 요청 프롬프트 복사 → Claude.ai에 붙여넣기
-3. blog-wordpress 스킬 → Craft에 초안 저장
-4. Craft에서 편집 (이미지 교체, 문체 수정)
-5. Claude Code에서 /publish-post → 발행
-6. Obsidian status: published 업데이트
-```
-
-이후 주 2회 반복.
