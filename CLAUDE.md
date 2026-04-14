@@ -27,7 +27,7 @@
 
 ## 프로젝트 구조
 
-### 현재 구조 (Phase 0-1 / 0-2 / 1 / 2 완료 기준 — babipanote만 UI 완성, aigrit는 Phase 2.5 예정)
+### 현재 구조 (Phase 0-1 / 0-2 / 1 / 2 / 2.5 완료 기준 — aigrit · babipanote 양쪽 UI 완성)
 
 지금 실제로 존재하는 파일만 기술. 빈 디렉토리는 표기 생략. 단계별 계획은 `docs/MONOREPO_MIGRATION.md` 참조.
 
@@ -53,11 +53,18 @@ unpack-blogs/
 │       ├── lib/
 │       │   ├── mdx.ts              # parseMdxFile (gray-matter + reading-time)
 │       │   ├── posts.ts            # getAllPosts / getPostBySlug (contentDir 주입)
-│       │   └── seo.ts              # buildMetadata (Next Metadata + OG/Twitter)
+│       │   ├── seo.ts              # buildMetadata (Next Metadata + OG/Twitter)
+│       │   ├── jsonld.ts           # buildArticleJsonLd / Review / WebSite (Phase 2.5)
+│       │   └── toc.ts              # extractHeadings (Phase 2.5)
 │       ├── contexts/
 │       │   └── brand-context.tsx   # BrandProvider / useBrand (Phase 1-3)
 │       ├── components/
-│       │   └── blog/               # PostCard, PostHeader, PostRenderer (Phase 2-1)
+│       │   ├── blog/               # PostCard, PostHeader, PostRenderer (Phase 2-1)
+│       │   │                       # + Comments(Giscus), RelatedPosts, TableOfContents (Phase 2.5)
+│       │   ├── mdx/                # Callout, CompareTable, ProCon(+Pros/Cons),
+│       │   │                       # AffiliateLink, defaultMdxComponents (Phase 2.5)
+│       │   ├── ads/                # AdBanner, AdInArticle (Phase 2.5)
+│       │   └── analytics/          # GoogleAnalytics, AdSenseScript (Phase 2.5)
 │       └── types/
 │           ├── post.ts             # PostFrontmatter, Post, PostSummary
 │           └── brand.ts            # BrandConfig 스키마 (Phase 1-1)
@@ -68,18 +75,30 @@ unpack-blogs/
     │   ├── eslint.config.mjs · postcss.config.mjs
     │   ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)
     │   ├── CLAUDE.md · AGENTS.md · README.md
-    │   ├── content/posts/          # (비어있음)
+    │   ├── content/posts/
+    │   │   └── hello-world.mdx     # 리뷰 방법론 첫 글 (Phase 2.5)
     │   ├── public/{fonts,images}/
     │   ├── docs/                   # BRAND_GUIDELINES + 앱 가이드 6개
     │   ├── scripts/
     │   ├── .claude/commands/       # 앱 스코프 커맨드 10개
     │   └── src/
-    │       └── app/
-    │           ├── layout.tsx      # BrandProvider + 폰트 (Pretendard/Inter/JetBrains)
-    │           ├── page.tsx        # Next 기본 템플릿 (Phase 2에서 교체)
-    │           ├── globals.css     # Tailwind v4 @theme — AIGrit 팔레트
-    │           └── favicon.ico
+    │       ├── app/
+    │       │   ├── layout.tsx      # BrandProvider + Header/Footer + GA4/AdSense 스크립트
+    │       │   ├── page.tsx        # Latest + By Category 홈 (Phase 2.5)
+    │       │   ├── blog/
+    │       │   │   ├── page.tsx    # 전체 글 목록 (PostCard)
+    │       │   │   └── [slug]/page.tsx  # SSG + PostRenderer + defaultMdxComponents
+    │       │   │                   # + AdInArticle + TOC + RelatedPosts + Comments + JSON-LD
+    │       │   ├── about/page.tsx         # E-E-A-T (Phase 2.5)
+    │       │   ├── privacy/page.tsx       # AdSense 필수 (Phase 2.5)
+    │       │   ├── disclaimer/page.tsx    # 제휴 마케팅 고지 (Phase 2.5)
+    │       │   ├── sitemap.ts · robots.ts # (Phase 2.5)
+    │       │   ├── globals.css     # Tailwind v4 @theme — AIGrit 팔레트
+    │       │   └── favicon.ico
+    │       └── components/
+    │           └── layout/         # Header([AI]Grit 브래킷 sticky), Footer (Phase 2.5)
     │
+
     └── babipanote/                 # @unpack/babipanote
         ├── package.json · next.config.ts
         ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)

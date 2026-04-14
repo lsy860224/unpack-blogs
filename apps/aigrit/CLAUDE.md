@@ -35,32 +35,35 @@
 - **import 순서:** react → next → 외부 라이브러리 → `@unpack/*` 공유 → `@/` 내부 → 상대 경로
 - **export:** named export 기본. 페이지 컴포넌트만 default export
 
-## 파일 구조 (목표 — 일부는 Phase별로 점진 도입)
-현재 실제 상태는 루트 `CLAUDE.md`의 "현재 구조" 섹션과 `ls apps/aigrit/src`로 확인. 아래는 앱 완성 시 구조.
+## 파일 구조 (Phase 2.5 완료 기준)
+Tailwind v4는 globals.css `@theme`로 토큰 주입 — `tailwind.config.ts` 없음.
 
 ```
 aigrit/
-├── content/posts/              ← MDX 글 파일 (이 폴더만 터치하면 글 추가)
-├── public/images/              ← 포스트별 이미지 (slug 폴더로 구분)
-├── brand.config.ts             ← 사이트 메타·컬러·네비·광고 on/off (Phase 1-2 완료)
-                                  (Tailwind v4는 globals.css @theme로 토큰 주입 — tailwind.config.ts 없음)
+├── brand.config.ts             ← 사이트 메타·컬러·네비·광고 on/off (Phase 1-2)
+├── content/posts/
+│   └── hello-world.mdx         ← 리뷰 방법론 첫 글 (Phase 2.5)
+├── public/{fonts,images}/
 ├── src/
-│   ├── app/                    ← Next.js App Router 페이지
-│   │   ├── layout.tsx          ← 루트 레이아웃 (BrandProvider, GA4, AdSense, 폰트)
-│   │   ├── page.tsx            ← (Phase 2) 홈 (최신 글 목록)
+│   ├── app/
+│   │   ├── layout.tsx          ← BrandProvider + Header/Footer + GA4/AdSense 스크립트
+│   │   ├── page.tsx            ← Latest + By Category 홈 (Phase 2.5)
 │   │   ├── blog/
-│   │   │   ├── page.tsx        ← (Phase 2) 전체 글 목록
-│   │   │   └── [slug]/page.tsx ← (Phase 2) 개별 글 페이지 (SSG)
-│   │   ├── about/page.tsx      ← (Phase 2) E-E-A-T 핵심 페이지
-│   │   ├── privacy/page.tsx    ← (Phase 2) 애드센스 필수
-│   │   ├── disclaimer/page.tsx ← (Phase 2) 제휴 마케팅 고지
-│   │   ├── sitemap.ts          ← (Phase 2) 자동 사이트맵
-│   │   └── robots.ts           ← (Phase 2) robots.txt
+│   │   │   ├── page.tsx        ← 전체 글 목록 (PostCard)
+│   │   │   └── [slug]/page.tsx ← SSG + PostRenderer + defaultMdxComponents
+│   │   │                         + AdInArticle + TOC + RelatedPosts + Comments + JSON-LD
+│   │   ├── about/page.tsx      ← E-E-A-T 핵심 페이지
+│   │   ├── privacy/page.tsx    ← 애드센스 필수
+│   │   ├── disclaimer/page.tsx ← 제휴 마케팅 고지
+│   │   ├── sitemap.ts          ← 자동 사이트맵
+│   │   ├── robots.ts           ← robots.txt
+│   │   ├── globals.css         ← Tailwind v4 @theme — AIGrit 팔레트
+│   │   └── favicon.ico
 │   └── components/
-│       └── layout/             ← (Phase 2) Header, Footer, Sidebar, ThemeToggle
-├── .env.local                  ← 환경변수 (절대 커밋 금지)
-├── .env.example                ← 환경변수 템플릿
-├── docs/                       ← 상세 설계 문서 (아래 참조)
+│       └── layout/             ← Header([AI]Grit 브래킷 sticky), Footer
+│                                 (Sidebar·ThemeToggle은 차후 Phase)
+├── .env.local · .env.example
+├── docs/                       ← BRAND_GUIDELINES + 앱 가이드 6개 (아래 참조)
 ├── scripts/setup.sh            ← 초기화 스크립트 (이미 수행됨)
 └── CLAUDE.md                   ← 이 파일
 ```

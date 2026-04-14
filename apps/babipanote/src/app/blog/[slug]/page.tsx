@@ -5,6 +5,7 @@ import {
   PostHeader,
   PostRenderer,
   buildMetadata,
+  defaultMdxComponents,
   getAllPostSlugs,
   getPostBySlug,
 } from "@unpack/blog-core";
@@ -54,7 +55,7 @@ export default async function PostPage({
     <article className="mx-auto max-w-3xl px-6 py-12">
       <PostHeader post={post} />
       <div className="prose prose-neutral max-w-none dark:prose-invert">
-        <PostRenderer source={post.content} />
+        <PostRenderer source={post.content} components={defaultMdxComponents} />
       </div>
     </article>
   );
