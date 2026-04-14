@@ -8,13 +8,19 @@
     ".": "./index.ts",
     "./lib/*": "./lib/*.ts",
     "./components/*": "./components/*",
+    "./contexts/*": "./contexts/*.tsx",
     "./types/*": "./types/*.ts",
     "./hooks/*": "./hooks/*.ts"
   },
   "scripts": {},
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "reading-time": "^1.5.0"
+    "next-mdx-remote": "^6.0.0",
+    "reading-time": "^1.5.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.14.3",
+    "rehype-slug": "^6.0.0",
+    "shiki": "^4.0.2"
   },
   "peerDependencies": {
     "next": "^16.0.0",

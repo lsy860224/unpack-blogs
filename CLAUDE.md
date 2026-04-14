@@ -27,7 +27,7 @@
 
 ## 프로젝트 구조
 
-### 현재 구조 (Phase 0-1 / 0-2 / 1 완료 기준)
+### 현재 구조 (Phase 0-1 / 0-2 / 1 / 2 완료 기준 — babipanote만 UI 완성, aigrit는 Phase 2.5 예정)
 
 지금 실제로 존재하는 파일만 기술. 빈 디렉토리는 표기 생략. 단계별 계획은 `docs/MONOREPO_MIGRATION.md` 참조.
 
@@ -56,6 +56,8 @@ unpack-blogs/
 │       │   └── seo.ts              # buildMetadata (Next Metadata + OG/Twitter)
 │       ├── contexts/
 │       │   └── brand-context.tsx   # BrandProvider / useBrand (Phase 1-3)
+│       ├── components/
+│       │   └── blog/               # PostCard, PostHeader, PostRenderer (Phase 2-1)
 │       └── types/
 │           ├── post.ts             # PostFrontmatter, Post, PostSummary
 │           └── brand.ts            # BrandConfig 스키마 (Phase 1-1)
@@ -82,16 +84,24 @@ unpack-blogs/
         ├── package.json · next.config.ts
         ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)
         ├── CLAUDE.md · AGENTS.md · README.md
-        ├── content/posts/          # (비어있음)
+        ├── content/posts/
+        │   └── hello-world.mdx     # 첫 글 — Phase 2
         ├── public/
         ├── docs/BRAND_GUIDELINES.md
         ├── .claude/commands/       # 앱 스코프 커맨드 10개
         └── src/
-            └── app/
-                ├── layout.tsx      # BrandProvider + 폰트 (Pretendard/Inter/Gowun Batang/Lora/JetBrains)
-                ├── page.tsx        # ⚠️ aigrit 사본 — Phase 2에서 타임라인 홈으로 교체
-                ├── globals.css     # Tailwind v4 @theme — babipanote 팔레트
-                └── favicon.ico
+            ├── app/
+            │   ├── layout.tsx      # BrandProvider + Header/Footer + 폰트 5종
+            │   ├── page.tsx        # 연도별 타임라인 홈 (Phase 2)
+            │   ├── blog/
+            │   │   ├── page.tsx    # 전체 글 목록 (PostCard)
+            │   │   └── [slug]/page.tsx  # SSG + PostRenderer
+            │   ├── projects/page.tsx  # AIGrit + GentleLab 카드
+            │   ├── about/page.tsx  # 운영자 소개
+            │   ├── globals.css     # Tailwind v4 @theme — babipanote 팔레트
+            │   └── favicon.ico
+            └── components/
+                └── layout/         # Header(미니멀), Footer(SNS+프로젝트)
 ```
 
 ### 목표 구조 (Phase 3 완료 후)
@@ -217,6 +227,9 @@ unpack-blogs/
 - 각 앱의 brand.config.ts에서 사이트명, 설명, 컬러, 네비게이션, 소셜 링크 등 정의
 - blog-core 컴포넌트는 이 설정을 props 또는 context로 주입받아 사용
 - 자세한 스키마는 packages/blog-core/types/brand.ts 참조
+
+## 디자인 작업
+브랜드·UI·Figma·토큰 관련 작업은 루트 `DESIGN.md`(운영 매뉴얼)와 `docs/DESIGN_CHECKLIST.md`(커밋 전 체크리스트)를 먼저 읽는다. 각 브랜드 가이드라인은 `apps/*/docs/BRAND_GUIDELINES.md`.
 
 ## MDX 글 포맷 (frontmatter)
 

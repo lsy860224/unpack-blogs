@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono, Gowun_Batang, Lora } from "next/font/google";
 import localFont from "next/font/local";
 import { BrandProvider, buildMetadata } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
+import { Header } from "../components/layout/Header";
+import { Footer } from "../components/layout/Footer";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -71,7 +73,11 @@ export default function RootLayout({
       className={`${pretendard.variable} ${inter.variable} ${jetbrains.variable} ${gowunBatang.variable} ${lora.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <BrandProvider config={brandConfig}>{children}</BrandProvider>
+        <BrandProvider config={brandConfig}>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </BrandProvider>
       </body>
     </html>
   );

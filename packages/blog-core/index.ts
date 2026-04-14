@@ -4,3 +4,6 @@ export * from "./lib/mdx";
 export * from "./lib/posts";
 export * from "./lib/seo";
 export * from "./contexts/brand-context";
+export * from "./components/blog/PostCard";
+export * from "./components/blog/PostHeader";
+export * from "./components/blog/PostRenderer";
