@@ -17,6 +17,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.2.2)
+      '@unpack/blog-core':
+        specifier: workspace:*
+        version: link:../../packages/blog-core
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.2.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
@@ -90,6 +93,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.2.2)
+      '@unpack/blog-core':
+        specifier: workspace:*
+        version: link:../../packages/blog-core
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.2.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
@@ -160,6 +166,9 @@ importers:
 
   packages/blog-core:
     dependencies:
+      gray-matter:
+        specifier: ^4.0.3
+        version: 4.0.3
       next:
         specifier: ^16.0.0
         version: 16.2.3(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -169,6 +178,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
+      reading-time:
+        specifier: ^1.5.0
+        version: 1.5.0
     devDependencies:
       '@types/node':
         specifier: ^20
