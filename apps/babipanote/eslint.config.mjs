@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local-only preview/experiment files (not committed to git)
+    "brand-preview.jsx",
   ]),
 ]);
 

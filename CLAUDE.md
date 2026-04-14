@@ -17,7 +17,7 @@
 
 ## 기술 스택
 - 모노레포: Turborepo + pnpm workspaces
-- 프레임워크: Next.js 15 (App Router, TypeScript)
+- 프레임워크: Next.js 16 (App Router, TypeScript) — 참고: `apps/*/AGENTS.md`
 - 콘텐츠: MDX (next-mdx-remote + gray-matter)
 - 스타일: Tailwind CSS + @tailwindcss/typography
 - 배포: GitHub → Vercel (사이트별 프로젝트)
@@ -27,89 +27,131 @@
 
 ## 프로젝트 구조
 
+### 현재 구조 (Phase 0-1 / 0-2 완료 기준)
+
+지금 실제로 존재하는 파일만 기술. 빈 디렉토리는 표기 생략. 단계별 계획은 `docs/MONOREPO_MIGRATION.md` 참조.
+
 ```
 unpack-blogs/
 ├── turbo.json
 ├── pnpm-workspace.yaml
-├── package.json                    # 루트 (워크스페이스 설정)
-│
-├── packages/
-│   └── blog-core/                  # 공유 블로그 엔진
-│       ├── package.json
-│       ├── tsconfig.json
-│       ├── lib/
-│       │   ├── mdx.ts              # MDX 파싱 + frontmatter 추출
-│       │   ├── posts.ts            # 글 목록 조회 유틸
-│       │   └── seo.ts              # OG/메타태그 헬퍼
-│       ├── components/
-│       │   ├── blog/               # PostCard, PostHeader, TableOfContents
-│       │   │   │                   # RelatedPosts, Comments (Giscus)
-│       │   ├── mdx/                # Callout, CompareTable, ProCon, AffiliateLink
-│       │   └── ads/                # AdBanner, AdInArticle
-│       ├── hooks/
-│       │   ├── use-dark-mode.ts
-│       │   └── use-reading-progress.ts
-│       ├── types/
-│       │   └── post.ts             # Post frontmatter 타입
-│       └── index.ts                # barrel export
-│
-├── apps/
-│   ├── aigrit/                     # AI 도구 리뷰 블로그
-│   │   ├── package.json
-│   │   ├── next.config.ts
-│   │   ├── tailwind.config.ts      # aigrit 브랜드 컬러 확장
-│   │   ├── brand.config.ts         # 사이트 메타, 컬러, 네비게이션
-│   │   ├── content/
-│   │   │   └── posts/              # AIGrit MDX 글 파일
-│   │   ├── public/
-│   │   │   ├── favicon.ico
-│   │   │   ├── og-default.png
-│   │   │   └── images/
-│   │   └── src/
-│   │       ├── app/
-│   │       │   ├── layout.tsx      # AIGrit 루트 레이아웃
-│   │       │   ├── page.tsx        # 홈 (최신 글 + 카테고리)
-│   │       │   ├── blog/
-│   │       │   │   ├── page.tsx    # 전체 글 목록
-│   │       │   │   └── [slug]/page.tsx
-│   │       │   ├── about/page.tsx
-│   │       │   ├── privacy/page.tsx
-│   │       │   ├── disclaimer/page.tsx
-│   │       │   ├── sitemap.ts
-│   │       │   └── robots.ts
-│   │       └── components/
-│   │           └── layout/         # AIGrit 전용 Header, Footer, Sidebar
-│   │
-│   └── babipanote/                 # 바비파 빌더 저널
-│       ├── package.json
-│       ├── next.config.ts
-│       ├── tailwind.config.ts      # babipanote 브랜드 컬러 확장
-│       ├── brand.config.ts         # 사이트 메타, 컬러, 네비게이션
-│       ├── content/
-│       │   └── posts/              # babipanote MDX 글 파일
-│       ├── public/
-│       │   ├── favicon.ico
-│       │   ├── og-default.png
-│       │   └── images/
-│       └── src/
-│           ├── app/
-│           │   ├── layout.tsx      # babipanote 루트 레이아웃
-│           │   ├── page.tsx        # 홈 (타임라인형)
-│           │   ├── blog/
-│           │   │   ├── page.tsx
-│           │   │   └── [slug]/page.tsx
-│           │   ├── about/page.tsx
-│           │   ├── projects/page.tsx  # AIGrit + GentleLab 소개
-│           │   ├── sitemap.ts
-│           │   └── robots.ts
-│           └── components/
-│               └── layout/         # babipanote 전용 Header, Footer
-│
-├── .github/
-│   └── workflows/ci.yml           # lint + build 양쪽 체크
+├── package.json                    # 루트 (워크스페이스 + turbo 스크립트)
+├── pnpm-lock.yaml
 ├── .env.example
 ├── .gitignore
-└── CLAUDE.md                       # 이 파일
+├── CLAUDE.md                       # 이 파일
+├── docs/
+│   └── MONOREPO_MIGRATION.md       # 모노레포 전환 아카이브
+├── .github/
+│   └── workflows/ci.yml            # pnpm + turbo (lint + build)
+│
+├── packages/
+│   └── blog-core/                  # 공유 엔진 (@unpack/blog-core)
+│       ├── package.json
+│       ├── tsconfig.json
+│       ├── index.ts                # barrel export
+│       ├── lib/
+│       │   ├── mdx.ts              # parseMdxFile (gray-matter + reading-time)
+│       │   ├── posts.ts            # getAllPosts / getPostBySlug (contentDir 주입)
+│       │   └── seo.ts              # buildMetadata (Next Metadata + OG/Twitter)
+│       └── types/
+│           └── post.ts             # PostFrontmatter, Post, PostSummary
+│
+└── apps/
+    ├── aigrit/                     # @unpack/aigrit
+    │   ├── package.json
+    │   ├── next.config.ts          # transpilePackages: ["@unpack/blog-core"]
+    │   ├── tsconfig.json
+    │   ├── eslint.config.mjs
+    │   ├── postcss.config.mjs
+    │   ├── CLAUDE.md · AGENTS.md · README.md
+    │   ├── content/posts/          # (비어있음)
+    │   ├── public/{fonts,images}/
+    │   ├── docs/                   # 앱 가이드 6개 (APP_SCAFFOLDING_GUIDE 등)
+    │   ├── scripts/
+    │   ├── .claude/commands/       # 앱 스코프 커맨드 10개
+    │   └── src/
+    │       └── app/
+    │           ├── layout.tsx      # 루트 레이아웃 (현재 폰트만)
+    │           ├── page.tsx        # Next 기본 템플릿 (Phase 2에서 교체)
+    │           ├── globals.css
+    │           └── favicon.ico
+    │
+    └── babipanote/                 # @unpack/babipanote
+        ├── package.json
+        ├── next.config.ts
+        ├── CLAUDE.md · AGENTS.md · README.md
+        ├── content/posts/          # (비어있음)
+        ├── public/
+        ├── .claude/commands/       # 앱 스코프 커맨드 10개
+        └── src/
+            └── app/
+                ├── layout.tsx      # (aigrit 사본 — Phase 2에서 교체)
+                ├── page.tsx        # (aigrit 사본 — Phase 2에서 교체)
+                └── globals.css
+```
+
+### 목표 구조 (Phase 3 완료 후)
+
+Phase 1~3이 끝나면 아래 구조로 수렴. 각 미구현 항목에는 도입 Phase를 명시.
+
+```
+unpack-blogs/
+├── turbo.json · pnpm-workspace.yaml · package.json
+├── .env.example · .gitignore · CLAUDE.md
+├── docs/MONOREPO_MIGRATION.md
+├── .github/workflows/ci.yml
+│
+├── packages/
+│   └── blog-core/
+│       ├── index.ts · package.json · tsconfig.json
+│       ├── lib/{mdx,posts,seo}.ts
+│       ├── types/
+│       │   ├── post.ts
+│       │   └── brand.ts                           # (Phase 1-1)
+│       ├── contexts/
+│       │   └── brand-context.tsx                  # BrandProvider (Phase 1-3)
+│       ├── components/
+│       │   ├── blog/                              # (Phase 2+) PostCard, PostHeader,
+│       │   │                                      #   TableOfContents, RelatedPosts, Comments
+│       │   ├── mdx/                               # (Phase 2+) Callout, CompareTable,
+│       │   │                                      #   ProCon, AffiliateLink
+│       │   └── ads/                               # (Phase 2+) AdBanner, AdInArticle
+│       └── hooks/                                 # (Phase 2+) use-dark-mode,
+│                                                  #   use-reading-progress
+│
+└── apps/
+    ├── aigrit/
+    │   ├── brand.config.ts                        # (Phase 1-2)
+    │   ├── tailwind.config.ts                     # (Phase 1-3)
+    │   ├── content/posts/*.mdx
+    │   ├── public/{favicon.ico, og-default.png, images/}
+    │   └── src/
+    │       ├── app/
+    │       │   ├── layout.tsx                     # BrandProvider 래핑 (Phase 1-3)
+    │       │   ├── page.tsx                       # (Phase 2) 홈 — 최신 글 + 카테고리
+    │       │   ├── blog/{page.tsx, [slug]/page.tsx}  # (Phase 2)
+    │       │   ├── about/privacy/disclaimer/page.tsx  # (Phase 2)
+    │       │   ├── sitemap.ts · robots.ts         # (Phase 2)
+    │       │   └── globals.css
+    │       └── components/
+    │           └── layout/                        # (Phase 2) Header, Footer, Sidebar
+    │
+    └── babipanote/
+        ├── brand.config.ts                        # (Phase 1-2)
+        ├── tailwind.config.ts                     # (Phase 1-3)
+        ├── content/posts/*.mdx
+        ├── public/{favicon.ico, og-default.png, images/}
+        └── src/
+            ├── app/
+            │   ├── layout.tsx                     # BrandProvider (Phase 1-3)
+            │   ├── page.tsx                       # (Phase 2) 타임라인형 홈
+            │   ├── blog/{page.tsx, [slug]/page.tsx}
+            │   ├── projects/page.tsx              # (Phase 2-1) AIGrit + GentleLab 소개
+            │   ├── about/page.tsx
+            │   └── sitemap.ts · robots.ts
+            └── components/
+                └── layout/                        # (Phase 2-1) Header, Footer (사이드바 없음)
 ```
 
 ## 코딩 컨벤션
@@ -145,16 +187,22 @@ unpack-blogs/
 
 ## 환경변수
 
-### AIGrit
-- NEXT_PUBLIC_GA_ID: GA4 측정 ID (analytics.google.com)
-- NEXT_PUBLIC_ADSENSE_ID: 애드센스 Publisher ID (adsense.google.com)
-- NEXT_PUBLIC_GISCUS_REPO: 댓글용 GitHub 저장소 (giscus.app)
-- NEXT_PUBLIC_SITE_URL: https://aigrit.dev
+루트 `.env.example`이 단일 소스. 로컬 개발 시 작업 대상 앱의 변수만 `.env.local`에 채우면 됨. Vercel에서는 각 프로젝트에 별도 설정.
 
-### babipanote
-- NEXT_PUBLIC_GA_ID: GA4 측정 ID (별도)
-- NEXT_PUBLIC_GISCUS_REPO: 댓글용 GitHub 저장소 (별도)
-- NEXT_PUBLIC_SITE_URL: https://babipanote.com
+### AIGrit (aigrit.dev)
+- `NEXT_PUBLIC_GA_ID` — GA4 측정 ID (analytics.google.com)
+- `NEXT_PUBLIC_ADSENSE_ID` — 애드센스 Publisher ID (adsense.google.com)
+- `NEXT_PUBLIC_GISCUS_REPO` — 댓글용 GitHub 저장소 (giscus.app)
+- `NEXT_PUBLIC_GISCUS_REPO_ID` — Giscus 저장소 ID
+- `NEXT_PUBLIC_GISCUS_CATEGORY` — Giscus 카테고리명
+- `NEXT_PUBLIC_GISCUS_CATEGORY_ID` — Giscus 카테고리 ID
+- `NEXT_PUBLIC_SITE_URL` — `https://aigrit.dev`
+
+### babipanote (babipanote.com)
+광고 비활성 — AdSense 변수 없음.
+- `NEXT_PUBLIC_GA_ID` — GA4 측정 ID (AIGrit과 별도)
+- `NEXT_PUBLIC_GISCUS_REPO` / `..._REPO_ID` / `..._CATEGORY` / `..._CATEGORY_ID` — 별도 저장소
+- `NEXT_PUBLIC_SITE_URL` — `https://babipanote.com`
 
 ## Vercel 배포 설정
 - GitHub 모노레포 1개 → Vercel 프로젝트 2개

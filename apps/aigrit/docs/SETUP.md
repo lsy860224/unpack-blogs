@@ -1,18 +1,20 @@
-# SETUP.md — 프로젝트 초기 세팅 상세
+# SETUP.md — AIGrit 앱 초기 세팅 상세
 
-> CLAUDE.md의 기술 스택과 파일 구조를 실제로 구현하는 상세 가이드.
-> `scripts/setup.sh`가 이 문서의 자동화 버전이다.
+> **상태:** 본 문서의 1~5단계(프로젝트 생성, 의존성, Tailwind, 폰트, 디렉토리)는 모노레포 전환 이전에 이미 수행되었습니다. 현재는 **신규 세팅 가이드가 아니라 구성 요소 레퍼런스**로 활용하세요.
+> **모노레포 컨텍스트:** 이 앱은 `unpack-blogs/` 워크스페이스의 일부이며 루트 `pnpm install` 한 번으로 모든 앱·패키지 의존성이 설치됩니다. 공유 엔진은 `@unpack/blog-core`에 있고, 앱은 이를 `transpilePackages`로 참조합니다.
 
 ## 사전 요구사항
 
 - Node.js 20+ (LTS)
-- npm 10+ 또는 pnpm 9+
+- pnpm 9+ (모노레포 패키지 매니저 — `package.json`의 `packageManager: pnpm@9.12.0` 고정)
 - Git
-- GitHub 계정 + `aigrit` 저장소 (Public)
+- GitHub 계정 + `unpack-blogs` 저장소
 - Vercel 계정 (GitHub 연결)
-- aigrit.dev 도메인 (Namecheap 구매)
+- aigrit.dev 도메인 (Vercel Domains 관리)
 
-## 1. 프로젝트 생성
+## 1. 신규 생성 (아카이브 — 이미 완료)
+
+단일 레포 시절 다음 명령으로 초기 생성했습니다. 재실행하지 마세요.
 
 ```bash
 npx create-next-app@latest aigrit \
@@ -24,20 +26,27 @@ npx create-next-app@latest aigrit \
   --import-alias "@/*"
 ```
 
-## 2. 의존성 설치
+현재 상태 기준 신규 개발자 셋업:
+```bash
+git clone <unpack-blogs 저장소>
+cd unpack-blogs
+pnpm install                 # 모노레포 전체
+cp .env.example .env.local   # 루트 템플릿 (또는 apps/aigrit/.env.local)
+pnpm dev --filter=@unpack/aigrit
+```
+
+## 2. 의존성 (현재 앱 기준)
+
+`apps/aigrit/package.json`에 이미 포함됨. 새로 추가할 때만 아래 참조.
 
 ```bash
-# 콘텐츠
-npm install next-mdx-remote gray-matter reading-time rehype-slug rehype-autolink-headings rehype-pretty-code
+# 모노레포 루트에서:
+pnpm add --filter=@unpack/aigrit next-mdx-remote rehype-slug rehype-autolink-headings rehype-pretty-code
+pnpm add --filter=@unpack/aigrit @tailwindcss/typography
+pnpm add --filter=@unpack/aigrit @vercel/analytics @vercel/speed-insights
 
-# 스타일
-npm install @tailwindcss/typography
-
-# 분석
-npm install @vercel/analytics @vercel/speed-insights
-
-# 개발용
-npm install -D @types/node
+# 공유 엔진에서 사용하는 것들 (이미 blog-core에 존재):
+#   gray-matter, reading-time  → packages/blog-core에 정의됨
 ```
 
 ### 패키지별 용도
@@ -139,52 +148,48 @@ Pretendard는 CDN 또는 woff2 파일 직접 포함. CDN 사용 시:
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.min.css" />
 ```
 
-## 5. 디렉토리 생성
+## 5. 디렉토리 (현재 상태)
 
-```bash
-mkdir -p content/posts
-mkdir -p public/images
-mkdir -p public/fonts
-mkdir -p src/components/{layout,blog,mdx,ads}
-mkdir -p src/lib
-mkdir -p src/types
+다음 디렉토리는 이미 생성되어 있습니다:
 ```
+apps/aigrit/
+├── content/posts/          # 비어있음
+├── public/{images,fonts}/
+└── src/
+    ├── app/
+    └── components/{layout,blog,mdx,ads}/   # 비어있음 — Phase 2에서 채움
+```
+
+> **⚠ blog/mdx/ads 컴포넌트는 앱이 아니라 공유 엔진으로:** 해당 디렉토리는 과거 단일 레포 구조의 잔재입니다. 실제 컴포넌트는 `packages/blog-core/components/` 아래에 작성하고, 앱에서는 `@unpack/blog-core`로 import합니다. 앱 로컬 `src/components/`에는 **레이아웃 전용(Header/Footer/Sidebar)**만 남기는 것이 원칙(Phase 2).
 
 ## 6. Git 설정
 
-`.gitignore`에 추가:
-```
-.env.local
-.env*.local
-node_modules/
-.next/
-out/
-.vercel/
-*.tsbuildinfo
-```
+루트 `.gitignore`에서 관리 (모노레포 통합). 앱 수준 추가 필요 항목이 있을 때만 `apps/aigrit/.gitignore`에 추가.
 
 ## 7. Vercel 연결
+
+모노레포 1개 → Vercel 프로젝트 2개 구조. AIGrit 프로젝트는 **Root Directory = `apps/aigrit`**로 설정.
 
 ```bash
 # Vercel CLI (선택)
 npm i -g vercel
-vercel link
+cd apps/aigrit && vercel link
 
 # 또는 vercel.com에서 GitHub Import
+# New Project → unpack-blogs 선택 → Root Directory = apps/aigrit
+# Build Command: (기본) — Turborepo가 자동 감지
 # Settings → Domains → aigrit.dev 추가
 ```
 
-### Namecheap DNS → Vercel
-
-Namecheap DNS 레코드 설정:
-```
-A     @     76.76.21.21
-CNAME www   cname.vercel-dns.com.
-```
+도메인은 Vercel Domains에서 관리. 외부 DNS 레지스트라 사용 시 Vercel 네임서버로 위임.
 
 ## 8. 확인
 
 ```bash
-npm run dev
+# 모노레포 루트에서
+pnpm dev --filter=@unpack/aigrit
 # http://localhost:3000 에서 기본 페이지 확인
+
+# 전체 앱 빌드 체크 (blog-core 변경 시)
+pnpm turbo run build
 ```

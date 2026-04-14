@@ -1,32 +1,49 @@
 # COMPONENTS.md — 컴포넌트 상세 설계
 
 > 모든 React 컴포넌트의 역할, props, 구현 가이드.
+> **모노레포 배치:** blog/mdx/ads 컴포넌트는 **공유 엔진** `@unpack/blog-core`에 배치됨. layout만 앱 로컬. Phase 1 완료 후 컴포넌트들은 `useBrand()` 훅으로 사이트별 설정 주입 받음(하드코딩 금지).
 
-## 디렉토리 구조
+## 디렉토리 구조 (목표 — Phase 2 이후)
 
+### 공유 엔진 (`packages/blog-core/`)
 ```
-src/components/
-├── layout/         ← 페이지 레이아웃 (전체 페이지에서 사용)
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   └── ThemeToggle.tsx
-├── blog/           ← 블로그 전용 컴포넌트
+blog-core/components/
+├── blog/           ← 블로그 전용 컴포넌트 (양쪽 사이트 공통)
 │   ├── PostCard.tsx
 │   ├── PostHeader.tsx
 │   ├── PostList.tsx
 │   ├── TableOfContents.tsx
 │   ├── RelatedPosts.tsx
 │   ├── TagList.tsx
-│   └── Comments.tsx
-├── mdx/            ← MDX 본문 내에서 사용하는 커스텀 컴포넌트
-│   ├── AffiliateLink.tsx
+│   └── Comments.tsx       ← Giscus (brand.config.ts의 comments로 설정 주입)
+├── mdx/            ← MDX 본문 내 커스텀 컴포넌트
+│   ├── AffiliateLink.tsx  ← brand.config.ts의 monetization.affiliateLinks 플래그로 on/off
 │   ├── CompareTable.tsx
 │   ├── Callout.tsx
 │   └── ProCon.tsx
 └── ads/            ← 광고 컴포넌트
-    ├── AdBanner.tsx
+    ├── AdBanner.tsx       ← brand.config.ts의 monetization.adsense 플래그로 on/off
     └── AdInArticle.tsx
 ```
+
+앱에서는 barrel export로 import:
+```typescript
+import { PostCard, TableOfContents, Callout, AdBanner } from "@unpack/blog-core"
+```
+
+### 앱 로컬 (`apps/aigrit/src/components/`)
+```
+src/components/
+└── layout/         ← 페이지 레이아웃 (사이트별 커스텀)
+    ├── Header.tsx      ← AIGrit: 로고 + 네비 + 검색 + ThemeToggle
+    ├── Footer.tsx      ← AIGrit: 3열 + 제휴 고지
+    ├── Sidebar.tsx     ← AIGrit: 카테고리 · 최근 글 (babipanote는 없음)
+    └── ThemeToggle.tsx
+```
+
+`babipanote`는 `apps/babipanote/src/components/layout/`에 자체 Header/Footer(미니멀, 사이드바 없음) 작성.
+
+## layout/ 컴포넌트
 
 ## layout/ 컴포넌트
 
@@ -50,11 +67,13 @@ src/components/
 - localStorage에 선택 저장
 
 ## blog/ 컴포넌트
+> 위치: `packages/blog-core/components/blog/*` (Phase 2). 타입은 `@unpack/blog-core`의 `Post` / `PostSummary` / `PostFrontmatter`. 문서에 `PostMeta`로 표기된 과거 네이밍은 `PostFrontmatter`로 읽으세요.
 
 ### PostCard.tsx
 ```typescript
+import type { PostSummary } from "@unpack/blog-core"
 interface PostCardProps {
-  meta: PostMeta
+  post: PostSummary
   variant?: 'default' | 'featured'  // featured는 홈에서 사용
 }
 ```

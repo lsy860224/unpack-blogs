@@ -17,7 +17,7 @@
 ## /publish-post 커맨드
 
 ### 위치
-`.claude/commands/publish-post.md`
+`apps/aigrit/.claude/commands/publish-post.md` (앱 스코프 — 루트 아님). babipanote에도 별도 사본이 있으며, URL·커밋 메시지가 `babipanote.com`으로 설정됨.
 
 ### 입력
 사용자가 Craft에서 복사한 전체 본문 텍스트. 최상단에 MDX frontmatter 코드 블록이 포함되어 있어야 함.
@@ -30,7 +30,7 @@
 
 #### Step 2: slug 중복 체크
 ```bash
-ls content/posts/ | grep {slug}
+ls apps/aigrit/content/posts/ | grep {slug}
 ```
 - 중복이면 작업 중단 + 경고
 
@@ -50,10 +50,10 @@ Craft 테이블 (탭/파이프 구분) → MDX 파이프 테이블 문법
 #### Step 5: 파일 생성
 ```bash
 # MDX 파일
-content/posts/{slug}.mdx
+apps/aigrit/content/posts/{slug}.mdx
 
 # 이미지 폴더
-mkdir -p public/images/{slug}/
+mkdir -p apps/aigrit/public/images/{slug}/
 ```
 
 #### Step 6: 이미지 확인
@@ -66,23 +66,24 @@ mkdir -p public/images/{slug}/
   ```
 
 #### Step 7: 빌드 테스트
+모노레포 루트에서:
 ```bash
-npm run build
+pnpm turbo run build --filter=@unpack/aigrit
 ```
 - 빌드 실패 시 에러 표시 + 수정 제안
 
 #### Step 8: Git 커밋 + 푸시
 ```bash
-git add content/posts/{slug}.mdx
-git add public/images/{slug}/
-git commit -m "post: {title}"
+git add apps/aigrit/content/posts/{slug}.mdx
+git add apps/aigrit/public/images/{slug}/
+git commit -m "post(aigrit): {title}"
 git push origin main
 ```
 
 #### Step 9: 결과 출력
 ```
 ✅ 발행 완료!
-📄 파일: content/posts/{slug}.mdx
+📄 파일: apps/aigrit/content/posts/{slug}.mdx
 🔗 URL: https://aigrit.dev/blog/{slug}
 ⏱️ Vercel 배포: 1~2분 후 라이브
 
@@ -121,7 +122,7 @@ git push origin main
 ## 이미지 네이밍 규칙
 
 ```
-public/images/{slug}/
+apps/aigrit/public/images/{slug}/
 ├── thumbnail.png      ← OG/썸네일 (1200×630)
 ├── image-01.png       ← 본문 이미지 (순서대로)
 ├── image-02.png
@@ -133,16 +134,16 @@ public/images/{slug}/
 
 ```bash
 # 1. MDX 파일 직접 작성
-vim content/posts/my-new-post.mdx
+vim apps/aigrit/content/posts/my-new-post.mdx
 
 # 2. 이미지 배치
-cp ~/screenshots/*.png public/images/my-new-post/
+cp ~/screenshots/*.png apps/aigrit/public/images/my-new-post/
 
-# 3. 빌드 확인
-npm run build
+# 3. 빌드 확인 (모노레포 루트에서)
+pnpm turbo run build --filter=@unpack/aigrit
 
 # 4. 커밋 + 푸시
-git add .
-git commit -m "post: 새 글 제목"
+git add apps/aigrit/content/posts/my-new-post.mdx apps/aigrit/public/images/my-new-post/
+git commit -m "post(aigrit): 새 글 제목"
 git push
 ```

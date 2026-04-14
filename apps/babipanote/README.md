@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# babipanote
 
-## Getting Started
+바비파의 빌더 저널 — 1인 개발자가 AIGrit 블로그와 GentleLab 앱을 만들어가는 과정을 기록하는 사이트.
 
-First, run the development server:
+- **도메인:** [babipanote.com](https://babipanote.com)
+- **레이아웃:** 타임라인형 (연대기)
+- **수익화:** 없음 (브랜드 자산 축적)
+
+## 로컬 개발
+
+모노레포 루트(`unpack-blogs/`)에서 실행:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install                                   # 모노레포 전체 의존성
+pnpm dev --filter=@unpack/babipanote           # babipanote 개발 서버
+pnpm turbo run build --filter=@unpack/babipanote  # 빌드
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 문서
+- 앱 규칙 · 환경변수 · 브랜드: [`CLAUDE.md`](./CLAUDE.md)
+- 모노레포 전체 구조: 루트 [`CLAUDE.md`](../../CLAUDE.md)
+- 공유 엔진 API: `@unpack/blog-core` (`packages/blog-core/`)

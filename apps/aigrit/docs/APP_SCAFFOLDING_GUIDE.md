@@ -1,7 +1,10 @@
-# IMPLEMENTATION_GUIDE.md — 단계별 구현 가이드
+# APP_SCAFFOLDING_GUIDE.md — AIGrit 앱 스케폴딩 단계별 가이드
 
+> **스코프:** 이 문서는 `apps/aigrit/` 앱 내부 구현 절차(엔진, 컴포넌트, 페이지, 배포)만 다룹니다. 모노레포 전환 절차는 루트 `docs/MONOREPO_MIGRATION.md`를 참조하세요.
+> **상태 (2026-04-15 기준):** Phase 0(초기화: setup.sh·tailwind·eslint)는 완료. Phase 1 이후(엔진/UI/배포)는 대부분 미착수 — 단, 모노레포 전환에 따라 일부 Phase가 루트 수준 작업과 겹치거나 `@unpack/blog-core`로 대체되었음. 각 Phase 실행 전 실제 상태와 대조하세요.
+> **선행:** 루트 `pnpm install` 완료. `pnpm dev --filter=@unpack/aigrit`로 로컬 실행 가능.
 > 각 Phase의 프롬프트를 Claude Code에 순서대로 입력하세요.
-> 예상 총 소요: 5~6일 (하루 2~3시간 기준)
+> 예상 총 소요: 5~6일 (하루 2~3시간 기준, 모노레포 전환 상태에 따라 변동)
 
 ---
 
@@ -114,7 +117,7 @@ Claude Code 프롬프트:
 2. src/app/sitemap.ts — 자동 사이트맵 (docs/SEO_MONETIZATION.md 참조)
 3. src/app/robots.ts — robots.txt
 
-빌드 확인: npm run build
+빌드 확인: 모노레포 루트에서 `pnpm turbo run build --filter=@unpack/aigrit`
 ```
 
 ---
@@ -246,16 +249,15 @@ Claude Code 프롬프트:
 ```
 docs/DEPLOYMENT.md의 배포 전 체크리스트를 실행해줘:
 
-1. npm run lint
-2. npx tsc --noEmit
-3. npm run build
-4. console.log 확인
-5. 하드코딩된 URL 확인
-6. .github/workflows/ci.yml 생성 (docs/DEPLOYMENT.md 참조)
+1. 모노레포 루트에서 pnpm turbo run lint
+2. (빌드 과정이 타입 검증 포함) pnpm turbo run build
+3. console.log 확인
+4. 하드코딩된 URL 확인
+5. 루트 .github/workflows/ci.yml 은 이미 존재 — 변경 불필요
 
 모두 통과하면:
 git add .
-git commit -m "feat: initial blog setup"
+git commit -m "feat(aigrit): initial blog setup"
 git push origin main
 ```
 

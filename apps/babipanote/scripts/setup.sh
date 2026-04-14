@@ -1,13 +1,13 @@
 #!/bin/bash
 # ============================================
-# AIGrit 프로젝트 초기 세팅 스크립트
+# babipanote 프로젝트 초기 세팅 스크립트
 # 사용법: chmod +x scripts/setup.sh && ./scripts/setup.sh
 # ============================================
 
 set -e
 
 echo ""
-echo "🚀 AIGrit 프로젝트 초기화 시작..."
+echo "🚀 babipanote 프로젝트 초기화 시작..."
 echo "=================================="
 echo ""
 
@@ -118,19 +118,19 @@ fi
 # --- 8. 완료 ---
 echo ""
 echo "============================================"
-echo "✅ AIGrit 초기화 완료!"
+echo "✅ babipanote 초기화 완료!"
 echo "============================================"
 echo ""
 echo "다음 단계:"
 echo "  1. .env.local에 실제 API 키를 입력하세요"
 echo "  2. npm run dev 로 개발 서버를 시작하세요"
 echo "  3. Claude Code를 열고:"
-echo "     \"CLAUDE.md를 읽고, docs/IMPLEMENTATION_GUIDE.md의 Phase 0-2부터 시작해줘\""
+echo "     \"루트 CLAUDE.md와 apps/babipanote/CLAUDE.md를 읽고 작업을 시작해줘\""
 echo "  4. 각 Phase의 프롬프트를 순서대로 실행하세요"
 echo ""
 echo "📖 문서:"
 echo "  - CLAUDE.md              ← 프로젝트 컨텍스트 (자동 인식)"
-echo "  - docs/IMPLEMENTATION_GUIDE.md  ← 단계별 구현 프롬프트"
+echo "  - docs/ (babipanote 특화 문서는 Phase 2에서 작성 예정)"
 echo "  - docs/SETUP.md          ← 초기 세팅 상세"
 echo "  - docs/MDX_ENGINE.md     ← MDX 엔진 설계"
 echo "  - docs/COMPONENTS.md     ← 컴포넌트 설계"
