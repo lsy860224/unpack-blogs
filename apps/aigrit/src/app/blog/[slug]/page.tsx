@@ -6,6 +6,7 @@ import {
   PostRenderer,
   buildMetadata,
   buildArticleJsonLd,
+  buildReviewJsonLd,
   getAllPostSlugs,
   getAllPostSummaries,
   getPostBySlug,
@@ -71,6 +72,19 @@ export default async function PostPage({
     datePublished: post.frontmatter.date,
   });
 
+  const reviewJsonLd = post.frontmatter.review
+    ? buildReviewJsonLd({
+        productName: post.frontmatter.review.productName,
+        productCategory: post.frontmatter.review.productCategory,
+        ratingValue: post.frontmatter.review.ratingValue,
+        bestRating: post.frontmatter.review.bestRating,
+        worstRating: post.frontmatter.review.worstRating,
+        authorName: brandConfig.name,
+        datePublished: post.frontmatter.date,
+        url: `${brandConfig.url}/blog/${post.frontmatter.slug}`,
+      })
+    : null;
+
   const adsEnabled = brandConfig.monetization.adsense;
   const adsPubId = brandConfig.monetization.adsensePublisherId;
 
@@ -80,6 +94,12 @@ export default async function PostPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {reviewJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
+        />
+      )}
 
       <PostHeader post={post} />
 

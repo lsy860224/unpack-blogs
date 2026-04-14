@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
-import type { Post, PostFrontmatter } from "../types/post";
+import type { Post, PostFrontmatter, PostReviewMeta } from "../types/post";
 
 export function parseMdxFile(filePath: string): Post {
   const raw = fs.readFileSync(filePath, "utf8");
@@ -37,5 +37,22 @@ function normalizeFrontmatter(
     featured: typeof data.featured === "boolean" ? data.featured : undefined,
     category: typeof data.category === "string" ? data.category : undefined,
     draft: typeof data.draft === "boolean" ? data.draft : undefined,
+    review: parseReview(data.review),
+  };
+}
+
+function parseReview(value: unknown): PostReviewMeta | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const v = value as Record<string, unknown>;
+  const productName = typeof v.productName === "string" ? v.productName : undefined;
+  const ratingValue = typeof v.ratingValue === "number" ? v.ratingValue : undefined;
+  if (!productName || ratingValue === undefined) return undefined;
+  return {
+    productName,
+    ratingValue,
+    bestRating: typeof v.bestRating === "number" ? v.bestRating : undefined,
+    worstRating: typeof v.worstRating === "number" ? v.worstRating : undefined,
+    productCategory:
+      typeof v.productCategory === "string" ? v.productCategory : undefined,
   };
 }

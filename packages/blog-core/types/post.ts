@@ -1,3 +1,11 @@
+export interface PostReviewMeta {
+  productName: string;
+  ratingValue: number;
+  bestRating?: number;
+  worstRating?: number;
+  productCategory?: string;
+}
+
 export interface PostFrontmatter {
   title: string;
   date: string;
@@ -8,6 +16,7 @@ export interface PostFrontmatter {
   featured?: boolean;
   category?: string;
   draft?: boolean;
+  review?: PostReviewMeta;
 }
 
 export interface Post {
