@@ -32,3 +32,7 @@ next-env.d.ts
 # IDE
 .idea
 .vscode
+
+# Claude Code runtime state (slash commands/settings are per-project via /.claude/)
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
