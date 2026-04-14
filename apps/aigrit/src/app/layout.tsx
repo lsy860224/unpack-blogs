@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { BrandProvider, buildMetadata } from "@unpack/blog-core";
+import { brandConfig } from "../../brand.config";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -23,11 +25,26 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  ...buildMetadata({
+    title: `${brandConfig.name} — ${brandConfig.tagline}`,
+    description: brandConfig.description,
+    siteName: brandConfig.name,
+    siteUrl: brandConfig.url,
+  }),
   title: {
-    default: "AIGrit — AI의 알맹이만 남긴다",
-    template: "%s | AIGrit",
+    default: `${brandConfig.name} — ${brandConfig.tagline}`,
+    template: `%s | ${brandConfig.name}`,
   },
-  description: "AI 도구를 직접 써보고 솔직하게 비교하는 수익형 블로그",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: brandConfig.theme.colors.background },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: brandConfig.theme.dark?.background ?? brandConfig.theme.colors.background,
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -37,10 +54,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="ko"
+      lang={brandConfig.locale.replace("-", "_").slice(0, 2)}
       className={`${pretendard.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <BrandProvider config={brandConfig}>{children}</BrandProvider>
+      </body>
     </html>
   );
 }

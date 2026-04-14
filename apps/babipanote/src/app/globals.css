@@ -4,28 +4,54 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-primary: #1e293b;
-  --color-brand-secondary: #f59e0b;
-  --color-brand-secondary-hover: #d97706;
-  --color-brand-accent-red: #ef4444;
-  --color-brand-accent-green: #10b981;
+  /* Brand — babipanote (Ink & Paper) */
+  --color-brand-primary: #6b2e4e;
+  --color-brand-secondary: #c89f7c;
+  --color-brand-secondary-hover: #a87f5c;
+  --color-brand-accent-green: #6b8a63;
+  --color-brand-accent-red: #9c4a3e;
 
+  /* Neutrals */
+  --color-neutral-ink: #2b2420;
+  --color-neutral-paper: #faf7f2;
+
+  /* Fonts */
+  --font-serif:
+    var(--font-gowun-batang, "Gowun Batang"), var(--font-lora, "Lora"),
+    Georgia, "Times New Roman", serif;
   --font-sans:
-    var(--font-pretendard, "Pretendard"), var(--font-inter, "Inter"),
+    var(--font-pretendard, "Pretendard Variable"), var(--font-inter, "Inter"),
     system-ui, -apple-system, sans-serif;
   --font-mono:
     var(--font-jetbrains, "JetBrains Mono"), ui-monospace, "SFMono-Regular",
     Menlo, monospace;
+
+  /* Type Scale */
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.1;
+  --text-h1: 2.25rem;
+  --text-h1--line-height: 1.2;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.35;
+  --text-body: 1rem;
+  --text-body--line-height: 1.75;
+  --text-small: 0.875rem;
+  --text-xsmall: 0.75rem;
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf7f2;
+  --foreground: #2b2420;
 }
 
 .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #1a1614;
+  --foreground: #e8e0d6;
+
+  --color-brand-primary: #c89bae;
+  --color-brand-secondary: #e0bea0;
+  --color-brand-accent-green: #a8bfa0;
+  --color-brand-accent-red: #c88072;
 }
 
 @layer base {
@@ -35,6 +61,14 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  .display {
+    font-family: var(--font-serif);
+    letter-spacing: -0.01em;
   }
 
   code,

@@ -27,7 +27,7 @@
 
 ## 프로젝트 구조
 
-### 현재 구조 (Phase 0-1 / 0-2 완료 기준)
+### 현재 구조 (Phase 0-1 / 0-2 / 1 완료 기준)
 
 지금 실제로 존재하는 파일만 기술. 빈 디렉토리는 표기 생략. 단계별 계획은 `docs/MONOREPO_MIGRATION.md` 참조.
 
@@ -54,41 +54,44 @@ unpack-blogs/
 │       │   ├── mdx.ts              # parseMdxFile (gray-matter + reading-time)
 │       │   ├── posts.ts            # getAllPosts / getPostBySlug (contentDir 주입)
 │       │   └── seo.ts              # buildMetadata (Next Metadata + OG/Twitter)
+│       ├── contexts/
+│       │   └── brand-context.tsx   # BrandProvider / useBrand (Phase 1-3)
 │       └── types/
-│           └── post.ts             # PostFrontmatter, Post, PostSummary
+│           ├── post.ts             # PostFrontmatter, Post, PostSummary
+│           └── brand.ts            # BrandConfig 스키마 (Phase 1-1)
 │
 └── apps/
     ├── aigrit/                     # @unpack/aigrit
-    │   ├── package.json
-    │   ├── next.config.ts          # transpilePackages: ["@unpack/blog-core"]
-    │   ├── tsconfig.json
-    │   ├── eslint.config.mjs
-    │   ├── postcss.config.mjs
+    │   ├── package.json · next.config.ts · tsconfig.json
+    │   ├── eslint.config.mjs · postcss.config.mjs
+    │   ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)
     │   ├── CLAUDE.md · AGENTS.md · README.md
     │   ├── content/posts/          # (비어있음)
     │   ├── public/{fonts,images}/
-    │   ├── docs/                   # 앱 가이드 6개 (APP_SCAFFOLDING_GUIDE 등)
+    │   ├── docs/                   # BRAND_GUIDELINES + 앱 가이드 6개
     │   ├── scripts/
     │   ├── .claude/commands/       # 앱 스코프 커맨드 10개
     │   └── src/
     │       └── app/
-    │           ├── layout.tsx      # 루트 레이아웃 (현재 폰트만)
+    │           ├── layout.tsx      # BrandProvider + 폰트 (Pretendard/Inter/JetBrains)
     │           ├── page.tsx        # Next 기본 템플릿 (Phase 2에서 교체)
-    │           ├── globals.css
+    │           ├── globals.css     # Tailwind v4 @theme — AIGrit 팔레트
     │           └── favicon.ico
     │
     └── babipanote/                 # @unpack/babipanote
-        ├── package.json
-        ├── next.config.ts
+        ├── package.json · next.config.ts
+        ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)
         ├── CLAUDE.md · AGENTS.md · README.md
         ├── content/posts/          # (비어있음)
         ├── public/
+        ├── docs/BRAND_GUIDELINES.md
         ├── .claude/commands/       # 앱 스코프 커맨드 10개
         └── src/
             └── app/
-                ├── layout.tsx      # (aigrit 사본 — Phase 2에서 교체)
-                ├── page.tsx        # (aigrit 사본 — Phase 2에서 교체)
-                └── globals.css
+                ├── layout.tsx      # BrandProvider + 폰트 (Pretendard/Inter/Gowun Batang/Lora/JetBrains)
+                ├── page.tsx        # ⚠️ aigrit 사본 — Phase 2에서 타임라인 홈으로 교체
+                ├── globals.css     # Tailwind v4 @theme — babipanote 팔레트
+                └── favicon.ico
 ```
 
 ### 목표 구조 (Phase 3 완료 후)

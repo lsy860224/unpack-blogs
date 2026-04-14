@@ -42,8 +42,8 @@
 aigrit/
 ├── content/posts/              ← MDX 글 파일 (이 폴더만 터치하면 글 추가)
 ├── public/images/              ← 포스트별 이미지 (slug 폴더로 구분)
-├── brand.config.ts             ← (Phase 1-2) 사이트 메타·컬러·네비·광고 on/off
-├── tailwind.config.ts          ← (Phase 1-3) brand 토큰 기반 확장
+├── brand.config.ts             ← 사이트 메타·컬러·네비·광고 on/off (Phase 1-2 완료)
+                                  (Tailwind v4는 globals.css @theme로 토큰 주입 — tailwind.config.ts 없음)
 ├── src/
 │   ├── app/                    ← Next.js App Router 페이지
 │   │   ├── layout.tsx          ← 루트 레이아웃 (BrandProvider, GA4, AdSense, 폰트)
@@ -87,15 +87,18 @@ aigrit/
 | NEXT_PUBLIC_GISCUS_CATEGORY_ID | Giscus 카테고리 ID | giscus.app |
 | NEXT_PUBLIC_SITE_URL | 사이트 URL | 직접 설정 (`https://aigrit.dev`) |
 
-## 브랜드 (목표 — Phase 1-2에서 `brand.config.ts`로 이동 예정)
+## 브랜드 (`brand.config.ts` + `docs/BRAND_GUIDELINES.md` 참조)
+디자인 컨셉: **Precision Indigo** — 기계·데이터·리뷰 계측기. babipanote(잉크·종이) 대척점. 전체 팔레트·타이포·로고 규격은 `docs/BRAND_GUIDELINES.md`에 있으며, 런타임 값은 `brand.config.ts`가 단일 소스.
+
 - **SNS:** X @aigrit_dev · Instagram @aigrit.dev · GitHub lsy860224/aigrit
-- **Primary:** #1E293B (Slate-800) — 로고, 헤더, 주요 텍스트
-- **Secondary:** #F59E0B (Amber-500) — CTA, 강조, 배지
-- **Accent Red:** #EF4444 — "별로" 태그
-- **Accent Green:** #10B981 — "추천" 태그
-- **폰트:** Pretendard (한글) + Inter (영문) + JetBrains Mono (코드)
-- **톤:** 전문적이지만 친근한. "같이 실험해보는 동료" 느낌
-- **로고:** [AI]Grit 워드마크 — AI는 Amber, Grit은 Slate
+- **Primary:** #3730A3 (Indigo) — 로고, 헤더, 링크
+- **Secondary:** #06B6D4 (Cyan) — CTA, 배지, 스코어 하이라이트
+- **Accent Green:** #10B981 — "추천" · "가성비" 배지
+- **Accent Red:** #EF4444 — "별로" · "중단" 배지
+- **Neutral:** Slate-900 `#0F172A` / Snow `#F8FAFC`
+- **폰트:** Pretendard (본문/헤딩 한글) + Inter (영문) + JetBrains Mono (수치·코드)
+- **톤:** 전문적이지만 친근한. "같이 실험해보는 리뷰어" — 검증 권위 + 겸손
+- **로고:** `[AI]Grit` 워드마크 — `[AI]` 브래킷은 Cyan + 본체 Primary (Indigo)
 
 ## docs 폴더 참조 규칙
 아래 상황에서 해당 docs 파일을 **반드시 읽고** 작업한다:
@@ -103,6 +106,7 @@ aigrit/
 | 상황 | 읽을 파일 |
 |------|----------|
 | 프로젝트 최초 세팅, 패키지 설치 | `docs/SETUP.md` |
+| 브랜드 팔레트·타이포·로고·OG 규격 | `docs/BRAND_GUIDELINES.md` |
 | MDX 파싱, 글 목록, frontmatter 작업 | `docs/MDX_ENGINE.md` |
 | 컴포넌트 생성/수정 (layout, blog, mdx, ads) | `docs/COMPONENTS.md` |
 | SEO 메타태그, 애드센스, 제휴링크 작업 | `docs/SEO_MONETIZATION.md` |

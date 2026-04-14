@@ -21,24 +21,26 @@ aigrit과 동일 (루트 `CLAUDE.md` 참조). babipanote 특화 차이점:
 - **Header 미니멀** — 검색 UI 없음
 - **홈 레이아웃** — 카테고리 없이 날짜순 타임라인
 
-## 현재 상태 (2026-04-15)
-Phase 0-1 / 0-2 모노레포 전환만 완료. babipanote 앱의 실제 UI·콘텐츠는 미착수.
+## 현재 상태 (Phase 1 완료)
+Phase 0-1 / 0-2 모노레포 전환 + Phase 1 브랜드 분리 완료. 페이지·레이아웃 컴포넌트·콘텐츠는 Phase 2에서.
 
 ```
 apps/babipanote/
 ├── package.json                # @unpack/babipanote
 ├── next.config.ts              # transpilePackages: ["@unpack/blog-core"]
+├── brand.config.ts             # 브랜드 런타임 설정 (Phase 1-2)
 ├── tsconfig.json
 ├── eslint.config.mjs · postcss.config.mjs
 ├── CLAUDE.md · AGENTS.md · README.md
 ├── content/posts/              # (비어있음 — Phase 2에서 첫 글)
-├── public/{fonts,images}/      # fonts는 aigrit와 동일 Pretendard, images는 비어있음
+├── public/{fonts,images}/
+├── docs/BRAND_GUIDELINES.md    # 브랜드 설계 문서
 ├── .claude/commands/           # 앱 스코프 커맨드 (publish-post 등)
 └── src/
     └── app/
-        ├── layout.tsx          # ⚠️ 현재 aigrit 사본 — Phase 2에서 babipanote 브랜드로 교체
+        ├── layout.tsx          # BrandProvider + 폰트(Pretendard/Inter/Gowun Batang/Lora/JetBrains)
         ├── page.tsx            # ⚠️ Next 기본 템플릿 — Phase 2에서 타임라인 홈으로 교체
-        ├── globals.css
+        ├── globals.css         # Tailwind v4 @theme — babipanote 팔레트 (Phase 1-3)
         └── favicon.ico
 ```
 
@@ -66,14 +68,28 @@ apps/babipanote/
 | `NEXT_PUBLIC_GISCUS_CATEGORY_ID` | Giscus 카테고리 ID |
 | `NEXT_PUBLIC_SITE_URL` | `https://babipanote.com` |
 
-## 브랜드 (목표 — Phase 1에서 `brand.config.ts`로 이동 예정)
-- **톤:** 솔직한 1인 개발자 일기. "결과보다 과정", "실패도 공유"
-- **컬러:** Primary `#8B5CF6` (Violet) · Secondary `#F97316` (Orange) · Accent `#06B6D4` (Cyan)
-- **폰트:** Pretendard (한글) + Inter (영문) + JetBrains Mono (코드)
+## 브랜드 (`brand.config.ts` + `docs/BRAND_GUIDELINES.md` 참조)
+디자인 컨셉: **잉크와 종이 (Ink & Paper)** — 책·저널·원고지. AIGrit(Indigo+Cyan, 계측기)의 대척점. 전체 팔레트·타이포·로고 규격은 `docs/BRAND_GUIDELINES.md`, 런타임 값은 `brand.config.ts`.
+
+- **톤:** 솔직한 1인 개발자 일기. "결과보다 과정", "실패도 공유" — 인칭 "나" 기본
+- **Primary:** `#6B2E4E` (Plum) — 제목, 링크, 브랜드
+- **Secondary:** `#C89F7C` (Terracotta) — 배지·구분선 배경 (텍스트 금지)
+- **Accent Green:** `#6B8A63` — "완료" · "출시" 배지
+- **Accent Red:** `#9C4A3E` — "실패" · "중단" 배지
+- **Neutral:** Ink `#2B2420` / Paper `#FAF7F2`
+- **폰트:** 헤딩 Gowun Batang (한글) + Lora (영문) **세리프** / 본문 Pretendard + Inter / 코드 JetBrains Mono
 - **네비게이션:** Home · Blog · Projects · About
 
-## docs 폴더
-현재 없음. Phase 2에서 babipanote 특화 주제(타임라인 홈 구조, Projects 페이지, 브랜드 자산 전략 등)만 선별 작성. aigrit과 공통되는 주제(MDX 엔진, SEO 골격, blog-core API)는 `apps/aigrit/docs/`의 문서를 참조로 링크.
+## docs 폴더 참조 규칙
+
+| 상황 | 읽을 파일 |
+|---|---|
+| 브랜드 팔레트·타이포·로고·OG 규격 | `docs/BRAND_GUIDELINES.md` |
+| MDX 파싱/글 목록/frontmatter | `apps/aigrit/docs/MDX_ENGINE.md` (공용 동작) |
+| SEO 메타·구조화 데이터 | `apps/aigrit/docs/SEO_MONETIZATION.md` (광고 섹션은 skip) |
+| Vercel 배포·CI | `apps/aigrit/docs/DEPLOYMENT.md` (모노레포 공통) |
+| 글 발행 워크플로우 | `apps/aigrit/docs/PUBLISH_WORKFLOW.md` (공용) + 앱별 publish-post 커맨드 |
+| 타임라인 홈·Projects 페이지 등 babipanote 특화 | Phase 2에서 신규 작성 예정 |
 
 ## 배포 워크플로우
 ```bash
