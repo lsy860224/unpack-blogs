@@ -11,9 +11,7 @@
     "./types/*": "./types/*.ts",
     "./hooks/*": "./hooks/*.ts"
   },
-  "scripts": {
-    "lint": "eslint ."
-  },
+  "scripts": {},
   "dependencies": {
     "gray-matter": "^4.0.3",
     "reading-time": "^1.5.0"
