@@ -1,8 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
-import { BrandProvider, buildMetadata } from "@unpack/blog-core";
+import {
+  BrandProvider,
+  buildMetadata,
+  GoogleAnalytics,
+  AdSenseScript,
+} from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
+import { Header } from "../components/layout/Header";
+import { Footer } from "../components/layout/Footer";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -58,7 +65,15 @@ export default function RootLayout({
       className={`${pretendard.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <BrandProvider config={brandConfig}>{children}</BrandProvider>
+        <BrandProvider config={brandConfig}>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </BrandProvider>
+        <GoogleAnalytics gaId={brandConfig.analytics.gaId} />
+        {brandConfig.monetization.adsense && (
+          <AdSenseScript publisherId={brandConfig.monetization.adsensePublisherId} />
+        )}
       </body>
     </html>
   );
