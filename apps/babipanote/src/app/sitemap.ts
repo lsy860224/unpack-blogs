@@ -13,7 +13,8 @@ const STATIC_PATHS: { path: string; priority: number }[] = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = brandConfig.url.replace(/\/+$/, "");
+  const configUrl = brandConfig.url;
+  const base = (configUrl.includes("localhost") ? "https://babipanote.com" : configUrl).replace(/\/+$/, "");
   const now = new Date();
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((s) => ({

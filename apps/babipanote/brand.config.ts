@@ -5,7 +5,7 @@ export const brandConfig: BrandConfig = {
   tagline: "오늘도 만들고, 내일 더 나은 것을 만든다",
   description:
     "1인 빌더의 실패와 배움을 가감 없이 기록하는 개인 저널 — 매출·숫자·감정까지 날것으로.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://babipanote.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://babipanote.com",
   locale: "ko-KR",
   nav: [
     { label: "Home", href: "/" },

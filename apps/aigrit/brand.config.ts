@@ -5,7 +5,7 @@ export const brandConfig: BrandConfig = {
   tagline: "AI의 알맹이만 남긴다",
   description:
     "AI 도구를 직접 며칠간 써보고 속도·비용·정확도를 숫자로 비교하는 한국어 리뷰 — 팔지 않고, 씁니다.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://aigrit.dev",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://aigrit.dev",
   locale: "ko-KR",
   nav: [
     { label: "Home", href: "/" },
