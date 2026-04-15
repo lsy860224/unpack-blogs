@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     default: `${brandConfig.name} — ${brandConfig.tagline}`,
     template: `%s | ${brandConfig.name}`,
   },
+  verification: {
+    other: {
+      "naver-site-verification": "e114db7c0ebcb7a99c7635f44b05ea88b26fa057",
+    },
+  },
 };
 
 export const viewport: Viewport = {
