@@ -1,21 +1,20 @@
 ---
-title: "Week 1 회고 — 36시간 스프린트로 블로그 2개 런칭한 이야기"
+title: "Turborepo 모노레포로 36시간 만에 블로그 2개 런칭한 후기"
 date: "2026-04-15 23:30"
 slug: "week1-sprint-two-blogs"
-description: "Turborepo 모노레포로 AIGrit과 babipanote를 동시에 만들고 배포한 첫 주. 16커밋, 36시간, 2개 도메인."
-tags: ["빌더저널", "회고", "turborepo", "next.js", "vercel"]
+description: "Turborepo 모노레포와 Next.js 16으로 36시간 만에 블로그 2개를 런칭한 1인 개발자의 실전 회고. 프로젝트 구조 설계부터 Vercel 배포까지 전 과정을 공유합니다."
+tags: ["turborepo", "모노레포", "nextjs", "1인개발", "사이드프로젝트", "vercel", "빌더저널"]
 thumbnail: ""
 category: "저널"
+featured: true
 ---
-
-## 이번 주에 한 일
 
 4월 14일 월요일 저녁, 빈 폴더 하나에서 시작했다. 4월 15일 화요일 밤, 두 개의 블로그가 각자의 도메인에서 돌아가고 있었다.
 
-- **aigrit.dev** — AI 도구 리뷰 블로그. 애드센스 붙이고, Giscus 댓글 달고, hello-world 글 하나 올렸다.
-- **babipanote.com** — 지금 이 글을 읽고 있는 빌더 저널. 광고 없이, 과정만 기록하는 공간.
+- [**aigrit.dev**](https://aigrit.dev) — AI 도구 리뷰 블로그. 애드센스 붙이고, Giscus 댓글 달고, hello-world 글 하나 올렸다.
+- [**babipanote.com**](https://babipanote.com) — 지금 이 글을 읽고 있는 빌더 저널. 광고 없이, 과정만 기록하는 공간.
 
-숫자로 보면 이렇다.
+## 36시간 스프린트 결과 — 숫자로 보는 Week 1
 
 | 항목 | 수치 |
 |------|------|
@@ -23,17 +22,17 @@ category: "저널"
 | 소요 시간 | 약 36시간 (퇴근 후 + 새벽) |
 | 생성 파일 | 약 60개 |
 | 공유 패키지 | 1개 (blog-core) |
-| 배포 플랫폼 | Vercel × 2 프로젝트 |
+| 배포 플랫폼 | [Vercel](https://vercel.com) × 2 프로젝트 |
 | 발행 글 | 각 1개씩 (hello-world) |
 | 현재 트래픽 | 0 |
 
 트래픽 0이다. 솔직히 쓴다고 했으니까.
 
-## 왜 모노레포였나
+## 왜 Turborepo 모노레포를 선택했는가
 
 원래 블로그를 하나만 만들 생각이었다. AIGrit. AI 도구 리뷰하고 애드센스로 수익 내는 블로그. 그런데 만들다 보니 "오늘 이거 삽질했다" 같은 개인적인 글을 쓸 곳이 없었다. 리뷰 블로그에 일기를 쓸 수는 없으니까.
 
-두 개를 별도 레포로 만들면 코드가 두 벌이다. MDX 파싱, SEO 메타태그, 댓글 시스템 — 전부 복붙해야 한다. 그래서 Turborepo 모노레포를 선택했다.
+두 개를 별도 레포로 만들면 코드가 두 벌이다. MDX 파싱, SEO 메타태그, 댓글 시스템 — 전부 복붙해야 한다. 그래서 [Turborepo](https://turbo.build/repo) 모노레포를 선택했다.
 
 ```
 unpack-blogs/
@@ -45,26 +44,53 @@ unpack-blogs/
 
 blog-core에 공통 로직을 넣고, 각 앱은 `brand.config.ts` 파일 하나로 색상, 폰트, 광고 on/off, 레이아웃을 분리했다. 코드는 하나인데 사이트는 둘. 수정하면 둘 다 반영된다.
 
-## 어떤 순서로 만들었나
+## Next.js 16 프로젝트 구조 설계 — 블로그 2개를 하나의 레포에서
+
+[Next.js 16](https://nextjs.org)의 App Router와 [pnpm](https://pnpm.io) 워크스페이스를 조합했다. 핵심은 `blog-core` 패키지의 `BrandProvider` 컨텍스트다. 각 앱이 자신의 `brand.config.ts`를 주입하면, 공유 컴포넌트들이 해당 브랜드의 색상과 설정으로 렌더링된다.
+
+| 항목 | AIGrit | babipanote |
+|------|--------|-----------|
+| 포지션 | AI 도구 리뷰 | 빌더 저널 |
+| 톤 | 전문적, 수치 중심 | 개인적, 일기체 |
+| 색상 | Indigo + Cyan | Plum + Terracotta |
+| 광고 | 애드센스 ON | OFF |
+| 레이아웃 | 카테고리 중심 | 타임라인형 |
+
+하나의 `PostCard` 컴포넌트가 AIGrit에서는 Indigo 테두리로, babipanote에서는 Plum 테두리로 표시된다. 코드 한 줄 안 건드리고.
+
+## 36시간 스프린트 타임라인 — 실제 작업 로그
 
 Phase 0부터 2.5까지 단계를 나눠서 진행했다.
 
 1. **Phase 0** — Turborepo 스캐폴딩, pnpm 워크스페이스 설정
-2. **Phase 0-1** — blog-core 패키지 생성, MDX 파싱, 글 목록 API
+2. **Phase 0-1** — blog-core 패키지 생성, MDX 파싱([gray-matter](https://github.com/jonschlinkert/gray-matter) + [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote)), 글 목록 API
 3. **Phase 0-2** — 디자인 토큰 정의 (AIGrit: Indigo, babipanote: Plum)
 4. **Phase 1** — BrandProvider 컨텍스트, brand.config.ts 분리
 5. **Phase 2** — 실제 페이지 구현 (홈, 글 목록, 글 상세, About)
-6. **Phase 2.5** — Giscus 댓글, AdSense, JSON-LD, 시간 포매팅
+6. **Phase 2.5** — [Giscus](https://giscus.app) 댓글, [AdSense](https://adsense.google.com) 연동, JSON-LD 구조화 데이터, 시간 포매팅
 
 각 Phase마다 커밋을 찍었다. 되돌릴 수 있게.
 
-## 잘한 것
+## Vercel 배포와 모노레포 CI/CD 설정 방법
+
+Vercel에서 모노레포를 배포하는 건 생각보다 간단했다.
+
+1. GitHub에 모노레포 push
+2. Vercel에서 **프로젝트 2개** 생성
+3. 각 프로젝트의 Root Directory를 `apps/aigrit`과 `apps/babipanote`로 지정
+4. 환경변수 각각 설정 (GA4 ID, Giscus 레포 등)
+
+Turborepo가 `packages/blog-core` 변경을 감지해서 양쪽 모두 재배포해준다. GitHub Actions CI도 `turbo run build`로 전체 빌드를 검증한다.
+
+## 1인 개발자의 스프린트 회고 — 잘한 점과 아쉬운 점
+
+### 잘한 것
 
 **브랜드 분리를 처음부터 설계한 것.** brand.config.ts 하나로 색상, 폰트, 광고, 네비게이션을 제어하니까 새 사이트 추가가 쉽다. 나중에 네이버 블로그 연동이나 세 번째 블로그를 만들 때도 apps/ 폴더에 하나 더 추가하면 된다.
 
 **Phase를 잘게 나눈 것.** 36시간을 통으로 쓴 게 아니라 6단계로 쪼갰다. 각 단계가 끝날 때마다 빌드가 되는 상태를 유지했다. 새벽 3시에 눈이 감겨도 "여기까지는 됐다"는 확신이 있었다.
 
-## 못한 것
+### 못한 것
 
 **콘텐츠를 못 쌓았다.** 인프라에 36시간을 쏟고 정작 글은 각 1개뿐이다. "기반을 먼저 만들자"는 합리화를 했는데, 솔직히 글 쓰기가 더 무서웠던 것 같다.
 
@@ -76,4 +102,4 @@ Phase 0부터 2.5까지 단계를 나눠서 진행했다.
 2. AIGrit에 첫 번째 실전 리뷰 발행
 3. 콘텐츠 루틴 잡기 — 평일 1시간, 주말 3시간
 
-인프라는 됐다. 이제 채울 차례다.
+인프라는 됐다. 이제 채울 차례다. [다음 글](/blog/building-app-with-claude-code)에서는 Claude Code로 Flutter 앱을 만든 이야기를 쓴다.
