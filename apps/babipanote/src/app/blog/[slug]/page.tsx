@@ -2,6 +2,7 @@ import path from "node:path";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
+  Comments,
   PostHeader,
   PostRenderer,
   buildMetadata,
@@ -57,6 +58,13 @@ export default async function PostPage({
       <div className="prose prose-neutral max-w-none dark:prose-invert">
         <PostRenderer source={post.content} components={defaultMdxComponents} />
       </div>
+
+      <Comments
+        repo={brandConfig.comments.giscusRepo}
+        repoId={brandConfig.comments.giscusRepoId}
+        category={brandConfig.comments.giscusCategory}
+        categoryId={brandConfig.comments.giscusCategoryId}
+      />
     </article>
   );
 }

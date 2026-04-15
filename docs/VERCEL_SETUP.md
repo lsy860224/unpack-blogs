@@ -50,11 +50,43 @@
 - [ ] **Settings → Domains** → `babipanote.com` 등록
 
 ## 3. Giscus 설정 (두 사이트 각각)
-- [ ] https://giscus.app
-  - Repository: `lsy860224/aigrit-comments` (aigrit) / `lsy860224/babipanote-comments` (babipanote)
-  - 각 저장소에서 **Settings → Discussions 활성화** → Giscus가 읽을 수 있는 `Announcements` 또는 `Comments` 카테고리 생성
-  - 발급된 `data-repo-id` / `data-category` / `data-category-id` 값을 Vercel 환경변수에 복사
-- [ ] giscus 앱(https://github.com/apps/giscus)을 저장소에 설치
+
+Public 저장소 2개는 이미 생성됨: `lsy860224/aigrit-comments`, `lsy860224/babipanote-comments`. 아래를 **각 저장소마다** 반복.
+
+### 3-1. 저장소 셋업
+- [ ] 저장소 → **Settings → General → Features**: **Discussions 체크 ON**, Issues 체크 OFF 권장(스팸 방지)
+- [ ] 저장소 → **Discussions → Categories → New category**: `Announcements` (Format: Announcement) 생성
+  - 이미 있으면 그대로 사용. 이름은 정확히 `Announcements` 권장 (env의 `NEXT_PUBLIC_GISCUS_CATEGORY`와 일치)
+
+### 3-2. giscus 앱 설치
+- [ ] https://github.com/apps/giscus → **Configure** → 두 저장소 모두 선택하여 접근 허용
+
+### 3-3. giscus.app에서 ID 발급 (저장소별로)
+- [ ] https://giscus.app 접속
+- [ ] **저장소** 입력: `lsy860224/aigrit-comments` (babipanote는 `lsy860224/babipanote-comments`)
+- [ ] **Page ↔ Discussions Mapping**: `Pathname` 선택 (slug 변경 시 유실 방지)
+- [ ] **Discussion Category**: `Announcements`
+- [ ] **Features**: Reactions 허용 권장, Light/Dark는 `preferred_color_scheme`
+- [ ] 페이지 하단 스니펫에서 다음 값 복사:
+  - `data-repo-id` → `NEXT_PUBLIC_GISCUS_REPO_ID`
+  - `data-category-id` → `NEXT_PUBLIC_GISCUS_CATEGORY_ID`
+
+### 3-4. 환경변수 입력 (각 Vercel 프로젝트 + 로컬)
+- [ ] AIGrit 프로젝트 Environment Variables:
+  ```
+  NEXT_PUBLIC_GISCUS_REPO=lsy860224/aigrit-comments
+  NEXT_PUBLIC_GISCUS_REPO_ID=R_XXXXXXXXXX
+  NEXT_PUBLIC_GISCUS_CATEGORY=Announcements
+  NEXT_PUBLIC_GISCUS_CATEGORY_ID=DIC_XXXXXXXXXX
+  ```
+- [ ] babipanote 프로젝트에도 같은 4개 변수를 `babipanote-comments` 기준 값으로 입력
+- [ ] 로컬 개발: `apps/{aigrit,babipanote}/.env.example` → `.env.local` 복사 후 동일 값 입력
+
+### 3-5. 검증
+- [ ] 각 사이트의 `/blog/hello-world` 접속 → 본문 아래에 Giscus iframe 렌더 확인
+- [ ] GitHub 계정 로그인 → 테스트 댓글 1개 작성
+- [ ] 해당 저장소 **Discussions** 탭에 스레드 자동 생성 확인 (Category: Announcements)
+- [ ] 글 삭제 후 재발행 시 URL pathname이 같으면 기존 스레드에 이어짐을 확인
 
 ## 4. GA4 (두 사이트 각각)
 - [ ] https://analytics.google.com → 관리 → **속성 2개 생성** (aigrit.dev / babipanote.com)
