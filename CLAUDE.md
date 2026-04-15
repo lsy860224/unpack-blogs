@@ -255,7 +255,7 @@ unpack-blogs/
 ```yaml
 ---
 title: "글 제목"
-date: "2026-04-14"
+date: "2026-04-14 21:30"   # YYYY-MM-DD 또는 YYYY-MM-DD HH:mm (Asia/Seoul, 시간 생략 시 자정)
 slug: "url-slug"
 description: "150자 설명"
 tags: ["태그1", "태그2"]

@@ -16,6 +16,7 @@ import {
   RelatedPosts,
   TableOfContents,
   extractHeadings,
+  toIsoDatetime,
 } from "@unpack/blog-core";
 import { brandConfig } from "../../../../brand.config";
 
@@ -45,7 +46,7 @@ export async function generateMetadata({
     path: `/blog/${post.frontmatter.slug}`,
     image: post.frontmatter.thumbnail,
     type: "article",
-    publishedTime: post.frontmatter.date,
+    publishedTime: toIsoDatetime(post.frontmatter.date),
     tags: post.frontmatter.tags,
   });
 }
@@ -69,7 +70,7 @@ export default async function PostPage({
     siteUrl: brandConfig.url,
     path: `/blog/${post.frontmatter.slug}`,
     image: post.frontmatter.thumbnail,
-    datePublished: post.frontmatter.date,
+    datePublished: toIsoDatetime(post.frontmatter.date),
   });
 
   const reviewJsonLd = post.frontmatter.review
@@ -80,7 +81,7 @@ export default async function PostPage({
         bestRating: post.frontmatter.review.bestRating,
         worstRating: post.frontmatter.review.worstRating,
         authorName: brandConfig.name,
-        datePublished: post.frontmatter.date,
+        datePublished: toIsoDatetime(post.frontmatter.date),
         url: `${brandConfig.url}/blog/${post.frontmatter.slug}`,
       })
     : null;

@@ -1,6 +1,10 @@
 import Link from "next/link";
 import path from "node:path";
-import { getAllPostSummaries } from "@unpack/blog-core";
+import {
+  formatPostDateShort,
+  getAllPostSummaries,
+  toIsoDatetime,
+} from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 
 const CONTENT_DIR = path.join(process.cwd(), "content/posts");
@@ -47,11 +51,11 @@ export default function HomePage() {
                     >
                       <div className="flex items-baseline justify-between gap-3">
                         <time
-                          dateTime={post.frontmatter.date}
+                          dateTime={toIsoDatetime(post.frontmatter.date)}
                           className="text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
                           style={{ fontFamily: "var(--font-mono)" }}
                         >
-                          {post.frontmatter.date.slice(5)}
+                          {formatPostDateShort(post.frontmatter.date)}
                         </time>
                         <span className="text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]">
                           {post.readingTimeMinutes}분

@@ -122,7 +122,7 @@ aigrit/
 ```yaml
 ---
 title: "글 제목"
-date: "YYYY-MM-DD"
+date: "YYYY-MM-DD HH:mm"  # 또는 "YYYY-MM-DD" (시간 생략 시 Asia/Seoul 자정)
 slug: "url-slug"
 description: "150자 이내 설명"
 tags: ["태그1", "태그2"]

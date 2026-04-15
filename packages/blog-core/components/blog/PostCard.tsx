@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostSummary } from "../../types/post";
+import { formatPostDate, toIsoDatetime } from "../../lib/date";
 
 export interface PostCardProps {
   post: PostSummary;
@@ -29,10 +30,10 @@ export function PostCard({
     >
       <div className="flex items-baseline justify-between gap-3">
         <time
-          dateTime={frontmatter.date}
+          dateTime={toIsoDatetime(frontmatter.date)}
           className="text-xs text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] tabular-nums"
         >
-          {frontmatter.date}
+          {formatPostDate(frontmatter.date)}
         </time>
         <span className="text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]">
           {readingTimeMinutes}분

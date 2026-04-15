@@ -18,7 +18,7 @@ apps/aigrit/content/posts/*.mdx    ← 글 파일들
 ```typescript
 export interface PostFrontmatter {
   title: string
-  date: string           // YYYY-MM-DD
+  date: string           // YYYY-MM-DD 또는 YYYY-MM-DD HH:mm (KST)
   slug: string           // URL slug
   description: string
   tags?: string[]
@@ -141,7 +141,7 @@ featured: true
 | 필드 | 타입 | 필수 | 설명 |
 |------|------|:----:|------|
 | title | string | ✅ | 글 제목 (SEO title에도 사용) |
-| date | string | ✅ | 발행일 (YYYY-MM-DD) |
+| date | string | ✅ | 발행일 (YYYY-MM-DD 또는 YYYY-MM-DD HH:mm, KST 기준) |
 | slug | string | ✅ | URL 경로 (/blog/{slug}) — 생략 시 파일명 사용 |
 | description | string | ✅ | SEO meta description (150자) |
 | tags | string[] | ❌ | 태그 목록 |

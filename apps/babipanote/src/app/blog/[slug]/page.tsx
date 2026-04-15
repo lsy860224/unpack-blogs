@@ -9,6 +9,7 @@ import {
   defaultMdxComponents,
   getAllPostSlugs,
   getPostBySlug,
+  toIsoDatetime,
 } from "@unpack/blog-core";
 import { brandConfig } from "../../../../brand.config";
 
@@ -38,7 +39,7 @@ export async function generateMetadata({
     path: `/blog/${post.frontmatter.slug}`,
     image: post.frontmatter.thumbnail,
     type: "article",
-    publishedTime: post.frontmatter.date,
+    publishedTime: toIsoDatetime(post.frontmatter.date),
     tags: post.frontmatter.tags,
   });
 }

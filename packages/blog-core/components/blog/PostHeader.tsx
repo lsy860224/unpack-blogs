@@ -1,4 +1,5 @@
 import type { Post } from "../../types/post";
+import { formatPostDate, toIsoDatetime } from "../../lib/date";
 
 export interface PostHeaderProps {
   post: Post;
@@ -28,8 +29,8 @@ export function PostHeader({ post, className }: PostHeaderProps) {
         {frontmatter.description}
       </p>
       <div className="mt-4 flex items-center gap-3 text-sm text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
-        <time dateTime={frontmatter.date} className="tabular-nums">
-          {frontmatter.date}
+        <time dateTime={toIsoDatetime(frontmatter.date)} className="tabular-nums">
+          {formatPostDate(frontmatter.date)}
         </time>
         <span aria-hidden>·</span>
         <span>읽는 시간 {readingTimeMinutes}분</span>
