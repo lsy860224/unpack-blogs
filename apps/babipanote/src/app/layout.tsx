@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Gowun_Batang, Lora } from "next/font/google";
 import localFont from "next/font/local";
-import { BrandProvider, buildMetadata } from "@unpack/blog-core";
+import { BrandProvider, GoogleAnalytics, buildMetadata } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -78,6 +78,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </BrandProvider>
+        <GoogleAnalytics gaId={brandConfig.analytics.gaId} />
       </body>
     </html>
   );
