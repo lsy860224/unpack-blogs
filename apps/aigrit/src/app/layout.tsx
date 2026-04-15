@@ -42,6 +42,12 @@ export const metadata: Metadata = {
     default: `${brandConfig.name} — ${brandConfig.tagline}`,
     template: `%s | ${brandConfig.name}`,
   },
+  verification: {
+    google: "OAmX5Qm-Z-IU2IOnM60RakOqHqY-h99z1eE2iE5tyTE",
+    other: {
+      "naver-site-verification": "b034ba1644492f2a15ffa439789554ca2b037777",
+    },
+  },
 };
 
 export const viewport: Viewport = {
