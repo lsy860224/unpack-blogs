@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { PostSummary } from "../../types/post";
 import { formatPostDate, toIsoDatetime } from "../../lib/date";
 
@@ -7,6 +8,7 @@ export interface PostCardProps {
   variant?: "default" | "compact";
   hrefBase?: string;
   className?: string;
+  showThumbnail?: boolean;
 }
 
 export function PostCard({
@@ -14,20 +16,33 @@ export function PostCard({
   variant = "default",
   hrefBase = "/blog",
   className,
+  showThumbnail = true,
 }: PostCardProps) {
   const { frontmatter, readingTimeMinutes } = post;
   const isCompact = variant === "compact";
+  const hasThumbnail = showThumbnail && !isCompact && !!frontmatter.thumbnail;
 
   return (
     <Link
       href={`${hrefBase}/${frontmatter.slug}`}
       className={[
-        "group block rounded-lg transition",
+        "group block rounded-lg transition overflow-hidden",
         "hover:bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)]",
         isCompact ? "p-3" : "p-4",
         className ?? "",
       ].join(" ")}
     >
+      {hasThumbnail && (
+        <div className="mb-4 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)]">
+          <Image
+            src={frontmatter.thumbnail!}
+            alt={frontmatter.title}
+            width={1200}
+            height={630}
+            className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          />
+        </div>
+      )}
       <div className="flex items-baseline justify-between gap-3">
         <time
           dateTime={toIsoDatetime(frontmatter.date)}
