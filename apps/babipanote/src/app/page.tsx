@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import path from "node:path";
 import {
   formatPostDateShort,
@@ -47,7 +48,7 @@ export default function HomePage() {
                     <span className="absolute left-[-4px] top-3 w-2 h-2 rounded-full bg-[var(--color-brand-secondary)]" />
                     <Link
                       href={`/blog/${post.frontmatter.slug}`}
-                      className="block py-2 group"
+                      className="block py-3 group"
                     >
                       <div className="flex items-baseline justify-between gap-3">
                         <time
@@ -61,12 +62,27 @@ export default function HomePage() {
                           {post.readingTimeMinutes}분
                         </span>
                       </div>
-                      <h3 className="mt-0.5 text-base font-semibold group-hover:text-[var(--color-brand-primary)] transition">
-                        {post.frontmatter.title}
-                      </h3>
-                      <p className="mt-1 text-sm leading-relaxed text-[color-mix(in_oklab,var(--foreground)_70%,transparent)] line-clamp-2">
-                        {post.frontmatter.description}
-                      </p>
+                      <div className="mt-1 flex gap-4 items-start">
+                        {post.frontmatter.thumbnail && (
+                          <div className="flex-shrink-0 w-32 sm:w-40 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)]">
+                            <Image
+                              src={post.frontmatter.thumbnail}
+                              alt={post.frontmatter.title}
+                              width={1200}
+                              height={630}
+                              className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base font-semibold group-hover:text-[var(--color-brand-primary)] transition">
+                            {post.frontmatter.title}
+                          </h3>
+                          <p className="mt-1 text-sm leading-relaxed text-[color-mix(in_oklab,var(--foreground)_70%,transparent)] line-clamp-2">
+                            {post.frontmatter.description}
+                          </p>
+                        </div>
+                      </div>
                     </Link>
                   </li>
                 ))}
