@@ -1,30 +1,62 @@
 import type { Metadata } from "next";
-import { buildMetadata } from "@unpack/blog-core";
-import { brandConfig } from "../../../brand.config";
+import { buildMetadata, toOgLocale } from "@unpack/blog-core";
+import { brandConfig, getLocalizedBrand } from "../../../../brand.config";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Privacy Policy",
-  description: `${brandConfig.name} 개인정보 처리방침`,
-  siteName: brandConfig.name,
-  siteUrl: brandConfig.url,
-  path: "/privacy",
-});
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const localized = getLocalizedBrand(locale);
+  const description =
+    locale === "en"
+      ? `${localized.name} Privacy Policy`
+      : `${localized.name} 개인정보 처리방침`;
+  return buildMetadata({
+    title: "Privacy Policy",
+    description,
+    siteName: localized.name,
+    siteUrl: localized.url,
+    path: `/${locale}/privacy`,
+    locale: toOgLocale(locale),
+    hrefLangs: {
+      ko: "/ko/privacy",
+      en: "/en/privacy",
+      "x-default": "/ko/privacy",
+    },
+  });
+}
 
-export default function PrivacyPage() {
+export default async function PrivacyPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return locale === "en" ? <PrivacyEn /> : <PrivacyKo />;
+}
+
+function Header({ subtitle }: { subtitle: string }) {
+  return (
+    <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
+      <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
+        Privacy Policy
+      </h1>
+      <p
+        className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
+        style={{ fontFamily: "var(--font-mono)" }}
+      >
+        {subtitle}
+      </p>
+    </header>
+  );
+}
+
+function PrivacyKo() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
-          Privacy Policy
-        </h1>
-        <p
-          className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          개인정보 처리방침 · 최종 업데이트 2026-04-15
-        </p>
-      </header>
-
+      <Header subtitle="개인정보 처리방침 · 최종 업데이트 2026-04-15" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <p>
           {brandConfig.name}({brandConfig.url})은 방문자의 개인정보를 소중히
@@ -74,9 +106,7 @@ export default function PrivacyPage() {
         </p>
 
         <h2>4. 제3자 제공</h2>
-        <p>
-          수집된 정보는 다음 외 제3자에게 제공되지 않습니다.
-        </p>
+        <p>수집된 정보는 다음 외 제3자에게 제공되지 않습니다.</p>
         <ul>
           <li>Google LLC (Analytics, AdSense)</li>
           <li>Vercel Inc. (호스팅)</li>
@@ -112,6 +142,103 @@ export default function PrivacyPage() {
         <p>
           본 방침은 사이트 운영 방식이 바뀔 때 예고 후 업데이트됩니다. 변경 이력은
           본 페이지 상단의 &quot;최종 업데이트&quot; 날짜로 확인할 수 있습니다.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function PrivacyEn() {
+  return (
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <Header subtitle="Privacy Policy · Last updated 2026-04-15" />
+      <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
+        <p>
+          {brandConfig.name} ({brandConfig.url}) respects visitor privacy. This
+          policy explains what we collect and how we use it.
+        </p>
+
+        <h2>1. What we collect</h2>
+        <ul>
+          <li>
+            <strong>Access logs</strong> — IP address (anonymized), User-Agent,
+            referrer, and timestamp, recorded automatically by our web server
+            and CDN.
+          </li>
+          <li>
+            <strong>Analytics cookies</strong> — Google Analytics (GA4) sets
+            cookies to aggregate visit patterns. IP anonymization is enabled.
+          </li>
+          <li>
+            <strong>Ad cookies</strong> — Google AdSense uses cookies to serve
+            relevant ads. You can manage ad personalization at{" "}
+            <a
+              href="https://adssettings.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Ad Settings
+            </a>
+            .
+          </li>
+          <li>
+            <strong>Comment sign-in</strong> — Giscus comments use GitHub
+            account authentication. Sign-in data is processed by GitHub only and
+            not stored on this site.
+          </li>
+        </ul>
+
+        <h2>2. Purpose</h2>
+        <ul>
+          <li>Site operation and security (access records, error tracking).</li>
+          <li>Content improvement via aggregate analytics (GA4).</li>
+          <li>Ad delivery and invalid-click prevention (AdSense).</li>
+        </ul>
+
+        <h2>3. Retention</h2>
+        <p>
+          Access logs are retained for up to 6 months and then deleted. GA4 and
+          AdSense follow the retention policies of their respective services.
+        </p>
+
+        <h2>4. Third parties</h2>
+        <p>We do not share collected data with third parties except:</p>
+        <ul>
+          <li>Google LLC (Analytics, AdSense)</li>
+          <li>Vercel Inc. (hosting)</li>
+          <li>GitHub, Inc. (Giscus comments)</li>
+        </ul>
+
+        <h2>5. Opting out of cookies</h2>
+        <p>
+          You can block cookies in your browser settings. Some features (comments,
+          theme preference) may be limited when cookies are disabled.
+        </p>
+
+        <h2>6. Your rights</h2>
+        <p>
+          To access, correct, or delete your personal data, please contact us via{" "}
+          {brandConfig.social.x && (
+            <>
+              X (
+              <a
+                href={`https://x.com/${brandConfig.social.x.replace(/^@/, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {brandConfig.social.x}
+              </a>
+              )
+            </>
+          )}
+          .
+        </p>
+
+        <h2>7. Changes</h2>
+        <p>
+          This policy is updated when the site&apos;s operations change, with
+          prior notice. The &quot;Last updated&quot; date at the top of this page
+          reflects the most recent revision.
         </p>
       </section>
     </div>

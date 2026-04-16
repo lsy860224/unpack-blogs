@@ -1,35 +1,65 @@
 import type { Metadata } from "next";
-import { buildMetadata } from "@unpack/blog-core";
-import { brandConfig } from "../../../brand.config";
+import { buildMetadata, toOgLocale } from "@unpack/blog-core";
+import { brandConfig, getLocalizedBrand } from "../../../../brand.config";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Disclaimer",
-  description: `${brandConfig.name} 광고·제휴 고지사항`,
-  siteName: brandConfig.name,
-  siteUrl: brandConfig.url,
-  path: "/disclaimer",
-});
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const localized = getLocalizedBrand(locale);
+  const description =
+    locale === "en"
+      ? `${localized.name} advertising and affiliate disclosure`
+      : `${localized.name} 광고·제휴 고지사항`;
+  return buildMetadata({
+    title: "Disclaimer",
+    description,
+    siteName: localized.name,
+    siteUrl: localized.url,
+    path: `/${locale}/disclaimer`,
+    locale: toOgLocale(locale),
+    hrefLangs: {
+      ko: "/ko/disclaimer",
+      en: "/en/disclaimer",
+      "x-default": "/ko/disclaimer",
+    },
+  });
+}
 
-export default function DisclaimerPage() {
+export default async function DisclaimerPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return locale === "en" ? <DisclaimerEn /> : <DisclaimerKo />;
+}
+
+function Header({ subtitle }: { subtitle: string }) {
+  return (
+    <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
+      <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
+        Disclaimer
+      </h1>
+      <p
+        className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
+        style={{ fontFamily: "var(--font-mono)" }}
+      >
+        {subtitle}
+      </p>
+    </header>
+  );
+}
+
+function DisclaimerKo() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
-          Disclaimer
-        </h1>
-        <p
-          className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          광고·제휴 고지사항 · 최종 업데이트 2026-04-15
-        </p>
-      </header>
-
+      <Header subtitle="광고·제휴 고지사항 · 최종 업데이트 2026-04-15" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <h2>1. 사이트의 수익 구조</h2>
-        <p>
-          {brandConfig.name}은 다음 두 가지로 운영비·원고료를 충당합니다.
-        </p>
+        <p>{brandConfig.name}은 다음 두 가지로 운영비·원고료를 충당합니다.</p>
         <ul>
           <li>
             <strong>Google AdSense 디스플레이 광고</strong> — 본문 상·하단, 본문
@@ -82,9 +112,9 @@ export default function DisclaimerPage() {
 
         <h2>5. 외부 링크</h2>
         <p>
-          외부 사이트로 연결되는 링크(<code>target=&quot;_blank&quot;</code>
-          )의 콘텐츠에 대해서는 {brandConfig.name}이 책임지지 않습니다. 각 사이트
-          의 개인정보 방침과 약관을 별도로 확인해주세요.
+          외부 사이트로 연결되는 링크(<code>target=&quot;_blank&quot;</code>)의
+          콘텐츠에 대해서는 {brandConfig.name}이 책임지지 않습니다. 각 사이트의
+          개인정보 방침과 약관을 별도로 확인해주세요.
         </p>
 
         <h2>6. 문의</h2>
@@ -102,6 +132,91 @@ export default function DisclaimerPage() {
             "사이트 운영자"
           )}
           로 연락해주세요.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function DisclaimerEn() {
+  return (
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <Header subtitle="Advertising & Affiliate Disclosure · Last updated 2026-04-15" />
+      <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
+        <h2>1. How we&apos;re funded</h2>
+        <p>{brandConfig.name} is supported by two revenue streams:</p>
+        <ul>
+          <li>
+            <strong>Google AdSense display ads</strong> — inserted above, below,
+            and within articles. Ad slots are labeled <code>Ad · Sponsored</code>.
+          </li>
+          <li>
+            <strong>Affiliate links</strong> — we link to the official sign-up
+            pages of reviewed tools and earn a commission if you sign up or
+            purchase. These links are marked with an <code>AD</code> badge or
+            the phrase <em>&quot;Affiliate link — we may earn a commission&quot;</em>.
+          </li>
+        </ul>
+
+        <h2>2. Editorial independence</h2>
+        <ol>
+          <li>
+            Affiliate compensation occurs only when a reader <strong>decides
+            independently</strong>. We do not pressure clicks or sign-ups.
+          </li>
+          <li>
+            For tools we have affiliate relationships with, we still{" "}
+            <strong>describe limitations and downsides as observed</strong>.
+            Ratings and recommendations are decided independently of affiliate
+            status.
+          </li>
+          <li>
+            <strong>We do not accept sponsored reviews.</strong> Pitches
+            offering money in exchange for favorable coverage are declined.
+          </li>
+          <li>
+            Reviews involving affiliate links are marked with{" "}
+            <strong>&quot;Contains affiliate links&quot;</strong> at the top.
+          </li>
+        </ol>
+
+        <h2>3. Limits of information</h2>
+        <p>
+          Reviews reflect the state of the product at the time of writing.
+          Updates, pricing, or policy changes may not be reflected. Always check
+          the vendor&apos;s latest official information before purchasing.
+        </p>
+
+        <h2>4. Liability</h2>
+        <p>
+          {brandConfig.name}&apos;s reviews and comparisons are based on the
+          author&apos;s hands-on experience and measurements. {brandConfig.name}{" "}
+          assumes no legal liability for purchase, investment, or business
+          decisions made on the basis of these reviews.
+        </p>
+
+        <h2>5. External links</h2>
+        <p>
+          {brandConfig.name} is not responsible for the content of external
+          sites linked with <code>target=&quot;_blank&quot;</code>. Please review
+          the privacy policies and terms of those sites separately.
+        </p>
+
+        <h2>6. Contact</h2>
+        <p>
+          Questions about this disclosure:{" "}
+          {brandConfig.social.x ? (
+            <a
+              href={`https://x.com/${brandConfig.social.x.replace(/^@/, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {brandConfig.social.x}
+            </a>
+          ) : (
+            "site owner"
+          )}
+          .
         </p>
       </section>
     </div>

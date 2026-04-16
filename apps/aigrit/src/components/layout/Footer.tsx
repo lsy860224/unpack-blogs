@@ -3,19 +3,38 @@
 import Link from "next/link";
 import { useBrand } from "@unpack/blog-core/contexts/brand-context";
 
-const LEGAL_LINKS = [
-  { label: "About", href: "/about" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "Disclaimer", href: "/disclaimer" },
-];
-
 const SISTER_LINKS = [
-  { name: "babipanote", href: "https://babipanote.com", description: "빌더 저널" },
+  { name: "babipanote", href: "https://babipanote.com", descriptionKo: "빌더 저널", descriptionEn: "Builder journal" },
 ];
 
-export function Footer() {
+const FOOTER_UI = {
+  ko: {
+    site: "사이트",
+    social: "소셜",
+    copyrightTail: "실사용에 기반한 의견입니다.",
+    adsNotice: "이 사이트는 Google AdSense 광고와 제휴 마케팅 수익으로 운영됩니다.",
+    seeDisclaimer: "자세한 내용은",
+    disclaimerLink: "고지사항",
+    seeDisclaimerSuffix: "을 참고하세요.",
+  },
+  en: {
+    site: "Pages",
+    social: "Social",
+    copyrightTail: "All reviews are opinions based on hands-on use.",
+    adsNotice: "This site is supported by Google AdSense and affiliate marketing.",
+    seeDisclaimer: "See our",
+    disclaimerLink: "disclaimer",
+    seeDisclaimerSuffix: "for details.",
+  },
+} as const;
+
+export function Footer({ locale }: { locale: string }) {
   const brand = useBrand();
   const year = new Date().getFullYear();
+  const ui = FOOTER_UI[locale as keyof typeof FOOTER_UI] ?? FOOTER_UI.ko;
+
+  const withLocale = (href: string) =>
+    `/${locale}${href === "/" ? "" : href}`;
 
   return (
     <footer className="mt-24 border-t border-[color-mix(in_oklab,var(--foreground)_8%,transparent)]">
@@ -33,12 +52,12 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="font-semibold mb-2">사이트</p>
+          <p className="font-semibold mb-2">{ui.site}</p>
           <ul className="space-y-1">
-            {LEGAL_LINKS.map((l) => (
+            {brand.nav.map((l) => (
               <li key={l.href}>
                 <Link
-                  href={l.href}
+                  href={withLocale(l.href)}
                   className="text-[color-mix(in_oklab,var(--foreground)_70%,transparent)] hover:text-[var(--color-brand-primary)]"
                 >
                   {l.label}
@@ -55,7 +74,7 @@ export function Footer() {
                 >
                   {s.name}
                   <span className="ml-1 text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]">
-                    — {s.description}
+                    — {locale === "en" ? s.descriptionEn : s.descriptionKo}
                   </span>
                 </a>
               </li>
@@ -64,7 +83,7 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="font-semibold mb-2">소셜</p>
+          <p className="font-semibold mb-2">{ui.social}</p>
           <ul className="space-y-1">
             {brand.social.x && (
               <li>
@@ -106,9 +125,20 @@ export function Footer() {
         </div>
       </div>
       <div className="mx-auto max-w-5xl px-6 pb-8 text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)] flex flex-col gap-1">
-        <span>© {year} {brand.name}. All reviews are opinions based on hands-on use.</span>
+        <span>
+          © {year} {brand.name}. {ui.copyrightTail}
+        </span>
         {brand.monetization.adsense && (
-          <span>이 사이트는 Google AdSense 광고와 제휴 마케팅 수익으로 운영됩니다. 자세한 내용은 <Link href="/disclaimer" className="underline hover:text-[var(--color-brand-primary)]">고지사항</Link>을 참고하세요.</span>
+          <span>
+            {ui.adsNotice} {ui.seeDisclaimer}{" "}
+            <Link
+              href={withLocale("/disclaimer")}
+              className="underline hover:text-[var(--color-brand-primary)]"
+            >
+              {ui.disclaimerLink}
+            </Link>
+            {ui.seeDisclaimerSuffix}
+          </span>
         )}
       </div>
     </footer>

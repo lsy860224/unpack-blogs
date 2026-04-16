@@ -1,30 +1,63 @@
+import Link from "next/link";
 import type { Metadata } from "next";
-import { buildMetadata } from "@unpack/blog-core";
-import { brandConfig } from "../../../brand.config";
+import { buildMetadata, toOgLocale } from "@unpack/blog-core";
+import { brandConfig, getLocalizedBrand } from "../../../../brand.config";
 
-export const metadata: Metadata = buildMetadata({
-  title: "About",
-  description: `${brandConfig.name}을 소개합니다 — AI 도구를 직접 써보고 숫자로 비교하는 한국어 리뷰.`,
-  siteName: brandConfig.name,
-  siteUrl: brandConfig.url,
-  path: "/about",
-});
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const localized = getLocalizedBrand(locale);
+  const description =
+    locale === "en"
+      ? `About ${localized.name} — hands-on AI tool reviews, compared with numbers.`
+      : `${localized.name}을 소개합니다 — AI 도구를 직접 써보고 숫자로 비교하는 한국어 리뷰.`;
+  return buildMetadata({
+    title: "About",
+    description,
+    siteName: localized.name,
+    siteUrl: localized.url,
+    path: `/${locale}/about`,
+    locale: toOgLocale(locale),
+    hrefLangs: {
+      ko: "/ko/about",
+      en: "/en/about",
+      "x-default": "/ko/about",
+    },
+  });
+}
 
-export default function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  return locale === "en" ? <AboutEn /> : <AboutKo />;
+}
+
+function PageHeader({ subtitle }: { subtitle: string }) {
+  return (
+    <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
+      <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
+        About
+      </h1>
+      <p
+        className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
+        style={{ fontFamily: "var(--font-mono)" }}
+      >
+        {subtitle}
+      </p>
+    </header>
+  );
+}
+
+function AboutKo() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
-          About
-        </h1>
-        <p
-          className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          {brandConfig.name} · {brandConfig.url.replace(/^https?:\/\//, "")}
-        </p>
-      </header>
-
+      <PageHeader subtitle={`${brandConfig.name} · ${brandConfig.url.replace(/^https?:\/\//, "")}`} />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <h2>우리가 하는 일</h2>
         <p>
@@ -69,10 +102,92 @@ export default function AboutPage() {
           {brandConfig.name}은 <strong>Google AdSense 광고</strong>와{" "}
           <strong>제휴 마케팅(affiliate) 링크</strong>로 운영됩니다. 리뷰 판단은
           이 두 가지 수익원과 독립적이며, 관련 세부 사항은{" "}
-          <a href="/disclaimer">Disclaimer</a>에서 확인하세요.
+          <Link href="/ko/disclaimer">Disclaimer</Link>에서 확인하세요.
         </p>
 
         <h2>문의</h2>
+        <p>
+          {brandConfig.social.x && (
+            <>
+              X:{" "}
+              <a
+                href={`https://x.com/${brandConfig.social.x.replace(/^@/, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {brandConfig.social.x}
+              </a>
+              <br />
+            </>
+          )}
+          {brandConfig.social.github && (
+            <>
+              GitHub:{" "}
+              <a
+                href={`https://github.com/${brandConfig.social.github}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {brandConfig.social.github}
+              </a>
+            </>
+          )}
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function AboutEn() {
+  return (
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <PageHeader subtitle={`${brandConfig.name} · ${brandConfig.url.replace(/^https?:\/\//, "")}`} />
+      <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
+        <h2>What we do</h2>
+        <p>
+          {brandConfig.name} is a hands-on AI tool review blog. We use each tool
+          for several days, then <strong>compare speed, cost, and accuracy
+          with numbers</strong>. We don&apos;t rewrite marketing copy — we report
+          what actually happened when we used the tool.
+        </p>
+
+        <h2>Review principles</h2>
+        <ol>
+          <li>
+            <strong>Validation</strong> — hands-on results over marketing copy.
+            Every review is based on at least 3 days of real usage.
+          </li>
+          <li>
+            <strong>Numbers</strong> — speed, cost, and accuracy expressed as
+            numbers. We disclose the test setup and sample size (n=??).
+          </li>
+          <li>
+            <strong>Comparison</strong> — 1:1 or N:N comparisons over solo
+            reviews. When alternatives exist, we include them.
+          </li>
+          <li>
+            <strong>Context</strong> — we specify scenarios like &quot;as an
+            office worker&quot; or &quot;as a developer&quot; so readers can map
+            results to their own situation.
+          </li>
+        </ol>
+
+        <h2>What we don&apos;t review</h2>
+        <ul>
+          <li>Tools we only tried for 5 minutes — violates the 3-day rule.</li>
+          <li>Tools we only saw in an official demo video — no substitute for hands-on.</li>
+          <li>Anything written under sponsorship — we don&apos;t accept sponsored reviews.</li>
+        </ul>
+
+        <h2>How we&apos;re funded</h2>
+        <p>
+          {brandConfig.name} is supported by <strong>Google AdSense display
+          ads</strong> and <strong>affiliate links</strong>. Review judgments are
+          independent of these revenue streams. See the{" "}
+          <Link href="/en/disclaimer">Disclaimer</Link> for the full policy.
+        </p>
+
+        <h2>Contact</h2>
         <p>
           {brandConfig.social.x && (
             <>

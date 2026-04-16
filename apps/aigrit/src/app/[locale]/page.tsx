@@ -1,19 +1,56 @@
 import Link from "next/link";
 import path from "node:path";
-import { getAllPostSummaries, PostCard, buildWebSiteJsonLd } from "@unpack/blog-core";
-import { brandConfig } from "../../brand.config";
+import {
+  getAllPostSummaries,
+  PostCard,
+  buildWebSiteJsonLd,
+  toBcp47,
+} from "@unpack/blog-core";
+import { getLocalizedBrand } from "../../../brand.config";
 
-const CONTENT_DIR = path.join(process.cwd(), "content/posts");
+const HOME_UI = {
+  ko: {
+    kicker: "AI TOOL REVIEW",
+    ctaLatest: "최신 리뷰 →",
+    ctaAbout: "어떻게 리뷰하나요",
+    latest: "LATEST REVIEWS",
+    seeAll: "전체 보기 →",
+    byCategory: "BY CATEGORY",
+    empty: "아직 작성된 리뷰가 없습니다. 곧 첫 글을 올릴게요.",
+    other: "기타",
+  },
+  en: {
+    kicker: "AI TOOL REVIEW",
+    ctaLatest: "Latest reviews →",
+    ctaAbout: "How we review",
+    latest: "LATEST REVIEWS",
+    seeAll: "View all →",
+    byCategory: "BY CATEGORY",
+    empty: "No reviews yet. The first post is coming soon.",
+    other: "Other",
+  },
+} as const;
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const ui = HOME_UI[locale as keyof typeof HOME_UI] ?? HOME_UI.ko;
+  const localized = getLocalizedBrand(locale);
+  const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
   const posts = getAllPostSummaries(CONTENT_DIR);
   const latest = posts.slice(0, 6);
-  const byCategory = groupByCategory(posts);
+  const byCategory = groupByCategory(posts, ui.other);
   const jsonLd = buildWebSiteJsonLd({
-    siteName: brandConfig.name,
-    siteUrl: brandConfig.url,
-    description: brandConfig.description,
+    siteName: localized.name,
+    siteUrl: localized.url,
+    description: localized.description,
+    inLanguage: toBcp47(locale),
+    searchPath: `/${locale}/blog`,
   });
+  const hrefBase = `/${locale}/blog`;
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">
@@ -34,32 +71,32 @@ export default function HomePage() {
             className="text-xs font-semibold uppercase tracking-[0.2em]"
             style={{ color: "var(--color-brand-secondary)", fontFamily: "var(--font-mono)" }}
           >
-            AI TOOL REVIEW
+            {ui.kicker}
           </span>
         </div>
         <h1 className="text-4xl sm:text-5xl font-extrabold leading-[1.15] tracking-tight text-[var(--color-brand-primary)]">
-          {brandConfig.tagline}
+          {localized.tagline}
         </h1>
         <p className="mt-4 text-base sm:text-lg leading-relaxed text-[color-mix(in_oklab,var(--foreground)_75%,transparent)] max-w-2xl">
-          {brandConfig.description}
+          {localized.description}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
-            href="/blog"
+            href={`/${locale}/blog`}
             className="rounded-md px-5 py-2.5 text-sm font-semibold transition"
             style={{ background: "var(--color-brand-primary)", color: "var(--background)" }}
           >
-            최신 리뷰 →
+            {ui.ctaLatest}
           </Link>
           <Link
-            href="/about"
+            href={`/${locale}/about`}
             className="rounded-md border px-5 py-2.5 text-sm font-semibold"
             style={{
               borderColor: "color-mix(in oklab, var(--foreground) 20%, transparent)",
               color: "var(--foreground)",
             }}
           >
-            어떻게 리뷰하나요
+            {ui.ctaAbout}
           </Link>
         </div>
       </section>
@@ -72,19 +109,19 @@ export default function HomePage() {
               className="text-xs font-bold uppercase tracking-[0.2em] text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
               style={{ fontFamily: "var(--font-mono)" }}
             >
-              LATEST REVIEWS
+              {ui.latest}
             </h2>
             <Link
-              href="/blog"
+              href={`/${locale}/blog`}
               className="text-xs text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
             >
-              전체 보기 →
+              {ui.seeAll}
             </Link>
           </div>
           <ul className="grid gap-2 sm:grid-cols-2">
             {latest.map((post) => (
               <li key={post.frontmatter.slug}>
-                <PostCard post={post} />
+                <PostCard post={post} hrefBase={hrefBase} locale={locale} />
               </li>
             ))}
           </ul>
@@ -98,7 +135,7 @@ export default function HomePage() {
             className="text-xs font-bold uppercase tracking-[0.2em] text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] mb-6"
             style={{ fontFamily: "var(--font-mono)" }}
           >
-            BY CATEGORY
+            {ui.byCategory}
           </h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {byCategory.map(([cat, catPosts]) => (
@@ -116,7 +153,7 @@ export default function HomePage() {
                   {catPosts.slice(0, 4).map((p) => (
                     <li key={p.frontmatter.slug}>
                       <Link
-                        href={`/blog/${p.frontmatter.slug}`}
+                        href={`/${locale}/blog/${p.frontmatter.slug}`}
                         className="block py-1 text-sm text-[color-mix(in_oklab,var(--foreground)_80%,transparent)] hover:text-[var(--color-brand-primary)]"
                       >
                         {p.frontmatter.title}
@@ -133,7 +170,7 @@ export default function HomePage() {
       {posts.length === 0 && (
         <section className="mt-8 rounded-md border border-[color-mix(in_oklab,var(--foreground)_10%,transparent)] p-8 text-center">
           <p className="text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]">
-            아직 작성된 리뷰가 없습니다. 곧 첫 글을 올릴게요.
+            {ui.empty}
           </p>
         </section>
       )}
@@ -143,10 +180,13 @@ export default function HomePage() {
 
 type Summary = ReturnType<typeof getAllPostSummaries>[number];
 
-function groupByCategory(posts: Summary[]): [string, Summary[]][] {
+function groupByCategory(
+  posts: Summary[],
+  otherLabel: string,
+): [string, Summary[]][] {
   const map = new Map<string, Summary[]>();
   for (const p of posts) {
-    const cat = p.frontmatter.category ?? "기타";
+    const cat = p.frontmatter.category ?? otherLabel;
     const bucket = map.get(cat) ?? [];
     bucket.push(p);
     map.set(cat, bucket);
