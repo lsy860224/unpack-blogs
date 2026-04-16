@@ -2,7 +2,12 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
-import type { Post, PostFrontmatter, PostReviewMeta } from "../types/post";
+import type {
+  ClusterRole,
+  Post,
+  PostFrontmatter,
+  PostReviewMeta,
+} from "../types/post";
 
 export function parseMdxFile(filePath: string): Post {
   const raw = fs.readFileSync(filePath, "utf8");
@@ -38,7 +43,15 @@ function normalizeFrontmatter(
     category: typeof data.category === "string" ? data.category : undefined,
     draft: typeof data.draft === "boolean" ? data.draft : undefined,
     review: parseReview(data.review),
+    updated: typeof data.updated === "string" ? data.updated : undefined,
+    topic_cluster:
+      typeof data.topic_cluster === "string" ? data.topic_cluster : undefined,
+    cluster_role: parseClusterRole(data.cluster_role),
   };
+}
+
+function parseClusterRole(value: unknown): ClusterRole | undefined {
+  return value === "pillar" || value === "cluster" ? value : undefined;
 }
 
 function parseReview(value: unknown): PostReviewMeta | undefined {
