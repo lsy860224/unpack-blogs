@@ -7,6 +7,8 @@ import {
   toOgLocale,
 } from "@unpack/blog-core";
 import { getLocalizedBrand } from "../../../../brand.config";
+import { getCategoryNav } from "../../../lib/categories";
+import { CategorySidebar } from "../../../components/layout/CategorySidebar";
 
 const BLOG_UI = {
   ko: {
@@ -15,6 +17,8 @@ const BLOG_UI = {
     empty: "아직 리뷰가 없습니다.",
     totalSuffix: "편 · 최신순 정렬",
     totalPrefix: "총 ",
+    sidebarHeading: "카테고리",
+    allLabel: "전체 보기",
   },
   en: {
     kicker: "ALL REVIEWS",
@@ -22,6 +26,8 @@ const BLOG_UI = {
     empty: "No reviews yet.",
     totalSuffix: " posts · sorted by date",
     totalPrefix: "",
+    sidebarHeading: "CATEGORY",
+    allLabel: "All",
   },
 } as const;
 
@@ -61,49 +67,59 @@ export default async function BlogIndexPage({
   const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
   const posts = getAllPostSummaries(CONTENT_DIR);
   const hrefBase = `/${locale}/blog`;
+  const navEntries = getCategoryNav(locale, ui.allLabel);
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-12">
-      <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span
-            aria-hidden
-            className="inline-block h-1 w-4 rounded-full"
-            style={{ background: "var(--color-brand-secondary)" }}
-          />
-          <span
-            className="text-xs font-semibold uppercase tracking-[0.2em]"
-            style={{ color: "var(--color-brand-secondary)", fontFamily: "var(--font-mono)" }}
+    <div className="mx-auto max-w-6xl px-6 py-12 lg:flex lg:gap-10">
+      <aside className="mb-8 lg:mb-0 lg:w-56 lg:shrink-0">
+        <CategorySidebar
+          entries={navEntries}
+          activeSlug={null}
+          heading={ui.sidebarHeading}
+        />
+      </aside>
+      <div className="min-w-0 flex-1">
+        <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <span
+              aria-hidden
+              className="inline-block h-1 w-4 rounded-full"
+              style={{ background: "var(--color-brand-secondary)" }}
+            />
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.2em]"
+              style={{ color: "var(--color-brand-secondary)", fontFamily: "var(--font-mono)" }}
+            >
+              {ui.kicker}
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
+            {ui.title}
+          </h1>
+          <p
+            className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
+            style={{ fontFamily: "var(--font-mono)" }}
           >
-            {ui.kicker}
-          </span>
-        </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
-          {ui.title}
-        </h1>
-        <p
-          className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          {ui.totalPrefix}
-          <span className="tabular-nums">{posts.length}</span>
-          {ui.totalSuffix}
-        </p>
-      </header>
+            {ui.totalPrefix}
+            <span className="tabular-nums">{posts.length}</span>
+            {ui.totalSuffix}
+          </p>
+        </header>
 
-      {posts.length === 0 ? (
-        <p className="text-sm text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
-          {ui.empty}
-        </p>
-      ) : (
-        <ul className="grid gap-3 sm:grid-cols-2">
-          {posts.map((post) => (
-            <li key={post.frontmatter.slug}>
-              <PostCard post={post} hrefBase={hrefBase} locale={locale} />
-            </li>
-          ))}
-        </ul>
-      )}
+        {posts.length === 0 ? (
+          <p className="text-sm text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
+            {ui.empty}
+          </p>
+        ) : (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {posts.map((post) => (
+              <li key={post.frontmatter.slug}>
+                <PostCard post={post} hrefBase={hrefBase} locale={locale} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
