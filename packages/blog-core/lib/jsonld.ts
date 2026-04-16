@@ -13,6 +13,7 @@ export interface ArticleJsonLdInput {
   author?: string;
   datePublished: string;
   dateModified?: string;
+  inLanguage?: string;
 }
 
 export function buildArticleJsonLd(input: ArticleJsonLdInput) {
@@ -34,6 +35,7 @@ export function buildArticleJsonLd(input: ArticleJsonLdInput) {
       : { "@type": "Organization", name: input.siteName },
     publisher: { "@type": "Organization", name: input.siteName },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    ...(input.inLanguage ? { inLanguage: input.inLanguage } : {}),
   };
 }
 
@@ -47,6 +49,7 @@ export interface ReviewJsonLdInput {
   authorName: string;
   datePublished: string;
   url: string;
+  inLanguage?: string;
 }
 
 export function buildReviewJsonLd(input: ReviewJsonLdInput) {
@@ -67,6 +70,7 @@ export function buildReviewJsonLd(input: ReviewJsonLdInput) {
     datePublished: input.datePublished,
     ...(input.reviewBody ? { reviewBody: input.reviewBody } : {}),
     url: input.url,
+    ...(input.inLanguage ? { inLanguage: input.inLanguage } : {}),
   };
 }
 
@@ -74,19 +78,23 @@ export interface WebSiteJsonLdInput {
   siteName: string;
   siteUrl: string;
   description: string;
+  inLanguage?: string;
+  /** 검색 폼 경로. default "/blog" — locale prefix 쓸 경우 "/ko/blog" 같이 넘기면 됨. */
+  searchPath?: string;
 }
 
 export function buildWebSiteJsonLd(input: WebSiteJsonLdInput) {
+  const searchPath = input.searchPath ?? "/blog";
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: input.siteName,
     url: input.siteUrl,
     description: input.description,
-    inLanguage: "ko-KR",
+    inLanguage: input.inLanguage ?? "ko-KR",
     potentialAction: {
       "@type": "SearchAction",
-      target: `${input.siteUrl}/blog?q={search_term_string}`,
+      target: `${input.siteUrl}${searchPath}?q={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
   };

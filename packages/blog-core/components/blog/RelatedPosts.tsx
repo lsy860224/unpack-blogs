@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostSummary } from "../../types/post";
+import { getBlogCoreMessages } from "../../lib/i18n";
 
 export interface RelatedPostsProps {
   /** 후보 풀 — 전체 글 목록 */
@@ -12,6 +13,7 @@ export interface RelatedPostsProps {
   max?: number;
   hrefBase?: string;
   title?: string;
+  locale?: string;
 }
 
 /**
@@ -24,8 +26,10 @@ export function RelatedPosts({
   tags = [],
   max = 3,
   hrefBase = "/blog",
-  title = "관련 글",
+  title,
+  locale,
 }: RelatedPostsProps) {
+  const resolvedTitle = title ?? getBlogCoreMessages(locale).relatedPosts;
   const tagSet = new Set(tags);
   const scored = allPosts
     .filter((p) => p.frontmatter.slug !== currentSlug)
@@ -47,7 +51,7 @@ export function RelatedPosts({
   return (
     <section className="mt-16 border-t border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pt-8 not-prose">
       <h2 className="text-sm font-bold uppercase tracking-widest text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
-        {title}
+        {resolvedTitle}
       </h2>
       <ul className="mt-4 divide-y divide-[color-mix(in_oklab,var(--foreground)_8%,transparent)]">
         {scored.map(({ post }) => (

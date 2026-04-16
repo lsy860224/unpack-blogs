@@ -1,13 +1,16 @@
 import type { Post } from "../../types/post";
 import { formatPostDate, toIsoDatetime } from "../../lib/date";
+import { getBlogCoreMessages } from "../../lib/i18n";
 
 export interface PostHeaderProps {
   post: Post;
   className?: string;
+  locale?: string;
 }
 
-export function PostHeader({ post, className }: PostHeaderProps) {
+export function PostHeader({ post, className, locale }: PostHeaderProps) {
   const { frontmatter, readingTimeMinutes } = post;
+  const msg = getBlogCoreMessages(locale);
   return (
     <header className={["mb-8", className ?? ""].join(" ")}>
       {frontmatter.tags && frontmatter.tags.length > 0 && (
@@ -33,7 +36,10 @@ export function PostHeader({ post, className }: PostHeaderProps) {
           {formatPostDate(frontmatter.date)}
         </time>
         <span aria-hidden>·</span>
-        <span>읽는 시간 {readingTimeMinutes}분</span>
+        <span>
+          {msg.readingTimeLabel} {readingTimeMinutes}
+          {msg.readingTimeUnit}
+        </span>
       </div>
     </header>
   );

@@ -57,6 +57,12 @@ export interface BrandComments {
   giscusCategoryId?: string;
 }
 
+export interface BrandLocaleStrings {
+  tagline: string;
+  description: string;
+  nav: BrandNavItem[];
+}
+
 export interface BrandConfig {
   name: string;
   tagline: string;
@@ -70,4 +76,6 @@ export interface BrandConfig {
   layout: BrandLayout;
   analytics: BrandAnalytics;
   comments: BrandComments;
+  supportedLocales?: string[];
+  locales?: Record<string, BrandLocaleStrings>;
 }

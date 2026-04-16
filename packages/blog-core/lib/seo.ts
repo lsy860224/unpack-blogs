@@ -11,6 +11,8 @@ export interface SeoInput {
   type?: "website" | "article";
   publishedTime?: string;
   tags?: string[];
+  /** hreflang alternates: { ko: "/ko/...", en: "/en/...", "x-default": "/ko/..." } — 값이 절대 URL 이 아니면 siteUrl 기준으로 절대화됨 */
+  hrefLangs?: Record<string, string>;
 }
 
 export function buildMetadata(input: SeoInput): Metadata {
@@ -25,15 +27,25 @@ export function buildMetadata(input: SeoInput): Metadata {
     type = "website",
     publishedTime,
     tags,
+    hrefLangs,
   } = input;
 
   const url = joinUrl(siteUrl, path);
   const ogImage = image ? joinUrl(siteUrl, image) : joinUrl(siteUrl, "/og-default.png");
 
+  const languages = hrefLangs
+    ? Object.fromEntries(
+        Object.entries(hrefLangs).map(([k, v]) => [k, joinUrl(siteUrl, v)]),
+      )
+    : undefined;
+
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      ...(languages ? { languages } : {}),
+    },
     openGraph: {
       title,
       description,

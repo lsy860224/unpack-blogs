@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { PostSummary } from "../../types/post";
 import { formatPostDate, toIsoDatetime } from "../../lib/date";
+import { getBlogCoreMessages } from "../../lib/i18n";
 
 export interface PostCardProps {
   post: PostSummary;
@@ -9,6 +10,7 @@ export interface PostCardProps {
   hrefBase?: string;
   className?: string;
   showThumbnail?: boolean;
+  locale?: string;
 }
 
 export function PostCard({
@@ -17,7 +19,9 @@ export function PostCard({
   hrefBase = "/blog",
   className,
   showThumbnail = true,
+  locale,
 }: PostCardProps) {
+  const msg = getBlogCoreMessages(locale);
   const { frontmatter, readingTimeMinutes } = post;
   const isCompact = variant === "compact";
   const hasThumbnail = showThumbnail && !isCompact && !!frontmatter.thumbnail;
@@ -51,7 +55,8 @@ export function PostCard({
           {formatPostDate(frontmatter.date)}
         </time>
         <span className="text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]">
-          {readingTimeMinutes}분
+          {readingTimeMinutes}
+          {msg.readingTimeUnit}
         </span>
       </div>
       <h3

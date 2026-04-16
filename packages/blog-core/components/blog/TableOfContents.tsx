@@ -1,3 +1,5 @@
+import { getBlogCoreMessages } from "../../lib/i18n";
+
 export interface TocHeading {
   id: string;
   text: string;
@@ -10,6 +12,7 @@ export interface TableOfContentsProps {
   minDepth?: number;
   maxDepth?: number;
   title?: string;
+  locale?: string;
 }
 
 /**
@@ -20,8 +23,10 @@ export function TableOfContents({
   headings,
   minDepth = 2,
   maxDepth = 3,
-  title = "목차",
+  title,
+  locale,
 }: TableOfContentsProps) {
+  const resolvedTitle = title ?? getBlogCoreMessages(locale).tableOfContents;
   const filtered = headings.filter(
     (h) => h.depth >= minDepth && h.depth <= maxDepth,
   );
@@ -30,7 +35,7 @@ export function TableOfContents({
   return (
     <nav className="my-6 rounded-md border border-[color-mix(in_oklab,var(--foreground)_10%,transparent)] bg-[color-mix(in_oklab,var(--foreground)_3%,transparent)] px-4 py-3 text-sm not-prose">
       <p className="mb-2 text-xs font-bold uppercase tracking-widest text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
-        {title}
+        {resolvedTitle}
       </p>
       <ul className="space-y-1">
         {filtered.map((h) => (

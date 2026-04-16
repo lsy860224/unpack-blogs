@@ -9,6 +9,7 @@ export * from "./lib/seo";
 export * from "./lib/toc";
 export * from "./lib/jsonld";
 export * from "./lib/date";
+export * from "./lib/i18n";
 
 // Contexts
 export * from "./contexts/brand-context";
