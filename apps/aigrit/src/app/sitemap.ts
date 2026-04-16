@@ -2,6 +2,7 @@ import path from "node:path";
 import type { MetadataRoute } from "next";
 import { getAllPostSummaries, SUPPORTED_LOCALES } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
+import { CATEGORY_META } from "../lib/categories";
 
 type ChangeFreq = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
@@ -51,6 +52,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
         alternates: {
           languages: buildLanguageMap(base, `/blog/${p.frontmatter.slug}`),
+        },
+      });
+    }
+  }
+
+  for (const locale of SUPPORTED_LOCALES) {
+    for (const cat of Object.values(CATEGORY_META)) {
+      entries.push({
+        url: `${base}/${locale}/category/${cat.slug}`,
+        lastModified: now,
+        changeFrequency: "weekly",
+        priority: 0.7,
+        alternates: {
+          languages: buildLanguageMap(base, `/category/${cat.slug}`),
         },
       });
     }

@@ -7,6 +7,7 @@ import {
   toBcp47,
 } from "@unpack/blog-core";
 import { getLocalizedBrand } from "../../../brand.config";
+import { getCategorySlug } from "../../lib/categories";
 
 const HOME_UI = {
   ko: {
@@ -16,6 +17,7 @@ const HOME_UI = {
     latest: "LATEST REVIEWS",
     seeAll: "전체 보기 →",
     byCategory: "BY CATEGORY",
+    seeCategoryAll: "카테고리 전체 보기 →",
     empty: "아직 작성된 리뷰가 없습니다. 곧 첫 글을 올릴게요.",
     other: "기타",
   },
@@ -26,6 +28,7 @@ const HOME_UI = {
     latest: "LATEST REVIEWS",
     seeAll: "View all →",
     byCategory: "BY CATEGORY",
+    seeCategoryAll: "See all in category →",
     empty: "No reviews yet. The first post is coming soon.",
     other: "Other",
   },
@@ -138,31 +141,48 @@ export default async function HomePage({
             {ui.byCategory}
           </h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {byCategory.map(([cat, catPosts]) => (
-              <div key={cat}>
-                <h3 className="mb-3 text-lg font-bold text-[var(--color-brand-primary)]">
-                  {cat}
-                  <span
-                    className="ml-2 text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
-                    style={{ fontFamily: "var(--font-mono)" }}
-                  >
-                    {catPosts.length}
-                  </span>
-                </h3>
-                <ul className="space-y-1">
-                  {catPosts.slice(0, 4).map((p) => (
-                    <li key={p.frontmatter.slug}>
-                      <Link
-                        href={`/${locale}/blog/${p.frontmatter.slug}`}
-                        className="block py-1 text-sm text-[color-mix(in_oklab,var(--foreground)_80%,transparent)] hover:text-[var(--color-brand-primary)]"
-                      >
-                        {p.frontmatter.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {byCategory.map(([cat, catPosts]) => {
+              const catHref = `/${locale}/category/${getCategorySlug(cat)}`;
+              return (
+                <div key={cat}>
+                  <h3 className="mb-3 text-lg font-bold">
+                    <Link
+                      href={catHref}
+                      className="text-[var(--color-brand-primary)] transition hover:text-[var(--color-brand-secondary)]"
+                    >
+                      {cat}
+                    </Link>
+                    <span
+                      className="ml-2 text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      {catPosts.length}
+                    </span>
+                  </h3>
+                  <ul className="space-y-1">
+                    {catPosts.slice(0, 4).map((p) => (
+                      <li key={p.frontmatter.slug}>
+                        <Link
+                          href={`/${locale}/blog/${p.frontmatter.slug}`}
+                          className="block py-1 text-sm text-[color-mix(in_oklab,var(--foreground)_80%,transparent)] hover:text-[var(--color-brand-primary)]"
+                        >
+                          {p.frontmatter.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  {catPosts.length > 4 && (
+                    <Link
+                      href={catHref}
+                      className="mt-2 inline-block text-xs text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
+                      style={{ fontFamily: "var(--font-mono)" }}
+                    >
+                      {ui.seeCategoryAll}
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
