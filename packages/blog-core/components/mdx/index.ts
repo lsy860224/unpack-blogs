@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Callout } from "./Callout";
 import { CompareTable } from "./CompareTable";
 import { ProCon, Pros, Cons } from "./ProCon";
@@ -28,4 +29,5 @@ export const defaultMdxComponents = {
   Pros,
   Cons,
   AffiliateLink,
+  Link,
 };
