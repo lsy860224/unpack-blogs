@@ -1,0 +1,219 @@
+---
+title: "Apple 단축어로 만드는 AI 자동화 5가지 — 하루 40분 절약 레시피"
+date: "2026-04-21 21:30"
+slug: "apple-shortcuts-ai-automation"
+description: "Apple 단축어에 Claude·GPT·Whisper API를 연결해 만드는 AI 자동화 5가지. 각 10~20분 만에 설정하고 매일 40분을 줄이는 실전 레시피. API 키 없이 무료로 쓰는 2가지 방법도 함께 정리했습니다."
+tags:
+  [
+    "Apple 단축어",
+    "iOS 단축어",
+    "AI 자동화",
+    "생산성",
+    "Claude API",
+    "OpenAI API",
+    "iOS Shortcuts",
+  ]
+thumbnail: "/images/apple-shortcuts-ai-automation/og.png"
+featured: false
+category: "자동화"
+topic_cluster: "생산성 자동화"
+cluster_role: cluster
+---
+
+**결론부터: Apple 단축어 5개면 매일 반복하는 작업 40분을 줄일 수 있다. API 키 없이도 2개는 바로 만든다.**
+
+아이폰과 맥을 쓴다면 이미 가장 강력한 자동화 도구를 가지고 있다. Apple 단축어다. 여기에 AI를 연결하면 "스크린샷 찍고 설명 붙이기", "음성 메모를 텍스트로 저장", "클립보드 번역" 같은 일이 터치 한 번으로 끝난다.
+
+3주간 직접 만들어 쓴 단축어 5개를 공유한다. 각각 만드는 데 10분, 매일 아끼는 시간은 합산 40분.
+
+## Apple 단축어로 AI를 어떻게 쓸 수 있을까?
+
+단축어 앱은 HTTP 요청을 보낼 수 있다. Anthropic Messages API든, OpenAI Chat Completions든 REST 엔드포인트가 있으면 연결 가능하다. API 키를 단축어 변수에 저장하고, "텍스트" 액션으로 프롬프트를 만들고, "URL 내용 가져오기"로 요청을 보낸다.
+
+![Apple 단축어 API 호출 구조](/images/apple-shortcuts-ai-automation/01-shortcut-api-flow.png)
+
+<figcaption
+  style={{
+    textAlign: "center",
+    fontSize: "0.9rem",
+    color: "#64748b",
+    marginTop: "-0.5rem",
+    marginBottom: "2rem",
+  }}
+>
+  단축어 → HTTP 요청 → AI 응답 → 결과 처리
+</figcaption>
+
+구조는 어느 단축어든 같다. **입력 → 프롬프트 조립 → API 호출 → 응답 파싱 → 결과 처리**. 차이는 어떤 API를 부르고, 결과를 어디로 보내느냐뿐이다.
+
+## 단축어 #1 — 선택 텍스트 한 줄 요약
+
+**소요:** 만들기 10분 · 매일 절약 10분
+
+아무 앱에서 텍스트를 선택하고 공유 시트에서 "한 줄 요약"을 누르면 Claude API가 50자 이내 요약을 반환한다.
+
+**구성:**
+
+1. 공유 시트에서 텍스트 입력 받기
+2. 프롬프트: "다음 텍스트를 한국어 50자 이내로 요약해줘: {입력}"
+3. Anthropic Messages API POST 요청
+4. 결과를 클립보드에 복사 + 알림 표시
+
+![텍스트 요약 단축어 실행 화면](/images/apple-shortcuts-ai-automation/02-shortcut-summarize.png)
+
+<figcaption
+  style={{
+    textAlign: "center",
+    fontSize: "0.9rem",
+    color: "#64748b",
+    marginTop: "-0.5rem",
+    marginBottom: "2rem",
+  }}
+>
+  Safari에서 선택 → 공유 시트 → 요약 결과
+</figcaption>
+
+**실사용 후기:** 뉴스·논문·슬랙 메시지 읽을 때 제일 많이 쓴다. "이 글 뭐야?"를 5초에 해결.
+
+## 단축어 #2 — 스크린샷 → AI 설명 (블로그캡처 응용)
+
+**소요:** 만들기 15분 · 글당 절약 15분
+
+블로그에 스크린샷 넣을 때마다 alt 텍스트와 캡션을 쓰는 건 귀찮다. 이 단축어는 스크린샷을 찍으면 AI가 자동으로 alt 텍스트와 캡션을 생성하고, 지정 폴더에 저장한다.
+
+![스크린샷 AI 설명 단축어](/images/apple-shortcuts-ai-automation/03-shortcut-screenshot-ai.png)
+
+<figcaption
+  style={{
+    textAlign: "center",
+    fontSize: "0.9rem",
+    color: "#64748b",
+    marginTop: "-0.5rem",
+    marginBottom: "2rem",
+  }}
+>
+  캡처 → AI 분석 → 파일명·alt·캡션 자동 생성
+</figcaption>
+
+GPT-4o Vision에 Base64로 인코딩한 이미지를 보내고, 응답을 `{filename, alt, caption}` JSON으로 받는다. 결과는 클립보드로 복사되어 MDX에 그대로 붙여넣기만 하면 된다.
+
+**실전 팁:** 이 구조를 확장하면 블로그 자동화 워크플로우 전체를 단축어 하나로 묶을 수 있다. 자세한 건 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor 비교</Link>에서 언급한 "배치 캡처" 방식과 조합하면 글당 1시간이 줄어든다.
+
+## 단축어 #3 — 음성 → Notion 자동 저장
+
+**소요:** 만들기 20분 · 매일 절약 10분
+
+걸으면서, 출퇴근하면서 떠오르는 아이디어를 음성으로 말하면 OpenAI Whisper API가 텍스트로 변환하고, Notion API로 데이터베이스에 자동 저장한다.
+
+**3단계 체인:**
+
+```
+단축어 오디오 녹음
+  ↓
+Whisper API (한국어 인식 포함)
+  ↓
+Notion Pages API (데이터베이스 신규 항목 생성)
+```
+
+Notion Integration 토큰을 발급받고, 대상 데이터베이스를 Integration에 연결하기만 하면 된다. 설정 30분, 이후엔 평생 쓴다.
+
+**실사용 후기:** Siri Notes보다 정확하고, 검색·태그가 되는 Notion에 바로 쌓인다는 게 핵심이다. "Obsidian 말고 Notion?"이라는 질문은 <Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">Claude 4 Sonnet vs GPT-4o 비교</Link>에서 다룬 모델 선택과 같은 맥락 — 내 워크플로우에 맞는 걸 쓰면 된다.
+
+## 단축어 #4 — 클립보드 번역
+
+**소요:** 만들기 5분 · 매일 절약 5분
+
+복사한 텍스트를 자동 감지해서 한↔영 번역. Claude API(Haiku 모델)로 속도를 높였다. 키보드 단축키 `⌃⇧T`에 할당하면 "복사 → 단축키 → 붙여넣기" 3초 컷.
+
+![클립보드 번역 단축어](/images/apple-shortcuts-ai-automation/05-shortcut-translate.png)
+
+<figcaption
+  style={{
+    textAlign: "center",
+    fontSize: "0.9rem",
+    color: "#64748b",
+    marginTop: "-0.5rem",
+    marginBottom: "2rem",
+  }}
+>
+  Cmd+C → ⌃⇧T → Cmd+V
+</figcaption>
+
+Haiku 모델은 토큰당 비용이 Sonnet의 1/12 수준이라 매일 수십 번 돌려도 월 $0.5 내외. 간단한 번역엔 굳이 큰 모델 쓸 필요가 없다.
+
+## 단축어 #5 — 캘린더 일정 자연어 입력
+
+**소요:** 만들기 15분 · 주 절약 20분
+
+"내일 오후 3시 치과 강남역 1번 출구"라고 말하면 AI가 파싱해서 캘린더 이벤트를 생성. 기존 Siri보다 정확하다 — 날짜 상대 표현, 반복 일정, 위치 추출까지 처리한다.
+
+![자연어 캘린더 입력 단축어](/images/apple-shortcuts-ai-automation/06-shortcut-calendar.png)
+
+<figcaption
+  style={{
+    textAlign: "center",
+    fontSize: "0.9rem",
+    color: "#64748b",
+    marginTop: "-0.5rem",
+    marginBottom: "2rem",
+  }}
+>
+  "내일 오후 3시 치과 강남역 1번 출구" → 캘린더 이벤트 자동 생성
+</figcaption>
+
+프롬프트에 현재 시각을 함께 넣어주면 "내일", "다음 주 화요일" 같은 상대 표현도 정확한 ISO 8601 시각으로 변환된다. 제목·시간·위치·메모 4개 필드가 자동 채워진다.
+
+## API 키 없이도 AI 단축어를 만들 수 있을까?
+
+**가능하다.** 2가지 방법이 있다.
+
+1. **ChatGPT 앱 연동:** ChatGPT iOS 앱이 설치되어 있으면 단축어에서 "ChatGPT에게 질문하기" 액션을 바로 쓸 수 있다. API 키 불필요.
+2. **웹 URL 호출:** `https://claude.ai` 같은 웹 인터페이스를 단축어의 Safari 액션으로 열고, URL 스킴으로 프롬프트를 전달하는 방식. 제한적이지만 무료.
+
+| 방식                      | 비용       | 정확도 | 자동화 수준   |
+| ------------------------- | ---------- | ------ | ------------- |
+| API 키 (OpenAI/Anthropic) | 월 $1~5    | 높음   | 완전 자동     |
+| ChatGPT 앱 연동           | 무료 / $20 | 중간   | 반자동        |
+| 웹 URL 호출               | 무료       | 낮음   | 수동에 가까움 |
+
+첫 입문자라면 ChatGPT 앱 연동으로 2개를 먼저 만들어보고, 익숙해지면 API 키로 옮기는 게 좋다.
+
+## 총정리 + 확장 아이디어
+
+| 단축어            | 만들기 시간 | 일일 절약 | API 필요   |
+| ----------------- | ----------- | --------- | ---------- |
+| 텍스트 한 줄 요약 | 10분        | 10분      | ✅         |
+| 스크린샷 AI 설명  | 15분        | 15분/글   | ✅         |
+| 음성 → Notion     | 20분        | 10분      | ✅         |
+| 클립보드 번역     | 5분         | 5분       | ✅ 또는 ❌ |
+| 캘린더 자연어     | 15분        | 주 20분   | ✅         |
+
+**확장 아이디어:** 이메일 초안 자동 작성, Slack 메시지 요약, 사진 → 메모 변환, 운동 기록 자동 입력.
+
+단축어 하나하나는 단순하지만 조합하면 하루 루틴 전체가 바뀐다. 특히 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor 비교</Link>에서 다룬 개발 환경 자동화와 이어 붙이면, 글쓰기부터 코딩까지 연쇄 자동화가 가능하다.
+
+## 자주 묻는 질문 (FAQ)
+
+### OpenAI API는 유료인가요?
+
+종량제다. 일반 사용자 기준 월 $1~5 수준. API 키 발급은 무료, 사용한 토큰만큼 과금된다. Anthropic도 같은 구조다.
+
+### iPad에서도 동일하게 작동하나요?
+
+동일하다. 단축어 앱은 iPhone·iPad·Mac에서 완전 동기화된다. Mac에서는 Finder 통합, 키보드 단축키 할당 등 추가 기능도 있어 오히려 더 편하다.
+
+### Siri로 실행 가능한가요?
+
+가능하다. 단축어 이름을 "블로그캡처"로 지으면 "Hey Siri, 블로그캡처"로 실행된다. 다만 복잡한 입력이 필요한 단축어는 수동 실행이 낫다.
+
+### Android에서 대안은?
+
+Tasker + AutoVoice 조합이 가장 가깝다. 또는 Make·Zapier의 모바일 트리거를 쓰는 방식도 있다.
+
+### 단축어를 다른 사람에게 공유할 수 있나요?
+
+가능하다. 단축어 편집 화면에서 "공유"를 누르면 iCloud 링크가 생성된다. 다만 API 키는 받는 사람이 각자 넣어야 한다 — 키는 공유 파일에 포함되지 않는다.
+
+## 마무리
+
+Apple 단축어는 "노코드 AI 자동화"의 가장 현실적인 진입점이다. Make·n8n 같은 본격 도구로 가기 전에, 손에 있는 아이폰·맥으로 먼저 시작해볼 것을 권한다. 5개 다 만드는 데 주말 한나절이면 충분하다.
