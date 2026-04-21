@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Gowun_Batang, Lora } from "next/font/google";
+import { JetBrains_Mono, Gowun_Batang } from "next/font/google";
 import localFont from "next/font/local";
-import { BrandProvider, GoogleAnalytics, buildMetadata } from "@unpack/blog-core";
+import {
+  BrandProvider,
+  GoogleAnalytics,
+  buildMetadata,
+} from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
@@ -14,12 +18,6 @@ const pretendard = localFont({
   weight: "45 920",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
@@ -30,12 +28,6 @@ const gowunBatang = Gowun_Batang({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-gowun-batang",
-  display: "swap",
-});
-
-const lora = Lora({
-  subsets: ["latin"],
-  variable: "--font-lora",
   display: "swap",
 });
 
@@ -59,10 +51,15 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: brandConfig.theme.colors.background },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: brandConfig.theme.colors.background,
+    },
     {
       media: "(prefers-color-scheme: dark)",
-      color: brandConfig.theme.dark?.background ?? brandConfig.theme.colors.background,
+      color:
+        brandConfig.theme.dark?.background ??
+        brandConfig.theme.colors.background,
     },
   ],
 };
@@ -75,8 +72,16 @@ export default function RootLayout({
   return (
     <html
       lang={brandConfig.locale.replace("-", "_").slice(0, 2)}
-      className={`${pretendard.variable} ${inter.variable} ${jetbrains.variable} ${gowunBatang.variable} ${lora.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${pretendard.variable} ${jetbrains.variable} ${gowunBatang.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('babipanote-theme');var m=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&m)){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <BrandProvider config={brandConfig}>
           <Header />

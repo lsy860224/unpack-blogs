@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "../../lib/cn";
 
 export interface CompareTableColumn {
   key: string;
@@ -18,11 +19,17 @@ export interface CompareTableProps {
   columns: CompareTableColumn[];
   rows: CompareTableRow[];
   caption?: string;
+  className?: string;
 }
 
-export function CompareTable({ columns, rows, caption }: CompareTableProps) {
+export function CompareTable({
+  columns,
+  rows,
+  caption,
+  className,
+}: CompareTableProps) {
   return (
-    <div className="my-8 overflow-x-auto not-prose">
+    <div className={cn("my-8 overflow-x-auto not-prose", className)}>
       {caption && (
         <p className="mb-2 text-xs uppercase tracking-widest text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
           {caption}
@@ -62,8 +69,8 @@ export function CompareTable({ columns, rows, caption }: CompareTableProps) {
                   v === "win"
                     ? "var(--color-brand-accent-green)"
                     : v === "lose"
-                    ? "var(--color-brand-accent-red)"
-                    : undefined;
+                      ? "var(--color-brand-accent-red)"
+                      : undefined;
                 return (
                   <td
                     key={c.key}

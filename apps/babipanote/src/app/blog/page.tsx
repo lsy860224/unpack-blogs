@@ -1,6 +1,10 @@
 import path from "node:path";
 import type { Metadata } from "next";
-import { PostCard, buildMetadata, getAllPostSummaries } from "@unpack/blog-core";
+import {
+  PostCard,
+  buildMetadata,
+  getAllPostSummaries,
+} from "@unpack/blog-core";
 import { brandConfig } from "../../../brand.config";
 
 const CONTENT_DIR = path.join(process.cwd(), "content/posts");
@@ -14,7 +18,7 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default function BlogIndexPage() {
-  const posts = getAllPostSummaries(CONTENT_DIR);
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "babipanote" });
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">

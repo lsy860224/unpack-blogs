@@ -6,7 +6,11 @@ import { CATEGORY_META } from "../lib/categories";
 
 type ChangeFreq = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
-const STATIC_PATHS: { path: string; priority: number; changeFrequency: ChangeFreq }[] = [
+const STATIC_PATHS: {
+  path: string;
+  priority: number;
+  changeFrequency: ChangeFreq;
+}[] = [
   { path: "/", priority: 1.0, changeFrequency: "weekly" },
   { path: "/blog", priority: 0.9, changeFrequency: "weekly" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
@@ -14,18 +18,23 @@ const STATIC_PATHS: { path: string; priority: number; changeFrequency: ChangeFre
   { path: "/disclaimer", priority: 0.3, changeFrequency: "monthly" },
 ];
 
-function buildLanguageMap(base: string, pathSuffix: string): Record<string, string> {
+function buildLanguageMap(
+  base: string,
+  pathSuffix: string,
+): Record<string, string> {
   return Object.fromEntries(
-    SUPPORTED_LOCALES.map((l) => [l, `${base}/${l}${pathSuffix === "/" ? "" : pathSuffix}`]),
+    SUPPORTED_LOCALES.map((l) => [
+      l,
+      `${base}/${l}${pathSuffix === "/" ? "" : pathSuffix}`,
+    ]),
   );
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const configUrl = brandConfig.url;
-  const base = (configUrl.includes("localhost") ? "https://aigrit.dev" : configUrl).replace(
-    /\/+$/,
-    "",
-  );
+  const base = (
+    configUrl.includes("localhost") ? "https://aigrit.dev" : configUrl
+  ).replace(/\/+$/, "");
   const now = new Date();
   const entries: MetadataRoute.Sitemap = [];
 
@@ -43,7 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   for (const locale of SUPPORTED_LOCALES) {
     const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-    const posts = getAllPostSummaries(CONTENT_DIR);
+    const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" });
     for (const p of posts) {
       entries.push({
         url: `${base}/${locale}/blog/${p.frontmatter.slug}`,

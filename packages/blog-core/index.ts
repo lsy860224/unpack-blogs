@@ -10,6 +10,8 @@ export * from "./lib/toc";
 export * from "./lib/jsonld";
 export * from "./lib/date";
 export * from "./lib/i18n";
+export * from "./lib/cn";
+export * from "./lib/validate";
 
 // Contexts
 export * from "./contexts/brand-context";

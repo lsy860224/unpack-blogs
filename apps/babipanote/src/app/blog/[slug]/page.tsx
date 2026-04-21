@@ -5,9 +5,12 @@ import {
   Comments,
   PostHeader,
   PostRenderer,
+  RelatedPosts,
+  buildArticleJsonLd,
   buildMetadata,
   defaultMdxComponents,
   getAllPostSlugs,
+  getAllPostSummaries,
   getPostBySlug,
   toIsoDatetime,
 } from "@unpack/blog-core";
@@ -20,7 +23,9 @@ interface Params {
 }
 
 export function generateStaticParams(): Params[] {
-  return getAllPostSlugs(CONTENT_DIR).map((slug) => ({ slug }));
+  return getAllPostSlugs(CONTENT_DIR, { brand: "babipanote" }).map((slug) => ({
+    slug,
+  }));
 }
 
 export async function generateMetadata({
@@ -29,7 +34,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(CONTENT_DIR, slug);
+  const post = getPostBySlug(CONTENT_DIR, slug, { brand: "babipanote" });
   if (!post) return {};
   return buildMetadata({
     title: post.frontmatter.title,
@@ -50,21 +55,50 @@ export default async function PostPage({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const post = getPostBySlug(CONTENT_DIR, slug);
+  const post = getPostBySlug(CONTENT_DIR, slug, { brand: "babipanote" });
   if (!post) notFound();
+
+  const allPosts = getAllPostSummaries(CONTENT_DIR, { brand: "babipanote" });
+
+  const articleJsonLd = buildArticleJsonLd({
+    title: post.frontmatter.title,
+    description: post.frontmatter.description,
+    siteName: brandConfig.name,
+    siteUrl: brandConfig.url,
+    path: `/blog/${post.frontmatter.slug}`,
+    image: post.frontmatter.thumbnail,
+    datePublished: toIsoDatetime(post.frontmatter.date),
+    dateModified: post.frontmatter.updated
+      ? toIsoDatetime(post.frontmatter.updated)
+      : undefined,
+    inLanguage: brandConfig.locale,
+  });
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <PostHeader post={post} />
       <div className="prose prose-neutral max-w-none dark:prose-invert">
         <PostRenderer source={post.content} components={defaultMdxComponents} />
       </div>
+
+      <RelatedPosts
+        allPosts={allPosts}
+        currentSlug={post.frontmatter.slug}
+        tags={post.frontmatter.tags}
+        currentCluster={post.frontmatter.topic_cluster}
+      />
 
       <Comments
         repo={brandConfig.comments.giscusRepo}
         repoId={brandConfig.comments.giscusRepoId}
         category={brandConfig.comments.giscusCategory}
         categoryId={brandConfig.comments.giscusCategoryId}
+        lang="ko"
+        brand="babipanote"
       />
     </article>
   );

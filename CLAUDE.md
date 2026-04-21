@@ -1,272 +1,148 @@
 # CLAUDE.md — UnpackBlogs Monorepo
 
 ## 프로젝트 개요
-- 프로젝트명: unpack-blogs (모노레포)
-- 목적: AIGrit + babipanote 두 블로그를 하나의 코드베이스로 운영
-- 구조: Turborepo 모노레포 (공유 엔진 + 사이트별 앱)
 
-### 사이트별 정체성
+Turborepo 모노레포 1개로 블로그 2개 + 네이버 에디션을 운영한다.
 
-| | AIGrit (aigrit.dev) | babipanote (babipanote.com) |
-|---|---|---|
-| 포지션 | AI 도구 리뷰 블로그 | 바비파의 빌더 저널 |
-| 톤 | 전문적, 비판적, 리뷰체 | 개인적, 솔직, 일기체 |
-| 타겟 | AI 입문자, 생산성 덕후 | 인디해커, 1인 창업자 |
-| 수익 | 애드센스 + SaaS 제휴 | 최소 (브랜드 자산 축적) |
-| 레이아웃 | 카테고리 중심, 검색 강조 | 타임라인형, 연대기 |
+| | AIGrit (aigrit.dev) | babipanote (babipanote.com) | 네이버 (babipa의 AIGrit) |
+|---|---|---|---|
+| 포지션 | AI 도구 리뷰 | 빌더 저널 | AIGrit 리프레이밍 + 협찬 |
+| 톤 | 전문적·비판적 | 솔직·일기체 | 생활·재테크 프레임 |
+| 수익 | AdSense + 제휴 | 없음 | 애드포스트 + 협찬 |
 
 ## 기술 스택
-- 모노레포: Turborepo + pnpm workspaces
-- 프레임워크: Next.js 16 (App Router, TypeScript) — 참고: `apps/*/AGENTS.md`
-- 콘텐츠: MDX (next-mdx-remote + gray-matter)
-- 스타일: Tailwind CSS + @tailwindcss/typography
-- 배포: GitHub → Vercel (사이트별 프로젝트)
-- 분석: GA4 + Vercel Analytics
-- 댓글: Giscus (GitHub Discussions 기반)
-- 도메인: Vercel Domains (aigrit.dev, babipanote.com)
 
-## 프로젝트 구조
+Turborepo + pnpm · Next.js 16 (App Router, TS) · MDX · Tailwind CSS v4 · Vercel · GA4 · Giscus
 
-### 현재 구조 (Phase 0-1 / 0-2 / 1 / 2 / 2.5 완료 기준 — aigrit · babipanote 양쪽 UI 완성)
-
-지금 실제로 존재하는 파일만 기술. 빈 디렉토리는 표기 생략. 단계별 계획은 `docs/MONOREPO_MIGRATION.md` 참조.
+## 핵심 구조
 
 ```
 unpack-blogs/
-├── turbo.json
-├── pnpm-workspace.yaml
-├── package.json                    # 루트 (워크스페이스 + turbo 스크립트)
-├── pnpm-lock.yaml
-├── .env.example
-├── .gitignore
-├── CLAUDE.md                       # 이 파일
-├── docs/
-│   └── MONOREPO_MIGRATION.md       # 모노레포 전환 아카이브
-├── .github/
-│   └── workflows/ci.yml            # pnpm + turbo (lint + build)
-│
-├── packages/
-│   └── blog-core/                  # 공유 엔진 (@unpack/blog-core)
-│       ├── package.json
-│       ├── tsconfig.json
-│       ├── index.ts                # barrel export
-│       ├── lib/
-│       │   ├── mdx.ts              # parseMdxFile (gray-matter + reading-time)
-│       │   ├── posts.ts            # getAllPosts / getPostBySlug (contentDir 주입)
-│       │   ├── seo.ts              # buildMetadata (Next Metadata + OG/Twitter)
-│       │   ├── jsonld.ts           # buildArticleJsonLd / Review / WebSite (Phase 2.5)
-│       │   └── toc.ts              # extractHeadings (Phase 2.5)
-│       ├── contexts/
-│       │   └── brand-context.tsx   # BrandProvider / useBrand (Phase 1-3)
-│       ├── components/
-│       │   ├── blog/               # PostCard, PostHeader, PostRenderer (Phase 2-1)
-│       │   │                       # + Comments(Giscus), RelatedPosts, TableOfContents (Phase 2.5)
-│       │   ├── mdx/                # Callout, CompareTable, ProCon(+Pros/Cons),
-│       │   │                       # AffiliateLink, defaultMdxComponents (Phase 2.5)
-│       │   ├── ads/                # AdBanner, AdInArticle (Phase 2.5)
-│       │   └── analytics/          # GoogleAnalytics, AdSenseScript (Phase 2.5)
-│       └── types/
-│           ├── post.ts             # PostFrontmatter, Post, PostSummary
-│           └── brand.ts            # BrandConfig 스키마 (Phase 1-1)
-│
-└── apps/
-    ├── aigrit/                     # @unpack/aigrit
-    │   ├── package.json · next.config.ts · tsconfig.json
-    │   ├── eslint.config.mjs · postcss.config.mjs
-    │   ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)
-    │   ├── CLAUDE.md · AGENTS.md · README.md
-    │   ├── content/posts/
-    │   │   └── hello-world.mdx     # 리뷰 방법론 첫 글 (Phase 2.5)
-    │   ├── public/{fonts,images}/
-    │   ├── docs/                   # BRAND_GUIDELINES + 앱 가이드 6개
-    │   ├── scripts/
-    │   ├── .claude/commands/       # 앱 스코프 커맨드 10개
-    │   └── src/
-    │       ├── app/
-    │       │   ├── layout.tsx      # BrandProvider + Header/Footer + GA4/AdSense 스크립트
-    │       │   ├── page.tsx        # Latest + By Category 홈 (Phase 2.5)
-    │       │   ├── blog/
-    │       │   │   ├── page.tsx    # 전체 글 목록 (PostCard)
-    │       │   │   └── [slug]/page.tsx  # SSG + PostRenderer + defaultMdxComponents
-    │       │   │                   # + AdInArticle + TOC + RelatedPosts + Comments + JSON-LD
-    │       │   ├── about/page.tsx         # E-E-A-T (Phase 2.5)
-    │       │   ├── privacy/page.tsx       # AdSense 필수 (Phase 2.5)
-    │       │   ├── disclaimer/page.tsx    # 제휴 마케팅 고지 (Phase 2.5)
-    │       │   ├── sitemap.ts · robots.ts # (Phase 2.5)
-    │       │   ├── globals.css     # Tailwind v4 @theme — AIGrit 팔레트
-    │       │   └── favicon.ico
-    │       └── components/
-    │           └── layout/         # Header([AI]Grit 브래킷 sticky), Footer (Phase 2.5)
-    │
-
-    └── babipanote/                 # @unpack/babipanote
-        ├── package.json · next.config.ts
-        ├── brand.config.ts         # 브랜드 런타임 (Phase 1-2)
-        ├── CLAUDE.md · AGENTS.md · README.md
-        ├── content/posts/
-        │   └── hello-world.mdx     # 첫 글 — Phase 2
-        ├── public/
-        ├── docs/BRAND_GUIDELINES.md
-        ├── .claude/commands/       # 앱 스코프 커맨드 10개
-        └── src/
-            ├── app/
-            │   ├── layout.tsx      # BrandProvider + Header/Footer + 폰트 5종
-            │   ├── page.tsx        # 연도별 타임라인 홈 (Phase 2)
-            │   ├── blog/
-            │   │   ├── page.tsx    # 전체 글 목록 (PostCard)
-            │   │   └── [slug]/page.tsx  # SSG + PostRenderer
-            │   ├── projects/page.tsx  # AIGrit + GentleLab 카드
-            │   ├── about/page.tsx  # 운영자 소개
-            │   ├── globals.css     # Tailwind v4 @theme — babipanote 팔레트
-            │   └── favicon.ico
-            └── components/
-                └── layout/         # Header(미니멀), Footer(SNS+프로젝트)
+├── packages/blog-core/     ← 공유 엔진
+├── apps/aigrit/             ← brand.config.ts (광고 ON)
+├── apps/babipanote/         ← brand.config.ts (광고 OFF)
+├── docs/                    ← 분리 문서
+└── .claude/                 ← hooks/ + rules/ + commands/
 ```
 
-### 목표 구조 (Phase 3 완료 후)
+## 명령어
 
-Phase 1~3이 끝나면 아래 구조로 수렴. 각 미구현 항목에는 도입 Phase를 명시.
-
-```
-unpack-blogs/
-├── turbo.json · pnpm-workspace.yaml · package.json
-├── .env.example · .gitignore · CLAUDE.md
-├── docs/MONOREPO_MIGRATION.md
-├── .github/workflows/ci.yml
-│
-├── packages/
-│   └── blog-core/
-│       ├── index.ts · package.json · tsconfig.json
-│       ├── lib/{mdx,posts,seo}.ts
-│       ├── types/
-│       │   ├── post.ts
-│       │   └── brand.ts                           # (Phase 1-1)
-│       ├── contexts/
-│       │   └── brand-context.tsx                  # BrandProvider (Phase 1-3)
-│       ├── components/
-│       │   ├── blog/                              # (Phase 2+) PostCard, PostHeader,
-│       │   │                                      #   TableOfContents, RelatedPosts, Comments
-│       │   ├── mdx/                               # (Phase 2+) Callout, CompareTable,
-│       │   │                                      #   ProCon, AffiliateLink
-│       │   └── ads/                               # (Phase 2+) AdBanner, AdInArticle
-│       └── hooks/                                 # (Phase 2+) use-dark-mode,
-│                                                  #   use-reading-progress
-│
-└── apps/
-    ├── aigrit/
-    │   ├── brand.config.ts                        # (Phase 1-2)
-    │   ├── tailwind.config.ts                     # (Phase 1-3)
-    │   ├── content/posts/*.mdx
-    │   ├── public/{favicon.ico, og-default.png, images/}
-    │   └── src/
-    │       ├── app/
-    │       │   ├── layout.tsx                     # BrandProvider 래핑 (Phase 1-3)
-    │       │   ├── page.tsx                       # (Phase 2) 홈 — 최신 글 + 카테고리
-    │       │   ├── blog/{page.tsx, [slug]/page.tsx}  # (Phase 2)
-    │       │   ├── about/privacy/disclaimer/page.tsx  # (Phase 2)
-    │       │   ├── sitemap.ts · robots.ts         # (Phase 2)
-    │       │   └── globals.css
-    │       └── components/
-    │           └── layout/                        # (Phase 2) Header, Footer, Sidebar
-    │
-    └── babipanote/
-        ├── brand.config.ts                        # (Phase 1-2)
-        ├── tailwind.config.ts                     # (Phase 1-3)
-        ├── content/posts/*.mdx
-        ├── public/{favicon.ico, og-default.png, images/}
-        └── src/
-            ├── app/
-            │   ├── layout.tsx                     # BrandProvider (Phase 1-3)
-            │   ├── page.tsx                       # (Phase 2) 타임라인형 홈
-            │   ├── blog/{page.tsx, [slug]/page.tsx}
-            │   ├── projects/page.tsx              # (Phase 2-1) AIGrit + GentleLab 소개
-            │   ├── about/page.tsx
-            │   └── sitemap.ts · robots.ts
-            └── components/
-                └── layout/                        # (Phase 2-1) Header, Footer (사이드바 없음)
+```bash
+pnpm turbo run build                     # 전체 빌드
+pnpm turbo run dev                        # 전체 dev
+pnpm --filter @unpack/aigrit dev          # aigrit만
+pnpm --filter @unpack/babipanote dev      # babipanote만
+npx --no-install tsc --noEmit -p .        # 타입 체크
 ```
 
-## 코딩 컨벤션
-- 언어: TypeScript strict mode
-- 린터: ESLint + Prettier
-- 패키지 매니저: pnpm (워크스페이스)
-- 컴포넌트: 함수형 컴포넌트 + React Hooks
-- 네이밍:
-  - 파일: kebab-case (예: post-card.tsx)
-  - 컴포넌트: PascalCase (예: PostCard)
-  - 함수/변수: camelCase (예: getAllPosts)
-  - 상수: UPPER_SNAKE_CASE (예: DEFAULT_OG_IMAGE)
-  - 타입: PascalCase (예: PostFrontmatter)
+## 검증 — 커밋 전 반드시
 
-## 핵심 규칙
+1. `pnpm turbo run build` — 양쪽 빌드 통과
+2. `npx --no-install tsc --noEmit` — 타입 에러 0
+3. blog-core 수정 시 양쪽 사이트 로컬 확인
 
-### 공유 코드 (packages/blog-core/)
-- 사이트 특화 로직 금지 — brand.config.ts에서 주입
-- 모든 컴포넌트는 className prop 수용 (Tailwind 오버라이드 가능)
-- 광고 컴포넌트는 enabled prop으로 on/off 제어
-- 색상은 CSS 변수 또는 Tailwind 테마 토큰 사용 (하드코딩 금지)
+## 자동화 (.claude/)
 
-### 사이트별 앱 (apps/aigrit/, apps/babipanote/)
-- 글은 각 앱의 content/posts/*.mdx에 추가
-- 브랜드 설정은 brand.config.ts에서만 관리
-- 레이아웃 컴포넌트만 사이트별로 커스텀
-- blog-core 컴포넌트를 import하여 조합
+단일 진실 공급원 — 실제 동작 명세는 아래 canonical 파일만 참조.
 
-### 환경변수
-- .env.local은 절대 커밋 금지
-- 사이트별 환경변수는 Vercel 프로젝트에서 각각 설정
-- NEXT_PUBLIC_ 접두사가 없는 변수는 서버 전용
+- Hooks — `.claude/hooks/` (스크립트) + `.claude/settings.json` (트리거)
+- Rules — `.claude/rules/*.md` (파일 작업 시 자동 주입)
+- Commands — `.claude/commands/` (`/publish-post` 등)
 
-## 환경변수
+상세 설명과 디버깅 가이드는 `docs/HOOKS_RULES.md` 한 곳에서만 관리. 이 문서는 목차·진입점 역할만 한다.
 
-루트 `.env.example`이 단일 소스. 로컬 개발 시 작업 대상 앱의 변수만 `.env.local`에 채우면 됨. Vercel에서는 각 프로젝트에 별도 설정.
-
-### AIGrit (aigrit.dev)
-- `NEXT_PUBLIC_GA_ID` — GA4 측정 ID (analytics.google.com)
-- `NEXT_PUBLIC_ADSENSE_ID` — 애드센스 Publisher ID (adsense.google.com)
-- `NEXT_PUBLIC_GISCUS_REPO` — 댓글용 GitHub 저장소 (giscus.app)
-- `NEXT_PUBLIC_GISCUS_REPO_ID` — Giscus 저장소 ID
-- `NEXT_PUBLIC_GISCUS_CATEGORY` — Giscus 카테고리명
-- `NEXT_PUBLIC_GISCUS_CATEGORY_ID` — Giscus 카테고리 ID
-- `NEXT_PUBLIC_SITE_URL` — `https://aigrit.dev`
-
-### babipanote (babipanote.com)
-광고 비활성 — AdSense 변수 없음.
-- `NEXT_PUBLIC_GA_ID` — GA4 측정 ID (AIGrit과 별도)
-- `NEXT_PUBLIC_GISCUS_REPO` / `..._REPO_ID` / `..._CATEGORY` / `..._CATEGORY_ID` — 별도 저장소
-- `NEXT_PUBLIC_SITE_URL` — `https://babipanote.com`
-
-## Vercel 배포 설정
-- GitHub 모노레포 1개 → Vercel 프로젝트 2개
-- AIGrit 프로젝트: Root Directory = `apps/aigrit`
-- babipanote 프로젝트: Root Directory = `apps/babipanote`
-- 둘 다 `packages/blog-core` 변경 시 자동 재배포 (Turborepo 감지)
-
-## 브랜드 설정 (brand.config.ts)
-- 각 앱의 brand.config.ts에서 사이트명, 설명, 컬러, 네비게이션, 소셜 링크 등 정의
-- blog-core 컴포넌트는 이 설정을 props 또는 context로 주입받아 사용
-- 자세한 스키마는 packages/blog-core/types/brand.ts 참조
-
-## 디자인 작업
-브랜드·UI·Figma·토큰 관련 작업은 루트 `DESIGN.md`(운영 매뉴얼)와 `docs/DESIGN_CHECKLIST.md`(커밋 전 체크리스트)를 먼저 읽는다. 각 브랜드 가이드라인은 `apps/*/docs/BRAND_GUIDELINES.md`.
-
-## MDX 글 포맷 (frontmatter)
-
-```yaml
 ---
-title: "글 제목"
-date: "2026-04-14 21:30"   # YYYY-MM-DD 또는 YYYY-MM-DD HH:mm (Asia/Seoul, 시간 생략 시 자정)
-slug: "url-slug"
-description: "150자 설명"
-tags: ["태그1", "태그2"]
-thumbnail: "/images/thumbnail.png"
-featured: false
-category: "카테고리명"
----
+
+## 🖊️ 글쓰기 워크플로우 — "글쓰기 시작" 시 이 순서를 따른다
+
+### Step 1: 대상 확인
+
+어느 블로그? (aigrit / babipanote) + 어떤 글? (slug 또는 번호)
+→ 해당 글쓰기 가이드 읽기:
+- AIGrit → `docs/POST_AIGRIT.md` + `docs/CONTENT_RULES.md`
+- babipanote → `docs/POST_BABIPANOTE.md`
+- 네이버 에디션 → `docs/POST_NAVER.md`
+
+### Step 2: 초안 존재 확인
+
+MDX 파일 체크:
+- AIGrit: `apps/aigrit/content/posts/ko/{slug}.mdx`
+- babipanote: `apps/babipanote/content/posts/{slug}.mdx`
+
+있으면 → "수정 발행?" 확인. 없으면 → Step 3.
+
+### Step 3: Craft 초안 확인
+
+Craft `05. Blog Pipeline/01. In Progress/{AIGrit or babipanote}/` 확인.
+- 있으면 → Step 4로
+- 없으면 → Claude Desktop 프롬프트 제안 (`docs/PUBLISH_CHECKLIST.md` 참조)
+
+### Step 4: OG 썸네일 + 에셋 점검
+
+**4-1. OG 썸네일 자동 생성 — `docs/THUMBNAIL.md` 필독**
+
+1. `docs/THUMBNAIL.md` 읽기 (사이트별 템플릿 스펙)
+2. Figma MCP (`use_figma`)로 OG 프레임 생성 (1200×630)
+3. `get_screenshot`으로 캡처 → `apps/{app}/public/images/{slug}/og.png` 저장
+4. 실패 시 수동 Export 안내
+
+**4-2. 본문 이미지 점검**
+
+초안의 `{IMG:}` 마커 카운트 → 필요 이미지 목록 → 부족분 체크리스트:
+```
+📋 에셋 체크리스트 — {slug}
+경로: apps/{app}/public/images/{slug}/
+✅ og.png — Figma 자동 생성 완료
+❌ 본문 이미지:
+  - [ ] 01-name.png — "alt 설명" (스크린샷)
+  - [ ] 02-name.png — "alt 설명" (스크린샷)
+💡 준비 후 "에셋 준비됐어"라고 말해주세요.
 ```
 
-## 주의사항
-- blog-core 수정 시 양쪽 사이트 모두 영향 — 반드시 양쪽 빌드 확인
-- `turbo run build`로 전체 빌드 테스트 후 push
-- 이미지는 각 앱의 public/images/에 관리 (공유 이미지 없음)
-- MDX 커스텀 컴포넌트 추가 시 blog-core/components/mdx/에 작성
+### Step 5: MDX 변환 + 발행
+
+Craft 초안 → frontmatter 생성 → 마커 치환 → slug 검증 → git push → IndexNow
+
+### Step 6: 발행 후 안내
+
+```
+✅ 발행 완료: https://{domain}/blog/{slug}
+📌 수동 작업: GSC 색인 · 네이버 수집 · Obsidian 상태 · Craft 아카이브
+```
+
+상세: `docs/PUBLISH_CHECKLIST.md`
+
+---
+
+## 문서 가이드
+
+### 📝 글 작성
+
+| 문서 | 언제 읽나 |
+|---|---|
+| `docs/POST_AIGRIT.md` | AIGrit 글 작성 시 |
+| `docs/POST_BABIPANOTE.md` | babipanote 글 작성 시 |
+| `docs/POST_NAVER.md` | 네이버 에디션 작성 시 |
+| `docs/CONTENT_RULES.md` | 마커·내부 링크·금지어 |
+| **`docs/THUMBNAIL.md`** | **OG 썸네일 Figma 자동 생성** |
+| `docs/WORKFLOW.md` | 파이프라인 전체 흐름 |
+| `docs/PUBLISH_CHECKLIST.md` | 발행 전 점검·프롬프트 템플릿 |
+
+### 🔧 개발
+
+| 문서 | 언제 읽나 |
+|---|---|
+| `docs/STRUCTURE.md` | 파일 트리 확인 |
+| `docs/ENV.md` | 환경변수 설정 |
+| `docs/HOOKS_RULES.md` | Hook 추가·디버깅 |
+| `DESIGN.md` | 디자인 작업 |
+
+### 📊 Obsidian SEO 관제
+
+| 문서 | 용도 |
+|---|---|
+| `02. Blog SEO/10. Pipeline/AIGrit/_README.md` | AIGrit 마스터 넘버링 |
+| `02. Blog SEO/10. Pipeline/babipanote/_README.md` | babipanote 마스터 넘버링 |
+| `02. Blog SEO/02. AIGrit 글쓰기 지침서.md` | 카테고리 표·수익화 |
+| `02. Blog SEO/03. babipanote 글쓰기 지침서.md` | babipanote 상세 |
+| `02. Blog SEO/07. Sprint 실행 계획.md` | 발행 일정 |

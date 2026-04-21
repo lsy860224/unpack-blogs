@@ -1,15 +1,20 @@
 import fs from "node:fs";
 import path from "node:path";
-import { parseMdxFile } from "./mdx";
+import { parseMdxFile, type Brand } from "./mdx";
 import type { Post, PostSummary } from "../types/post";
 
 const MDX_EXT = /\.mdx?$/i;
 
 export interface PostQueryOptions {
   includeDrafts?: boolean;
+  /** 앱별 스키마 검증 강제 (babipanote는 category 금지 등) */
+  brand?: Brand;
 }
 
-export function getAllPosts(contentDir: string, opts: PostQueryOptions = {}): Post[] {
+export function getAllPosts(
+  contentDir: string,
+  opts: PostQueryOptions = {},
+): Post[] {
   if (!fs.existsSync(contentDir)) return [];
   const files = fs
     .readdirSync(contentDir)
@@ -17,23 +22,31 @@ export function getAllPosts(contentDir: string, opts: PostQueryOptions = {}): Po
     .map((f) => path.join(contentDir, f));
 
   const posts = files
-    .map((filePath) => parseMdxFile(filePath))
+    .map((filePath) => parseMdxFile(filePath, { brand: opts.brand }))
     .filter((post) => opts.includeDrafts || !post.frontmatter.draft);
 
-  return posts.sort((a, b) => b.frontmatter.date.localeCompare(a.frontmatter.date));
+  return posts.sort((a, b) =>
+    b.frontmatter.date.localeCompare(a.frontmatter.date),
+  );
 }
 
 export function getAllPostSummaries(
   contentDir: string,
   opts?: PostQueryOptions,
 ): PostSummary[] {
-  return getAllPosts(contentDir, opts).map(({ frontmatter, readingTimeMinutes }) => ({
-    frontmatter,
-    readingTimeMinutes,
-  }));
+  return getAllPosts(contentDir, opts).map(
+    ({ frontmatter, readingTimeMinutes }) => ({
+      frontmatter,
+      readingTimeMinutes,
+    }),
+  );
 }
 
-export function getPostBySlug(contentDir: string, slug: string): Post | null {
+export function getPostBySlug(
+  contentDir: string,
+  slug: string,
+  opts: PostQueryOptions = {},
+): Post | null {
   if (!fs.existsSync(contentDir)) return null;
   const candidates = [
     path.join(contentDir, `${slug}.mdx`),
@@ -41,11 +54,15 @@ export function getPostBySlug(contentDir: string, slug: string): Post | null {
   ];
   const hit = candidates.find((p) => fs.existsSync(p));
   if (!hit) return null;
-  return parseMdxFile(hit);
+  return parseMdxFile(hit, { brand: opts.brand });
 }
 
-export function getAllPostSlugs(contentDir: string): string[] {
-  return getAllPostSummaries(contentDir, { includeDrafts: false }).map(
-    (p) => p.frontmatter.slug,
-  );
+export function getAllPostSlugs(
+  contentDir: string,
+  opts: PostQueryOptions = {},
+): string[] {
+  return getAllPostSummaries(contentDir, {
+    includeDrafts: false,
+    brand: opts.brand,
+  }).map((p) => p.frontmatter.slug);
 }

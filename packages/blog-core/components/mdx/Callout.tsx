@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "../../lib/cn";
 
 export type CalloutType = "info" | "warning" | "success" | "error" | "note";
 
@@ -6,6 +7,7 @@ export interface CalloutProps {
   type?: CalloutType;
   title?: string;
   children: ReactNode;
+  className?: string;
 }
 
 const STYLES: Record<CalloutType, { bar: string; bg: string; icon: string }> = {
@@ -36,11 +38,19 @@ const STYLES: Record<CalloutType, { bar: string; bg: string; icon: string }> = {
   },
 };
 
-export function Callout({ type = "info", title, children }: CalloutProps) {
+export function Callout({
+  type = "info",
+  title,
+  children,
+  className,
+}: CalloutProps) {
   const s = STYLES[type];
   return (
     <aside
-      className="my-6 flex gap-3 rounded-md border-l-4 px-4 py-3 not-prose"
+      className={cn(
+        "my-6 flex gap-3 rounded-md border-l-4 px-4 py-3 not-prose",
+        className,
+      )}
       style={{ borderColor: s.bar, background: s.bg }}
     >
       <span

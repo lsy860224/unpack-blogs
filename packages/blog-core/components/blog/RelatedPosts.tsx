@@ -3,13 +3,11 @@ import type { PostSummary } from "../../types/post";
 import { getBlogCoreMessages } from "../../lib/i18n";
 
 export interface RelatedPostsProps {
-  /** 후보 풀 — 전체 글 목록 */
   allPosts: PostSummary[];
-  /** 현재 글 slug (제외 대상) */
   currentSlug: string;
-  /** 현재 글 태그 (매칭 점수 계산용) */
   tags?: string[];
-  /** 최대 개수 */
+  /** 현재 글의 topic_cluster — 같은 클러스터 글에 +10점 */
+  currentCluster?: string;
   max?: number;
   hrefBase?: string;
   title?: string;
@@ -17,13 +15,14 @@ export interface RelatedPostsProps {
 }
 
 /**
- * 현재 글과 태그 겹침 기준으로 관련 글을 산출.
- * 태그 매칭 점수 동률이면 날짜 역순.
+ * 스코어링: 태그 일치 1점 × N + 같은 클러스터 10점 + pillar 5점.
+ * 동점 시 날짜 역순.
  */
 export function RelatedPosts({
   allPosts,
   currentSlug,
   tags = [],
+  currentCluster,
   max = 3,
   hrefBase = "/blog",
   title,
@@ -34,12 +33,20 @@ export function RelatedPosts({
   const scored = allPosts
     .filter((p) => p.frontmatter.slug !== currentSlug)
     .map((p) => {
-      const matches = (p.frontmatter.tags ?? []).reduce(
+      const tagMatches = (p.frontmatter.tags ?? []).reduce(
         (acc, t) => acc + (tagSet.has(t) ? 1 : 0),
         0,
       );
-      return { post: p, score: matches };
+      const clusterBonus =
+        currentCluster &&
+        p.frontmatter.topic_cluster &&
+        p.frontmatter.topic_cluster === currentCluster
+          ? 10
+          : 0;
+      const pillarBonus = p.frontmatter.cluster_role === "pillar" ? 5 : 0;
+      return { post: p, score: tagMatches + clusterBonus + pillarBonus };
     })
+    .filter(({ score }) => score > 0)
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       return b.post.frontmatter.date.localeCompare(a.post.frontmatter.date);

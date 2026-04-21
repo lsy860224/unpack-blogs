@@ -75,10 +75,15 @@ export async function generateMetadata({
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: brandConfig.theme.colors.background },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: brandConfig.theme.colors.background,
+    },
     {
       media: "(prefers-color-scheme: dark)",
-      color: brandConfig.theme.dark?.background ?? brandConfig.theme.colors.background,
+      color:
+        brandConfig.theme.dark?.background ??
+        brandConfig.theme.colors.background,
     },
   ],
 };
@@ -106,8 +111,16 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      suppressHydrationWarning
       className={`${pretendard.variable} ${inter.variable} ${jetbrains.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('aigrit-theme');var m=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&m)){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <BrandProvider config={runtimeConfig}>
           <Header locale={locale} />
@@ -116,7 +129,9 @@ export default async function RootLayout({
         </BrandProvider>
         <GoogleAnalytics gaId={brandConfig.analytics.gaId} />
         {brandConfig.monetization.adsense && (
-          <AdSenseScript publisherId={brandConfig.monetization.adsensePublisherId} />
+          <AdSenseScript
+            publisherId={brandConfig.monetization.adsensePublisherId}
+          />
         )}
       </body>
     </html>

@@ -35,7 +35,9 @@ interface Params {
 export function generateStaticParams(): Params[] {
   const params: Params[] = [];
   for (const locale of SUPPORTED_LOCALES) {
-    for (const slug of getAllPostSlugs(contentDirFor(locale))) {
+    for (const slug of getAllPostSlugs(contentDirFor(locale), {
+      brand: "aigrit",
+    })) {
       params.push({ locale, slug });
     }
   }
@@ -48,7 +50,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = getPostBySlug(contentDirFor(locale), slug);
+  const post = getPostBySlug(contentDirFor(locale), slug, { brand: "aigrit" });
   if (!post) return {};
   const localized = getLocalizedBrand(locale);
   return buildMetadata({
@@ -77,10 +79,10 @@ export default async function PostPage({
 }) {
   const { locale, slug } = await params;
   const dir = contentDirFor(locale);
-  const post = getPostBySlug(dir, slug);
+  const post = getPostBySlug(dir, slug, { brand: "aigrit" });
   if (!post) notFound();
 
-  const allPosts = getAllPostSummaries(dir);
+  const allPosts = getAllPostSummaries(dir, { brand: "aigrit" });
   const headings = extractHeadings(post.content);
   const localized = getLocalizedBrand(locale);
   const bcp47 = toBcp47(locale);
@@ -145,6 +147,7 @@ export default async function PostPage({
         allPosts={allPosts}
         currentSlug={post.frontmatter.slug}
         tags={post.frontmatter.tags}
+        currentCluster={post.frontmatter.topic_cluster}
         hrefBase={hrefBase}
         locale={locale}
       />
@@ -155,6 +158,7 @@ export default async function PostPage({
         category={brandConfig.comments.giscusCategory}
         categoryId={brandConfig.comments.giscusCategoryId}
         lang={locale}
+        brand="aigrit"
       />
     </article>
   );

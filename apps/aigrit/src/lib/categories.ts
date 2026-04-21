@@ -7,7 +7,7 @@ export interface CategoryMeta {
 }
 
 export const CATEGORY_META: Record<string, CategoryMeta> = {
-  "공지": {
+  공지: {
     slug: "notice",
     description: "AIGrit 운영 공지 및 업데이트",
   },
@@ -15,7 +15,7 @@ export const CATEGORY_META: Record<string, CategoryMeta> = {
     slug: "coding-tools",
     description: "Cursor, Claude Code 등 개발 보조 AI 도구 리뷰",
   },
-  "LLM": {
+  LLM: {
     slug: "llm",
     description: "GPT, Claude, Gemini 등 대형 언어 모델 비교",
   },
@@ -45,7 +45,7 @@ export function getCategoryNav(
   allLabel: string,
 ): CategoryNavEntry[] {
   const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-  const posts = getAllPostSummaries(CONTENT_DIR);
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" });
 
   const counts = new Map<string, number>();
   for (const p of posts) {

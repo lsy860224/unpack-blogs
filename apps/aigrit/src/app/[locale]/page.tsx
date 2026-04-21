@@ -43,7 +43,7 @@ export default async function HomePage({
   const ui = HOME_UI[locale as keyof typeof HOME_UI] ?? HOME_UI.ko;
   const localized = getLocalizedBrand(locale);
   const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-  const posts = getAllPostSummaries(CONTENT_DIR);
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" });
   const latest = posts.slice(0, 6);
   const byCategory = groupByCategory(posts, ui.other);
   const jsonLd = buildWebSiteJsonLd({
@@ -72,7 +72,10 @@ export default async function HomePage({
           />
           <span
             className="text-xs font-semibold uppercase tracking-[0.2em]"
-            style={{ color: "var(--color-brand-secondary)", fontFamily: "var(--font-mono)" }}
+            style={{
+              color: "var(--color-brand-secondary)",
+              fontFamily: "var(--font-mono)",
+            }}
           >
             {ui.kicker}
           </span>
@@ -87,7 +90,10 @@ export default async function HomePage({
           <Link
             href={`/${locale}/blog`}
             className="rounded-md px-5 py-2.5 text-sm font-semibold transition"
-            style={{ background: "var(--color-brand-primary)", color: "var(--background)" }}
+            style={{
+              background: "var(--color-brand-primary)",
+              color: "var(--background)",
+            }}
           >
             {ui.ctaLatest}
           </Link>
@@ -95,7 +101,8 @@ export default async function HomePage({
             href={`/${locale}/about`}
             className="rounded-md border px-5 py-2.5 text-sm font-semibold"
             style={{
-              borderColor: "color-mix(in oklab, var(--foreground) 20%, transparent)",
+              borderColor:
+                "color-mix(in oklab, var(--foreground) 20%, transparent)",
               color: "var(--foreground)",
             }}
           >

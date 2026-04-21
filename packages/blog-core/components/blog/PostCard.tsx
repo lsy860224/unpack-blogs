@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { PostSummary } from "../../types/post";
 import { formatPostDate, toIsoDatetime } from "../../lib/date";
 import { getBlogCoreMessages } from "../../lib/i18n";
+import { cn } from "../../lib/cn";
 
 export interface PostCardProps {
   post: PostSummary;
@@ -29,12 +30,12 @@ export function PostCard({
   return (
     <Link
       href={`${hrefBase}/${frontmatter.slug}`}
-      className={[
+      className={cn(
         "group block rounded-lg transition overflow-hidden",
         "hover:bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)]",
         isCompact ? "p-3" : "p-4",
-        className ?? "",
-      ].join(" ")}
+        className,
+      )}
     >
       {hasThumbnail && (
         <div className="mb-4 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)]">
@@ -60,10 +61,10 @@ export function PostCard({
         </span>
       </div>
       <h3
-        className={[
+        className={cn(
           "mt-1 font-semibold leading-snug group-hover:text-[var(--color-brand-primary)]",
           isCompact ? "text-base" : "text-lg",
-        ].join(" ")}
+        )}
       >
         {frontmatter.title}
       </h3>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { cn } from "../../lib/cn";
 
 declare global {
   interface Window {
@@ -38,12 +39,15 @@ export function AdInArticle({
 
   return (
     <div
-      className={[
+      className={cn(
         "my-8 text-center text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)] not-prose",
-        className ?? "",
-      ].join(" ")}
+        className,
+      )}
     >
-      <p className="mb-1 uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)" }}>
+      <p
+        className="mb-1 uppercase tracking-widest"
+        style={{ fontFamily: "var(--font-mono)" }}
+      >
         Sponsored
       </p>
       <ins

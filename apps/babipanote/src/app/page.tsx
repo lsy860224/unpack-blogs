@@ -11,7 +11,7 @@ import { brandConfig } from "../../brand.config";
 const CONTENT_DIR = path.join(process.cwd(), "content/posts");
 
 export default function HomePage() {
-  const posts = getAllPostSummaries(CONTENT_DIR);
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "babipanote" });
   const grouped = groupByYear(posts);
 
   return (

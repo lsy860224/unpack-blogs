@@ -5,14 +5,35 @@
   "main": "./index.ts",
   "types": "./index.ts",
   "exports": {
-    ".": "./index.ts",
-    "./lib/*": "./lib/*.ts",
-    "./components/*": "./components/*",
-    "./contexts/*": "./contexts/*.tsx",
-    "./types/*": "./types/*.ts",
-    "./hooks/*": "./hooks/*.ts"
+    ".": {
+      "types": "./index.ts",
+      "default": "./index.ts"
+    },
+    "./lib/*": {
+      "types": "./lib/*.ts",
+      "default": "./lib/*.ts"
+    },
+    "./components/blog/*": "./components/blog/*",
+    "./components/mdx/*": "./components/mdx/*",
+    "./components/ads/*": "./components/ads/*",
+    "./components/analytics/*": "./components/analytics/*",
+    "./config/*": "./config/*",
+    "./contexts/*": {
+      "types": "./contexts/*.tsx",
+      "default": "./contexts/*.tsx"
+    },
+    "./types/*": {
+      "types": "./types/*.ts",
+      "default": "./types/*.ts"
+    },
+    "./hooks/*": {
+      "types": "./hooks/*.ts",
+      "default": "./hooks/*.ts"
+    }
   },
-  "scripts": {},
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "gray-matter": "^4.0.3",
     "next-mdx-remote": "^6.0.0",

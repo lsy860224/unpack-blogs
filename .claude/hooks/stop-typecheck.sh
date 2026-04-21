@@ -10,11 +10,20 @@ if [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false')" = "true" ]; then
   exit 0
 fi
 
-cd /Users/seung-yeoblee/Developer/unpack-blogs || exit 0
+cd /Users/seung-yeoblee/dev/unpack-blogs || exit 0
 
-# TypeScript 타입 체크 (빠른 검증)
+# TypeScript 타입 체크 (워크스페이스별, 빠른 검증)
 echo "🔍 TypeScript 타입 체크 중..." >&2
-if ! npx --no-install tsc --noEmit -p . 2>/dev/null; then
+FAIL=0
+for dir in packages/blog-core apps/aigrit apps/babipanote; do
+  if [ -f "$dir/tsconfig.json" ] && [ -x "$dir/node_modules/.bin/tsc" ]; then
+    if ! (cd "$dir" && ./node_modules/.bin/tsc --noEmit) 2>&1 | sed "s|^|  [$dir] |" >&2; then
+      FAIL=1
+    fi
+  fi
+done
+
+if [ "$FAIL" -ne 0 ]; then
   echo "❌ TypeScript 타입 에러 발견. 수정이 필요합니다." >&2
   exit 2  # Claude에게 계속 작업하라고 지시
 fi

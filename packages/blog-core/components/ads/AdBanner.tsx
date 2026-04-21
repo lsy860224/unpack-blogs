@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { cn } from "../../lib/cn";
 
 declare global {
   interface Window {
@@ -41,7 +42,7 @@ export function AdBanner({
   if (!enabled || !publisherId || !slot) return null;
 
   return (
-    <div className={["my-6 w-full text-center", className ?? ""].join(" ")}>
+    <div className={cn("my-6 w-full text-center", className)}>
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}

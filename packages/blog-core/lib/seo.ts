@@ -31,7 +31,9 @@ export function buildMetadata(input: SeoInput): Metadata {
   } = input;
 
   const url = joinUrl(siteUrl, path);
-  const ogImage = image ? joinUrl(siteUrl, image) : joinUrl(siteUrl, "/og-default.png");
+  const ogImage = image
+    ? joinUrl(siteUrl, image)
+    : joinUrl(siteUrl, "/og-default.png");
 
   const languages = hrefLangs
     ? Object.fromEntries(
@@ -39,7 +41,10 @@ export function buildMetadata(input: SeoInput): Metadata {
       )
     : undefined;
 
+  const metadataBase = safeMetadataBase(siteUrl);
+
   return {
+    ...(metadataBase ? { metadataBase } : {}),
     title,
     description,
     alternates: {
@@ -64,6 +69,14 @@ export function buildMetadata(input: SeoInput): Metadata {
       images: [ogImage],
     },
   };
+}
+
+function safeMetadataBase(siteUrl: string): URL | undefined {
+  try {
+    return new URL(siteUrl);
+  } catch {
+    return undefined;
+  }
 }
 
 function joinUrl(base: string, path: string): string {

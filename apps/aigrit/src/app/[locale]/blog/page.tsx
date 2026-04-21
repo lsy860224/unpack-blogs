@@ -65,7 +65,7 @@ export default async function BlogIndexPage({
   const { locale } = await params;
   const ui = BLOG_UI[locale as keyof typeof BLOG_UI] ?? BLOG_UI.ko;
   const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-  const posts = getAllPostSummaries(CONTENT_DIR);
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" });
   const hrefBase = `/${locale}/blog`;
   const navEntries = getCategoryNav(locale, ui.allLabel);
 
@@ -88,7 +88,10 @@ export default async function BlogIndexPage({
             />
             <span
               className="text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{ color: "var(--color-brand-secondary)", fontFamily: "var(--font-mono)" }}
+              style={{
+                color: "var(--color-brand-secondary)",
+                fontFamily: "var(--font-mono)",
+              }}
             >
               {ui.kicker}
             </span>

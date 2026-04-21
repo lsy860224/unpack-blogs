@@ -15,13 +15,12 @@
   --color-neutral-ink: #2b2420;
   --color-neutral-paper: #faf7f2;
 
-  /* Fonts */
+  /* Fonts — heading(serif)은 한글 중심 Gowun Batang, 본문은 Pretendard만 유지 */
   --font-serif:
-    var(--font-gowun-batang, "Gowun Batang"), var(--font-lora, "Lora"),
-    Georgia, "Times New Roman", serif;
+    var(--font-gowun-batang, "Gowun Batang"), Georgia, "Times New Roman", serif;
   --font-sans:
-    var(--font-pretendard, "Pretendard Variable"), var(--font-inter, "Inter"),
-    system-ui, -apple-system, sans-serif;
+    var(--font-pretendard, "Pretendard Variable"), system-ui, -apple-system,
+    sans-serif;
   --font-mono:
     var(--font-jetbrains, "JetBrains Mono"), ui-monospace, "SFMono-Regular",
     Menlo, monospace;

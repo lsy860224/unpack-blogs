@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "../../lib/cn";
 
 export interface ProConProps {
   /** children API (MDX 권장): <Pros>...</Pros><Cons>...</Cons>를 자식으로 */
@@ -8,6 +9,7 @@ export interface ProConProps {
   cons?: string[];
   proTitle?: string;
   conTitle?: string;
+  className?: string;
 }
 
 /**
@@ -34,20 +36,17 @@ export function ProCon({
   cons,
   proTitle = "장점",
   conTitle = "단점",
+  className,
 }: ProConProps) {
-  // children 전달 시: 자식 컴포넌트(Pros/Cons)가 직접 렌더링
+  const rootClass = cn("my-6 grid gap-3 sm:grid-cols-2 not-prose", className);
   if (children) {
-    return (
-      <div className="my-6 grid gap-3 sm:grid-cols-2 not-prose">{children}</div>
-    );
+    return <div className={rootClass}>{children}</div>;
   }
-
-  // array prop 전달 시: 기본 렌더링
   const safePros = pros ?? [];
   const safeCons = cons ?? [];
 
   return (
-    <div className="my-6 grid gap-3 sm:grid-cols-2 not-prose">
+    <div className={rootClass}>
       <Pros title={proTitle}>
         <ul className="space-y-1 text-sm leading-relaxed">
           {safePros.map((item, i) => (
@@ -67,7 +66,10 @@ export function ProCon({
         <ul className="space-y-1 text-sm leading-relaxed">
           {safeCons.map((item, i) => (
             <li key={i} className="flex gap-2">
-              <span aria-hidden style={{ color: "var(--color-brand-accent-red)" }}>
+              <span
+                aria-hidden
+                style={{ color: "var(--color-brand-accent-red)" }}
+              >
                 ·
               </span>
               <span>{item}</span>

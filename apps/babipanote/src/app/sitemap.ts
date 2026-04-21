@@ -14,17 +14,20 @@ const STATIC_PATHS: { path: string; priority: number }[] = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const configUrl = brandConfig.url;
-  const base = (configUrl.includes("localhost") ? "https://babipanote.com" : configUrl).replace(/\/+$/, "");
+  const base = (
+    configUrl.includes("localhost") ? "https://babipanote.com" : configUrl
+  ).replace(/\/+$/, "");
   const now = new Date();
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((s) => ({
     url: `${base}${s.path}`,
     lastModified: now,
-    changeFrequency: s.path === "/" || s.path === "/blog" ? "weekly" : "monthly",
+    changeFrequency:
+      s.path === "/" || s.path === "/blog" ? "weekly" : "monthly",
     priority: s.priority,
   }));
 
-  const posts = getAllPostSummaries(CONTENT_DIR);
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "babipanote" });
   const postEntries: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${base}/blog/${p.frontmatter.slug}`,
     lastModified: new Date(p.frontmatter.updated ?? p.frontmatter.date),

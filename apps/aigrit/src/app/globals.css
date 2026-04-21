@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@variant dark (@media (prefers-color-scheme: dark));
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* Brand — AIGrit (Precision Indigo) */
@@ -43,17 +43,15 @@
   --surface: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #e2e8f0;
-    --surface: #1e293b;
+.dark {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  --surface: #1e293b;
 
-    --color-brand-primary: #818cf8;
-    --color-brand-secondary: #22d3ee;
-    --color-brand-accent-green: #34d399;
-    --color-brand-accent-red: #f87171;
-  }
+  --color-brand-primary: #818cf8;
+  --color-brand-secondary: #22d3ee;
+  --color-brand-accent-green: #34d399;
+  --color-brand-accent-red: #f87171;
 }
 
 @layer base {
@@ -70,6 +68,8 @@
   kbd,
   .num {
     font-family: var(--font-mono);
-    font-feature-settings: "tnum" 1, "ss01" 1;
+    font-feature-settings:
+      "tnum" 1,
+      "ss01" 1;
   }
 }

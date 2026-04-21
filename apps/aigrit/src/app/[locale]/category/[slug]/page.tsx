@@ -81,7 +81,7 @@ export default async function CategoryPage({
 
   const ui = CATEGORY_UI[locale as keyof typeof CATEGORY_UI] ?? CATEGORY_UI.ko;
   const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-  const posts = getAllPostSummaries(CONTENT_DIR).filter(
+  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" }).filter(
     (p) => p.frontmatter.category === cat.name,
   );
   const hrefBase = `/${locale}/blog`;
@@ -107,7 +107,10 @@ export default async function CategoryPage({
             <Link
               href={`/${locale}/blog`}
               className="text-xs font-semibold uppercase tracking-[0.2em] hover:opacity-80"
-              style={{ color: "var(--color-brand-secondary)", fontFamily: "var(--font-mono)" }}
+              style={{
+                color: "var(--color-brand-secondary)",
+                fontFamily: "var(--font-mono)",
+              }}
             >
               {ui.kicker}
             </Link>
