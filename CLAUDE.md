@@ -146,3 +146,10 @@ Craft 초안 → frontmatter 생성 → 마커 치환 → slug 검증 → git pu
 | `02. Blog SEO/02. AIGrit 글쓰기 지침서.md` | 카테고리 표·수익화 |
 | `02. Blog SEO/03. babipanote 글쓰기 지침서.md` | babipanote 상세 |
 | `02. Blog SEO/07. Sprint 실행 계획.md` | 발행 일정 |
+
+## 점검·헬스체크
+
+- 디자인 토큰: `docs/design-system.md`
+- 점검 기준: `docs/site-health-checklist.md`
+- 점검 로그: `docs/inspection-log/YYYY-MM.md`
+- 실행 프롬프트: Obsidian vault `02. Blog SEO/10. Site Health/`
