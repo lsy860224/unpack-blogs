@@ -4,7 +4,12 @@ import Link from "next/link";
 import { useBrand } from "@unpack/blog-core/contexts/brand-context";
 
 const SISTER_LINKS = [
-  { name: "babipanote", href: "https://babipanote.com", descriptionKo: "빌더 저널", descriptionEn: "Builder journal" },
+  {
+    name: "babipanote",
+    href: "https://babipanote.com",
+    descriptionKo: "빌더 저널",
+    descriptionEn: "Builder journal",
+  },
 ];
 
 const FOOTER_UI = {
@@ -12,7 +17,8 @@ const FOOTER_UI = {
     site: "사이트",
     social: "소셜",
     copyrightTail: "실사용에 기반한 의견입니다.",
-    adsNotice: "이 사이트는 Google AdSense 광고와 제휴 마케팅 수익으로 운영됩니다.",
+    adsNotice:
+      "이 사이트는 Google AdSense 광고와 제휴 마케팅 수익으로 운영됩니다.",
     seeDisclaimer: "자세한 내용은",
     disclaimerLink: "고지사항",
     seeDisclaimerSuffix: "을 참고하세요.",
@@ -21,7 +27,8 @@ const FOOTER_UI = {
     site: "Pages",
     social: "Social",
     copyrightTail: "All reviews are opinions based on hands-on use.",
-    adsNotice: "This site is supported by Google AdSense and affiliate marketing.",
+    adsNotice:
+      "This site is supported by Google AdSense and affiliate marketing.",
     seeDisclaimer: "See our",
     disclaimerLink: "disclaimer",
     seeDisclaimerSuffix: "for details.",
@@ -33,18 +40,15 @@ export function Footer({ locale }: { locale: string }) {
   const year = new Date().getFullYear();
   const ui = FOOTER_UI[locale as keyof typeof FOOTER_UI] ?? FOOTER_UI.ko;
 
-  const withLocale = (href: string) =>
-    `/${locale}${href === "/" ? "" : href}`;
+  const withLocale = (href: string) => `/${locale}${href === "/" ? "" : href}`;
 
   return (
     <footer className="mt-24 border-t border-[color-mix(in_oklab,var(--foreground)_8%,transparent)]">
       <div className="mx-auto max-w-5xl px-6 py-10 grid gap-8 sm:grid-cols-4 text-sm">
         <div className="sm:col-span-2">
           <p className="text-base font-extrabold tracking-tight">
-            <span className="text-[var(--color-brand-secondary)]">[</span>
-            <span className="text-[var(--color-brand-primary)]">AI</span>
-            <span className="text-[var(--color-brand-secondary)]">]</span>
-            <span className="text-[var(--color-brand-primary)]">Grit</span>
+            <span className="text-[var(--color-brand-secondary)]">[AI]</span>
+            <span className="ml-1 text-[var(--color-brand-primary)]">Grit</span>
           </p>
           <p className="mt-2 text-[color-mix(in_oklab,var(--foreground)_65%,transparent)] leading-relaxed max-w-sm">
             {brand.description}

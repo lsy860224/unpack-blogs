@@ -25,8 +25,7 @@ export function Header({ locale }: { locale: string }) {
     return `/${target}${pathname === "/" ? "" : pathname}`;
   };
 
-  const withLocale = (href: string) =>
-    `/${locale}${href === "/" ? "" : href}`;
+  const withLocale = (href: string) => `/${locale}${href === "/" ? "" : href}`;
 
   const localeSwitcher = (
     <div
@@ -63,12 +62,10 @@ export function Header({ locale }: { locale: string }) {
         {/* Logo */}
         <Link
           href={`/${locale}`}
-          className="flex items-center gap-1 font-extrabold tracking-tight shrink-0"
+          className="flex items-baseline font-extrabold tracking-tight shrink-0"
         >
-          <span className="text-[var(--color-brand-secondary)]">[</span>
-          <span className="text-[var(--color-brand-primary)]">AI</span>
-          <span className="text-[var(--color-brand-secondary)]">]</span>
-          <span className="text-[var(--color-brand-primary)]">Grit</span>
+          <span className="text-[var(--color-brand-secondary)]">[AI]</span>
+          <span className="ml-1 text-[var(--color-brand-primary)]">Grit</span>
         </Link>
 
         {/* Desktop nav (md+) */}
