@@ -73,8 +73,7 @@ export function RelatedPosts({
                 </h3>
                 <time
                   dateTime={post.frontmatter.date}
-                  className="shrink-0 text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-                  style={{ fontFamily: "var(--font-mono)" }}
+                  className="shrink-0 text-xs tabular-nums font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
                 >
                   {post.frontmatter.date}
                 </time>

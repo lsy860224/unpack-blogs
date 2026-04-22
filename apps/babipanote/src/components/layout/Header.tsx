@@ -10,8 +10,7 @@ export function Header() {
       <div className="mx-auto max-w-3xl px-6 py-5 flex items-center justify-between">
         <Link
           href="/"
-          className="text-xl font-bold tracking-tight text-[var(--color-brand-primary)]"
-          style={{ fontFamily: "var(--font-serif)" }}
+          className="text-xl font-bold tracking-tight font-serif text-[var(--color-brand-primary)]"
         >
           {brand.name}
           <span className="text-[var(--color-brand-secondary)]">·</span>

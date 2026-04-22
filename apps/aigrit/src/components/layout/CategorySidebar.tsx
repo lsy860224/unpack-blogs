@@ -17,8 +17,7 @@ export function CategorySidebar({
       {/* Desktop: vertical sticky sidebar */}
       <div className="hidden lg:block lg:sticky lg:top-20">
         <h2
-          className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
+          className="mb-3 text-xs font-bold uppercase tracking-[0.2em] font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
         >
           {heading}
         </h2>
@@ -38,8 +37,7 @@ export function CategorySidebar({
                 >
                   <span className="truncate">{entry.name}</span>
                   <span
-                    className="ml-2 text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
-                    style={{ fontFamily: "var(--font-mono)" }}
+                    className="ml-2 text-xs tabular-nums font-mono text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
                   >
                     {entry.count}
                   </span>
@@ -68,8 +66,7 @@ export function CategorySidebar({
                 >
                   <span>{entry.name}</span>
                   <span
-                    className="tabular-nums text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
-                    style={{ fontFamily: "var(--font-mono)" }}
+                    className="tabular-nums font-mono text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
                   >
                     {entry.count}
                   </span>

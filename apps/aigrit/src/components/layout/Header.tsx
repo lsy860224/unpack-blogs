@@ -28,10 +28,7 @@ export function Header({ locale }: { locale: string }) {
   const withLocale = (href: string) => `/${locale}${href === "/" ? "" : href}`;
 
   const localeSwitcher = (
-    <div
-      className="flex items-center gap-1 text-xs"
-      style={{ fontFamily: "var(--font-mono)" }}
-    >
+    <div className="flex items-center gap-1 text-xs font-mono">
       {LOCALES.map((l, i) => (
         <span key={l} className="flex items-center gap-1">
           {i > 0 && (
@@ -62,7 +59,7 @@ export function Header({ locale }: { locale: string }) {
         {/* Logo */}
         <Link
           href={`/${locale}`}
-          className="flex items-baseline font-extrabold tracking-tight shrink-0"
+          className="flex items-baseline font-display font-extrabold tracking-logo shrink-0"
         >
           <span className="text-[var(--color-brand-secondary)]">[AI]</span>
           <span className="ml-1 text-[var(--color-brand-primary)]">Grit</span>
@@ -97,17 +94,17 @@ export function Header({ locale }: { locale: string }) {
             aria-expanded={open}
           >
             <span
-              className={`block h-[2px] w-5 rounded-full bg-[var(--foreground)] transition-all duration-200 ${
+              className={`block h-0.5 w-5 rounded-full bg-[var(--foreground)] transition-all duration-200 ${
                 open ? "translate-y-[7px] rotate-45" : ""
               }`}
             />
             <span
-              className={`block h-[2px] w-5 rounded-full bg-[var(--foreground)] transition-opacity duration-200 ${
+              className={`block h-0.5 w-5 rounded-full bg-[var(--foreground)] transition-opacity duration-200 ${
                 open ? "opacity-0" : ""
               }`}
             />
             <span
-              className={`block h-[2px] w-5 rounded-full bg-[var(--foreground)] transition-all duration-200 ${
+              className={`block h-0.5 w-5 rounded-full bg-[var(--foreground)] transition-all duration-200 ${
                 open ? "-translate-y-[7px] -rotate-45" : ""
               }`}
             />

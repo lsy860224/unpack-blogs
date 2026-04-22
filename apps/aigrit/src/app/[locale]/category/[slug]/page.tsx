@@ -101,16 +101,11 @@ export default async function CategoryPage({
           <div className="flex items-center gap-2 mb-3">
             <span
               aria-hidden
-              className="inline-block h-1 w-4 rounded-full"
-              style={{ background: "var(--color-brand-secondary)" }}
+              className="inline-block h-1 w-4 rounded-full bg-brand-secondary"
             />
             <Link
               href={`/${locale}/blog`}
-              className="text-xs font-semibold uppercase tracking-[0.2em] hover:opacity-80"
-              style={{
-                color: "var(--color-brand-secondary)",
-                fontFamily: "var(--font-mono)",
-              }}
+              className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-secondary font-mono hover:opacity-80"
             >
               {ui.kicker}
             </Link>
@@ -121,10 +116,7 @@ export default async function CategoryPage({
           <p className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_70%,transparent)]">
             {cat.description}
           </p>
-          <p
-            className="mt-3 text-xs text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
+          <p className="mt-3 text-xs font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
             {ui.countPrefix}
             <span className="tabular-nums">{posts.length}</span>
             {ui.countSuffix}

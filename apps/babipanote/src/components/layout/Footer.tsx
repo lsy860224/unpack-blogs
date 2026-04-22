@@ -24,10 +24,7 @@ export function Footer() {
     <footer className="mt-20 border-t border-[color-mix(in_oklab,var(--foreground)_8%,transparent)]">
       <div className="mx-auto max-w-3xl px-6 py-10 grid gap-8 sm:grid-cols-3 text-sm">
         <div>
-          <p
-            className="text-base font-bold text-[var(--color-brand-primary)]"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
+          <p className="text-base font-bold font-serif text-[var(--color-brand-primary)]">
             {brand.name}
             <span className="text-[var(--color-brand-secondary)]">·</span>
           </p>

@@ -65,10 +65,7 @@ const STATUS_COLOR: Record<Status, string> = {
 export default function ProjectsPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1
-        className="text-3xl font-bold tracking-tight"
-        style={{ fontFamily: "var(--font-serif)" }}
-      >
+      <h1 className="text-3xl font-bold tracking-tight font-serif">
         Projects
       </h1>
       <p className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)] max-w-xl leading-relaxed">
@@ -76,10 +73,7 @@ export default function ProjectsPage() {
       </p>
 
       <section className="mt-12">
-        <h2
-          className="text-sm font-semibold uppercase tracking-widest text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
+        <h2 className="text-sm font-semibold uppercase tracking-widest font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
           Blogs
         </h2>
         <ul className="mt-4 space-y-3">
@@ -90,10 +84,7 @@ export default function ProjectsPage() {
       </section>
 
       <section className="mt-12">
-        <h2
-          className="text-sm font-semibold uppercase tracking-widest text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
+        <h2 className="text-sm font-semibold uppercase tracking-widest font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
           GentleLab — 가족용 앱 시리즈
         </h2>
         <ul className="mt-4 space-y-3">
@@ -114,8 +105,7 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-semibold">{project.name}</h3>
           <span
-            className={`text-[10px] px-2 py-0.5 rounded uppercase tracking-wider ${STATUS_COLOR[project.status]}`}
-            style={{ fontFamily: "var(--font-mono)" }}
+            className={`text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-mono ${STATUS_COLOR[project.status]}`}
           >
             {project.status}
           </span>

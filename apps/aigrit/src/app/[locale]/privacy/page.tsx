@@ -43,10 +43,7 @@ function Header({ subtitle }: { subtitle: string }) {
       <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
         Privacy Policy
       </h1>
-      <p
-        className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
-        style={{ fontFamily: "var(--font-mono)" }}
-      >
+      <p className="mt-2 text-sm font-mono text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]">
         {subtitle}
       </p>
     </header>

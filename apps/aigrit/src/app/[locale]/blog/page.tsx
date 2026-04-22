@@ -83,26 +83,16 @@ export default async function BlogIndexPage({
           <div className="flex items-center gap-2 mb-3">
             <span
               aria-hidden
-              className="inline-block h-1 w-4 rounded-full"
-              style={{ background: "var(--color-brand-secondary)" }}
+              className="inline-block h-1 w-4 rounded-full bg-brand-secondary"
             />
-            <span
-              className="text-xs font-semibold uppercase tracking-[0.2em]"
-              style={{
-                color: "var(--color-brand-secondary)",
-                fontFamily: "var(--font-mono)",
-              }}
-            >
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-secondary font-mono">
               {ui.kicker}
             </span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[var(--color-brand-primary)]">
             {ui.title}
           </h1>
-          <p
-            className="mt-2 text-sm text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
+          <p className="mt-2 text-sm font-mono text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]">
             {ui.totalPrefix}
             <span className="tabular-nums">{posts.length}</span>
             {ui.totalSuffix}

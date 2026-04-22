@@ -17,10 +17,7 @@ export default function HomePage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <section className="mb-16">
-        <h1
-          className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
+        <h1 className="text-4xl sm:text-5xl font-bold leading-tight tracking-tight font-serif">
           {brandConfig.tagline}
         </h1>
         <p className="mt-4 text-base leading-relaxed text-[color-mix(in_oklab,var(--foreground)_75%,transparent)] max-w-xl">
@@ -36,10 +33,7 @@ export default function HomePage() {
         <section className="space-y-12">
           {grouped.map(([year, yearPosts]) => (
             <div key={year}>
-              <h2
-                className="text-xs font-semibold uppercase tracking-widest text-[color-mix(in_oklab,var(--foreground)_45%,transparent)] mb-4"
-                style={{ fontFamily: "var(--font-mono)" }}
-              >
+              <h2 className="text-xs font-semibold uppercase tracking-widest font-mono text-[color-mix(in_oklab,var(--foreground)_45%,transparent)] mb-4">
                 {year}
               </h2>
               <ul className="space-y-1 border-l border-[color-mix(in_oklab,var(--foreground)_10%,transparent)]">
@@ -53,8 +47,7 @@ export default function HomePage() {
                       <div className="flex items-baseline justify-between gap-3">
                         <time
                           dateTime={toIsoDatetime(post.frontmatter.date)}
-                          className="text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-                          style={{ fontFamily: "var(--font-mono)" }}
+                          className="text-xs tabular-nums font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
                         >
                           {formatPostDateShort(post.frontmatter.date)}
                         </time>

@@ -13,7 +13,7 @@ export const metadata: Metadata = buildMetadata({
 export default function AboutPage() {
   return (
     <article className="mx-auto max-w-2xl px-6 py-12 prose prose-neutral dark:prose-invert">
-      <h1 style={{ fontFamily: "var(--font-serif)" }}>About</h1>
+      <h1 className="font-serif">About</h1>
       <p>
         바비파입니다. 평일에는 회사에서 일하고, 남는 시간으로 {" "}
         <a href="https://aigrit.dev" target="_blank" rel="noopener noreferrer">
@@ -27,14 +27,14 @@ export default function AboutPage() {
         남깁니다. 1인 빌더에게 필요한 건 멋진 최종 결과 사진보다, 한 사람이 어떻게
         꾸준히 버티는지에 대한 기록이라고 믿습니다.
       </p>
-      <h2 style={{ fontFamily: "var(--font-serif)" }}>무엇을 다루나요</h2>
+      <h2 className="font-serif">무엇을 다루나요</h2>
       <ul>
         <li>주/월 단위 회고 — 지난 기간의 숫자와 배움</li>
         <li>앱 개발기 — GentleLab 시리즈의 설계·출시·운영 과정</li>
         <li>블로그 운영기 — AIGrit의 수익·트래픽·의사결정</li>
         <li>실패 기록 — 중단한 실험, 철회한 의사결정</li>
       </ul>
-      <h2 style={{ fontFamily: "var(--font-serif)" }}>연락</h2>
+      <h2 className="font-serif">연락</h2>
       <p>
         X{" "}
         <a

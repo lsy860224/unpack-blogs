@@ -67,16 +67,9 @@ export default async function HomePage({
         <div className="flex items-center gap-2 mb-4">
           <span
             aria-hidden
-            className="inline-block h-1.5 w-6 rounded-full"
-            style={{ background: "var(--color-brand-secondary)" }}
+            className="inline-block h-1.5 w-6 rounded-full bg-brand-secondary"
           />
-          <span
-            className="text-xs font-semibold uppercase tracking-[0.2em]"
-            style={{
-              color: "var(--color-brand-secondary)",
-              fontFamily: "var(--font-mono)",
-            }}
-          >
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-secondary font-mono">
             {ui.kicker}
           </span>
         </div>
@@ -89,22 +82,13 @@ export default async function HomePage({
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href={`/${locale}/blog`}
-            className="rounded-md px-5 py-2.5 text-sm font-semibold transition"
-            style={{
-              background: "var(--color-brand-primary)",
-              color: "var(--background)",
-            }}
+            className="rounded-md bg-brand-primary px-5 py-2.5 text-sm font-semibold text-[var(--background)] transition"
           >
             {ui.ctaLatest}
           </Link>
           <Link
             href={`/${locale}/about`}
-            className="rounded-md border px-5 py-2.5 text-sm font-semibold"
-            style={{
-              borderColor:
-                "color-mix(in oklab, var(--foreground) 20%, transparent)",
-              color: "var(--foreground)",
-            }}
+            className="rounded-md border border-[color-mix(in_oklab,var(--foreground)_20%,transparent)] px-5 py-2.5 text-sm font-semibold text-[var(--foreground)]"
           >
             {ui.ctaAbout}
           </Link>
@@ -115,10 +99,7 @@ export default async function HomePage({
       {latest.length > 0 && (
         <section className="mb-14">
           <div className="flex items-baseline justify-between mb-4">
-            <h2
-              className="text-xs font-bold uppercase tracking-[0.2em] text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
+            <h2 className="text-xs font-bold uppercase tracking-[0.2em] font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
               {ui.latest}
             </h2>
             <Link
@@ -141,10 +122,7 @@ export default async function HomePage({
       {/* Categories */}
       {byCategory.length > 0 && (
         <section>
-          <h2
-            className="text-xs font-bold uppercase tracking-[0.2em] text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] mb-6"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
+          <h2 className="text-xs font-bold uppercase tracking-[0.2em] font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] mb-6">
             {ui.byCategory}
           </h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -159,10 +137,7 @@ export default async function HomePage({
                     >
                       {cat}
                     </Link>
-                    <span
-                      className="ml-2 text-xs tabular-nums text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]"
-                      style={{ fontFamily: "var(--font-mono)" }}
-                    >
+                    <span className="ml-2 text-xs tabular-nums font-mono text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]">
                       {catPosts.length}
                     </span>
                   </h3>
@@ -181,8 +156,7 @@ export default async function HomePage({
                   {catPosts.length > 4 && (
                     <Link
                       href={catHref}
-                      className="mt-2 inline-block text-xs text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
-                      style={{ fontFamily: "var(--font-mono)" }}
+                      className="mt-2 inline-block text-xs font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
                     >
                       {ui.seeCategoryAll}
                     </Link>

@@ -38,6 +38,22 @@
   --font-mono:
     var(--font-jetbrains, "JetBrains Mono"), ui-monospace, "SFMono-Regular",
     Menlo, monospace;
+  /* display = 로고/헤로 전용 — babipanote는 serif 스택 (Figma typography/display) */
+  --font-display:
+    var(--font-gowun-batang, "Gowun Batang"), Georgia, "Times New Roman", serif;
+
+  /* Font Weight — Figma weight/* (display/heading/body/meta) 매핑 */
+  --font-weight-display: 800; /* Extra Bold — 로고·히어로 */
+  --font-weight-heading: 700; /* Bold — h1~h3 */
+  --font-weight-body: 400; /* Regular — 본문 */
+  --font-weight-meta: 500; /* Medium — 메타·배지 */
+
+  /* Letter Spacing — Figma tracking/* 매핑 (logo -2% / body 0 / mark -4%) */
+  /* heading: Figma는 0이나 한글 Gowun Batang 가독성 위해 -1% 유지 (docs/BRAND_GUIDELINES.md §타이포) */
+  --tracking-logo: -0.02em;
+  --tracking-heading: -0.01em;
+  --tracking-body: 0em;
+  --tracking-mark: -0.04em; /* <mark> 강조 블록 전용 */
 
   /* Type Scale */
   --text-display: 3.5rem; /* 56 */
@@ -109,7 +125,7 @@
   h3,
   .display {
     font-family: var(--font-serif);
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-heading);
   }
 
   code,

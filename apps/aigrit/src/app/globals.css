@@ -36,6 +36,21 @@
   --font-mono:
     var(--font-jetbrains, "JetBrains Mono"), ui-monospace, "SFMono-Regular",
     Menlo, monospace;
+  /* display = 로고/헤로 전용. Inter 우선, Pretendard 폴백 (Figma typography/display) */
+  --font-display:
+    var(--font-inter, "Inter"), var(--font-pretendard, "Pretendard Variable"),
+    system-ui, -apple-system, sans-serif;
+
+  /* Font Weight — Figma weight/* (display/heading/body/meta) 매핑 */
+  --font-weight-display: 800; /* Extra Bold — 로고·히어로 */
+  --font-weight-heading: 700; /* Bold — h1~h3 */
+  --font-weight-body: 400; /* Regular — 본문 */
+  --font-weight-meta: 500; /* Medium — 메타·배지 */
+
+  /* Letter Spacing — Figma tracking/* 매핑 (AIGrit: logo -3% / heading -1% / body 0) */
+  --tracking-logo: -0.03em;
+  --tracking-heading: -0.01em;
+  --tracking-body: 0em;
 
   /* Type Scale */
   --text-display: 3rem; /* 48 */

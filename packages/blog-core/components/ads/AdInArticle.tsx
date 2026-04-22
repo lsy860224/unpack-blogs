@@ -44,12 +44,7 @@ export function AdInArticle({
         className,
       )}
     >
-      <p
-        className="mb-1 uppercase tracking-widest"
-        style={{ fontFamily: "var(--font-mono)" }}
-      >
-        Sponsored
-      </p>
+      <p className="mb-1 uppercase tracking-widest font-mono">Sponsored</p>
       <ins
         className="adsbygoogle"
         style={{ display: "block", textAlign: "center" }}

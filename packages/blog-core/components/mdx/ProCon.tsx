@@ -51,10 +51,7 @@ export function ProCon({
         <ul className="space-y-1 text-sm leading-relaxed">
           {safePros.map((item, i) => (
             <li key={i} className="flex gap-2">
-              <span
-                aria-hidden
-                style={{ color: "var(--color-accent-green)" }}
-              >
+              <span aria-hidden className="text-accent-green">
                 ·
               </span>
               <span>{item}</span>
@@ -66,10 +63,7 @@ export function ProCon({
         <ul className="space-y-1 text-sm leading-relaxed">
           {safeCons.map((item, i) => (
             <li key={i} className="flex gap-2">
-              <span
-                aria-hidden
-                style={{ color: "var(--color-accent-red)" }}
-              >
+              <span aria-hidden className="text-accent-red">
                 ·
               </span>
               <span>{item}</span>
@@ -88,21 +82,8 @@ export interface ProsConsWrapperProps {
 
 export function Pros({ title = "장점", children }: ProsConsWrapperProps) {
   return (
-    <div
-      className="rounded-md border-l-4 px-4 py-3"
-      style={{
-        borderColor: "var(--color-accent-green)",
-        background:
-          "color-mix(in oklab, var(--color-accent-green) 8%, transparent)",
-      }}
-    >
-      <p
-        className="mb-2 text-xs font-bold uppercase tracking-wider"
-        style={{
-          color: "var(--color-accent-green)",
-          fontFamily: "var(--font-mono)",
-        }}
-      >
+    <div className="rounded-md border-l-4 border-accent-green bg-[color-mix(in_oklab,var(--color-accent-green)_8%,transparent)] px-4 py-3">
+      <p className="mb-2 text-xs font-bold uppercase tracking-wider text-accent-green font-mono">
         ✓ {title}
       </p>
       <div className="text-sm leading-relaxed [&_ul]:space-y-1 [&_ul]:pl-4 [&_li]:list-disc">
@@ -114,21 +95,8 @@ export function Pros({ title = "장점", children }: ProsConsWrapperProps) {
 
 export function Cons({ title = "단점", children }: ProsConsWrapperProps) {
   return (
-    <div
-      className="rounded-md border-l-4 px-4 py-3"
-      style={{
-        borderColor: "var(--color-accent-red)",
-        background:
-          "color-mix(in oklab, var(--color-accent-red) 8%, transparent)",
-      }}
-    >
-      <p
-        className="mb-2 text-xs font-bold uppercase tracking-wider"
-        style={{
-          color: "var(--color-accent-red)",
-          fontFamily: "var(--font-mono)",
-        }}
-      >
+    <div className="rounded-md border-l-4 border-accent-red bg-[color-mix(in_oklab,var(--color-accent-red)_8%,transparent)] px-4 py-3">
+      <p className="mb-2 text-xs font-bold uppercase tracking-wider text-accent-red font-mono">
         ✗ {title}
       </p>
       <div className="text-sm leading-relaxed [&_ul]:space-y-1 [&_ul]:pl-4 [&_li]:list-disc">

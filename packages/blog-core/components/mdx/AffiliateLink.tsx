@@ -24,13 +24,7 @@ export function AffiliateLink({
       </a>
       {disclosure === "subtle" ? (
         <span
-          className="text-[10px] font-bold uppercase tracking-wider rounded-sm px-1.5 py-0.5"
-          style={{
-            background:
-              "color-mix(in oklab, var(--color-brand-secondary) 15%, transparent)",
-            color: "var(--color-brand-secondary)",
-            fontFamily: "var(--font-mono)",
-          }}
+          className="text-[10px] font-bold uppercase tracking-wider rounded-sm px-1.5 py-0.5 font-mono text-brand-secondary bg-[color-mix(in_oklab,var(--color-brand-secondary)_15%,transparent)]"
           title="제휴 링크 — 구매 시 이 사이트에 수수료가 지급될 수 있습니다."
         >
           AD

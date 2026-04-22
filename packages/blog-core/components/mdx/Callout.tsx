@@ -55,8 +55,8 @@ export function Callout({
     >
       <span
         aria-hidden
-        className="font-bold tabular-nums"
-        style={{ color: s.bar, fontFamily: "var(--font-mono)" }}
+        className="font-bold tabular-nums font-mono"
+        style={{ color: s.bar }}
       >
         {s.icon}
       </span>
