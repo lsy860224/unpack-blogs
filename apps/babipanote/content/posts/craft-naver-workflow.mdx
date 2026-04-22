@@ -8,7 +8,7 @@ thumbnail: "/images/craft-naver-workflow/og.png"
 featured: false
 ---
 
-Obsidian 마크다운을 복사해서 네이버 스마트에디터에 붙여넣었다. 결과는 참혹했다. 파이프 문법 테이블이 날것 그대로 노출. 이미지는 로컬 경로라 깨짐. 볼드도 사라졌다.
+[Obsidian](https://obsidian.md) 마크다운을 복사해서 [네이버 블로그](https://blog.naver.com) 스마트에디터에 붙여넣었다. 결과는 참혹했다. 파이프 문법 테이블이 날것 그대로 노출. 이미지는 로컬 경로라 깨짐. 볼드도 사라졌다. [Craft](https://www.craft.do) 를 중간 레이어로 쓰니 문제가 풀렸다.
 
 이걸 해결하는 데 이틀 걸렸다. 결론은 단순했다 — **Craft를 중간 레이어로 끼워넣는 것**. 이 글은 그 과정을 기록한다.
 
@@ -38,9 +38,11 @@ Obsidian은 **마크다운 원문**을 클립보드에 복사한다. `| 항목 |
 9. 태그 5~10개 입력
 10. 미리보기 → 발행
 
-![Craft 복붙 전후 비교](/images/craft-naver-workflow/01-craft-to-naver-before-after.png)
+실측: 10분 내 1회 발행 가능. 복붙 자체는 순식간이고, 이미지 수동 업로드와 소제목 크기 조정에 대부분 시간이 든다.
+
+![Craft → 네이버 복붙 파이프라인 다이어그램](/images/craft-naver-workflow/01-craft-to-naver-diagram.png)
 <figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#6F655D", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  좌: Craft 원본 / 우: 네이버 스마트에디터 결과 — 테이블·볼드가 그대로 살아남음
+  Obsidian 직접 붙여넣기는 깨지고 · Craft 중간 경유면 포맷 보존
 </figcaption>
 
 ## 깨지는 케이스와 대응
