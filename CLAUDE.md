@@ -152,4 +152,5 @@ Craft 초안 → frontmatter 생성 → 마커 치환 → slug 검증 → git pu
 - 디자인 토큰: `docs/design-system.md`
 - 점검 기준: `docs/site-health-checklist.md`
 - 점검 로그: `docs/inspection-log/YYYY-MM.md`
+- 디자인 백로그 (Nice-to-have): `docs/design-backlog.md`
 - 실행 프롬프트: Obsidian vault `02. Blog SEO/10. Site Health/`
