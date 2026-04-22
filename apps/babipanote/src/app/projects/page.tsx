@@ -57,7 +57,7 @@ const APPS: Project[] = [
 ];
 
 const STATUS_COLOR: Record<Status, string> = {
-  운영중: "bg-[color-mix(in_oklab,var(--color-brand-accent-green)_20%,transparent)] text-[var(--color-brand-accent-green)]",
+  운영중: "bg-[color-mix(in_oklab,var(--color-accent-green)_20%,transparent)] text-[var(--color-accent-green)]",
   개발중: "bg-[color-mix(in_oklab,var(--color-brand-secondary)_25%,transparent)] text-[color-mix(in_oklab,var(--color-brand-secondary)_80%,var(--foreground))]",
   계획중: "bg-[color-mix(in_oklab,var(--foreground)_8%,transparent)] text-[color-mix(in_oklab,var(--foreground)_65%,transparent)]",
 };

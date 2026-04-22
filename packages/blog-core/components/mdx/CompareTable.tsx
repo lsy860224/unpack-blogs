@@ -67,9 +67,9 @@ export function CompareTable({
                 const v = row.verdict?.[c.key];
                 const color =
                   v === "win"
-                    ? "var(--color-brand-accent-green)"
+                    ? "var(--color-accent-green)"
                     : v === "lose"
-                      ? "var(--color-brand-accent-red)"
+                      ? "var(--color-accent-red)"
                       : undefined;
                 return (
                   <td

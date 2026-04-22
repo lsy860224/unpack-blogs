@@ -53,7 +53,7 @@ export function ProCon({
             <li key={i} className="flex gap-2">
               <span
                 aria-hidden
-                style={{ color: "var(--color-brand-accent-green)" }}
+                style={{ color: "var(--color-accent-green)" }}
               >
                 ·
               </span>
@@ -68,7 +68,7 @@ export function ProCon({
             <li key={i} className="flex gap-2">
               <span
                 aria-hidden
-                style={{ color: "var(--color-brand-accent-red)" }}
+                style={{ color: "var(--color-accent-red)" }}
               >
                 ·
               </span>
@@ -91,15 +91,15 @@ export function Pros({ title = "장점", children }: ProsConsWrapperProps) {
     <div
       className="rounded-md border-l-4 px-4 py-3"
       style={{
-        borderColor: "var(--color-brand-accent-green)",
+        borderColor: "var(--color-accent-green)",
         background:
-          "color-mix(in oklab, var(--color-brand-accent-green) 8%, transparent)",
+          "color-mix(in oklab, var(--color-accent-green) 8%, transparent)",
       }}
     >
       <p
         className="mb-2 text-xs font-bold uppercase tracking-wider"
         style={{
-          color: "var(--color-brand-accent-green)",
+          color: "var(--color-accent-green)",
           fontFamily: "var(--font-mono)",
         }}
       >
@@ -117,15 +117,15 @@ export function Cons({ title = "단점", children }: ProsConsWrapperProps) {
     <div
       className="rounded-md border-l-4 px-4 py-3"
       style={{
-        borderColor: "var(--color-brand-accent-red)",
+        borderColor: "var(--color-accent-red)",
         background:
-          "color-mix(in oklab, var(--color-brand-accent-red) 8%, transparent)",
+          "color-mix(in oklab, var(--color-accent-red) 8%, transparent)",
       }}
     >
       <p
         className="mb-2 text-xs font-bold uppercase tracking-wider"
         style={{
-          color: "var(--color-brand-accent-red)",
+          color: "var(--color-accent-red)",
           fontFamily: "var(--font-mono)",
         }}
       >

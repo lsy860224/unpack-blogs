@@ -27,13 +27,13 @@ const STYLES: Record<CalloutType, { bar: string; bg: string; icon: string }> = {
     icon: "!",
   },
   success: {
-    bar: "var(--color-brand-accent-green)",
-    bg: "color-mix(in oklab, var(--color-brand-accent-green) 12%, transparent)",
+    bar: "var(--color-accent-green)",
+    bg: "color-mix(in oklab, var(--color-accent-green) 12%, transparent)",
     icon: "✓",
   },
   error: {
-    bar: "var(--color-brand-accent-red)",
-    bg: "color-mix(in oklab, var(--color-brand-accent-red) 12%, transparent)",
+    bar: "var(--color-accent-red)",
+    bg: "color-mix(in oklab, var(--color-accent-red) 12%, transparent)",
     icon: "✗",
   },
 };

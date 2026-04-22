@@ -92,7 +92,7 @@ export function Header({ locale }: { locale: string }) {
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="relative w-6 h-6 flex flex-col items-center justify-center gap-[5px]"
+            className="relative w-6 h-6 flex flex-col items-center justify-center gap-1.5"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >

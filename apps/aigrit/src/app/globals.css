@@ -8,13 +8,26 @@
   --color-brand-primary: #3730a3;
   --color-brand-secondary: #06b6d4;
   --color-brand-secondary-hover: #0891b2;
-  --color-brand-accent-green: #10b981;
-  --color-brand-accent-red: #ef4444;
+
+  /* Accent — Figma accent/* 네이밍과 일관 (/→-) */
+  --color-accent-green: #10b981;
+  --color-accent-red: #ef4444;
 
   /* Neutrals */
   --color-neutral-slate: #0f172a;
   --color-neutral-snow: #f8fafc;
   --color-neutral-surface: #ffffff;
+  --color-neutral-subtle: #f1f5f9;
+  --color-neutral-muted: #94a3b8;
+
+  /* Semantic aliases — role 기반 */
+  --color-semantic-bg-base: var(--color-neutral-snow);
+  --color-semantic-bg-surface: var(--color-neutral-surface);
+  --color-semantic-fg-primary: var(--color-neutral-slate);
+  --color-semantic-border: var(--color-neutral-subtle);
+  --color-semantic-info: var(--color-brand-secondary);
+  --color-semantic-success: var(--color-accent-green);
+  --color-semantic-error: var(--color-accent-red);
 
   /* Fonts */
   --font-sans:
@@ -25,16 +38,39 @@
     Menlo, monospace;
 
   /* Type Scale */
-  --text-display: 3rem;
+  --text-display: 3rem; /* 48 */
   --text-display--line-height: 1.15;
-  --text-h1: 2rem;
+  --text-h1: 2rem; /* 32 */
   --text-h1--line-height: 1.25;
-  --text-h2: 1.375rem;
+  --text-h2: 1.375rem; /* 22 */
   --text-h2--line-height: 1.35;
-  --text-body: 1rem;
+  --text-body: 1rem; /* 16 */
   --text-body--line-height: 1.65;
-  --text-small: 0.875rem;
-  --text-xsmall: 0.75rem;
+  --text-small: 0.875rem; /* 14 */
+  --text-small--line-height: 1.55;
+  --text-num: 1.125rem; /* 18 — AIGrit 전용 NUM (리뷰 스코어 강조) */
+  --text-num--line-height: 1.5;
+  --text-xsmall: 0.75rem; /* 12 */
+
+  /* Spacing — 4px 그리드 */
+  --space-0-5: 0.125rem; /* 2 — hair line */
+  --space-1: 0.25rem; /* 4 */
+  --space-2: 0.5rem; /* 8 */
+  --space-3: 0.75rem; /* 12 */
+  --space-4: 1rem; /* 16 */
+  --space-5: 1.5rem; /* 24 */
+  --space-6: 2rem; /* 32 */
+  --space-7: 3rem; /* 48 */
+  --space-8: 4rem; /* 64 */
+
+  /* Radius */
+  --radius-sm: 0.25rem; /* 4 */
+  --radius-md: 0.5rem; /* 8 */
+  --radius-lg: 0.75rem; /* 12 */
+  --radius-xl: 1rem; /* 16 */
+  --radius-2xl: 1.5rem; /* 24 */
+  --radius-card: var(--radius-md); /* 8 — AIGrit 기본 */
+  --radius-full: 9999px;
 }
 
 :root {
@@ -50,8 +86,14 @@
 
   --color-brand-primary: #818cf8;
   --color-brand-secondary: #22d3ee;
-  --color-brand-accent-green: #34d399;
-  --color-brand-accent-red: #f87171;
+  --color-brand-secondary-hover: #06b6d4;
+  --color-accent-green: #34d399;
+  --color-accent-red: #f87171;
+  --color-neutral-slate: #e2e8f0;
+  --color-neutral-snow: #0f172a;
+  --color-neutral-surface: #1e293b;
+  --color-neutral-subtle: #334155;
+  --color-neutral-muted: #64748b;
 }
 
 @layer base {
