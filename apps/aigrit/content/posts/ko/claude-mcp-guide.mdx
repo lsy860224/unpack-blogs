@@ -1,0 +1,170 @@
+---
+title: "Claude MCP 활용법 — Obsidian·Craft 연결해 AI가 내 파일 직접 다루기"
+date: "2026-04-22 16:30"
+slug: "claude-mcp-guide"
+description: "Model Context Protocol(MCP)로 Claude Desktop을 Obsidian·Craft·GitHub에 연결하는 실전 가이드. 설치·설정·주요 서버 6개 비교·트러블슈팅·커스텀 서버 작성 맛보기까지."
+tags: ["Claude MCP", "Model Context Protocol", "Claude Desktop", "AI 자동화", "Obsidian", "Craft", "AI 코딩"]
+thumbnail: "/images/claude-mcp-guide/og.png"
+featured: false
+category: "AI 코딩"
+topic_cluster: "AI 코딩"
+cluster_role: cluster
+---
+
+**결론부터: MCP로 Claude를 Obsidian·Craft·GitHub에 연결하면, AI가 "내 실제 파일"을 읽고 수정할 수 있다. 복붙 왕복이 사라지고 워크플로우가 한 단계 압축된다.**
+
+[Model Context Protocol(MCP)](https://modelcontextprotocol.io)은 [Anthropic](https://www.anthropic.com)이 만든 오픈 프로토콜이다. Claude 가 외부 도구와 양방향으로 소통하게 해준다. 이 글에서는 설치부터 Obsidian·Craft MCP 실전 연동, 커스텀 서버 작성 맛보기까지 다룬다. 이 연동이 전체 자동화 스택에서 어떤 위치를 차지하는지는 <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택 10가지</Link>에 정리했다.
+
+## MCP는 무엇이고 왜 중요한가?
+
+기존 AI 챗봇은 "대화창 안"에 갇혀 있다. 파일을 직접 읽지 못하고, 앱을 조작하지 못한다. MCP는 이 벽을 허문다. Claude 가 내 Obsidian vault 의 노트를 읽고, Craft 문서를 생성하고, GitHub 이슈를 만드는 것이 가능해진다.
+
+| 항목 | MCP 없이 | MCP 있으면 |
+|---|---|---|
+| 파일 읽기 | 복붙으로 전달 | Claude 가 직접 읽기 |
+| 문서 생성 | Claude 출력 → 수동 복사 | Claude → Craft 자동 저장 |
+| 데이터 검색 | 수동 조회 후 전달 | Claude 가 DB 직접 쿼리 |
+| 도구 연동 | 별도 API 코딩 | JSON 설정 파일 하나 |
+
+![MCP 아키텍처 다이어그램](/images/claude-mcp-guide/01-mcp-architecture.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  Claude Client ↔ MCP Server ↔ 외부 도구 — JSON 설정 하나로 연결
+</figcaption>
+
+MCP 이전에는 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor 비교</Link>에서 다룬 것처럼 "어떤 AI 코딩 도구가 내 파일을 잘 읽느냐"가 선택 기준이었다. 이제는 Claude Desktop 자체가 "모든 도구를 읽을 수 있는 허브"가 된다.
+
+## Claude Desktop 에 MCP 추가하는 법
+
+1. [Claude Desktop 설치](https://claude.ai/download) (macOS / Windows)
+2. 설정 → Developer → MCP Configuration 열기
+3. `claude_desktop_config.json` 편집
+4. MCP 서버 항목 추가
+5. Claude Desktop 재시작
+6. 좌측 하단 플러그 아이콘에서 연결 확인
+
+설정 예시:
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/you/Documents"
+      ]
+    }
+  }
+}
+```
+
+경로에는 Claude 가 읽을 수 있게 허용할 루트 디렉토리를 적는다. 한 번만 설정하면 이후 모든 대화에서 Claude 가 해당 경로 아래 파일을 직접 조작할 수 있다.
+
+## 어떤 MCP 서버부터 연결해야 할까?
+
+| MCP 서버 | 용도 | 추천도 |
+|---|---|---|
+| **Filesystem** | 로컬 파일 읽기·쓰기 | ★★★ |
+| **Obsidian** | vault 노트 검색·편집 | ★★★ |
+| **Craft** | 문서 생성·블록 편집 | ★★★ |
+| **GitHub** | 이슈·PR·코드 검색 | ★★ |
+| **Slack** | 메시지 검색·전송 | ★★ |
+| **Google Drive** | 문서 검색·읽기 | ★ |
+
+공식 서버 컬렉션은 [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) 에 모여 있다. 첫 입문자는 **Filesystem + Obsidian** 두 개로 시작하는 걸 권한다. 이 두 가지만으로도 하루 업무의 절반이 자동화된다.
+
+## Obsidian MCP 실전 연동
+
+babipa 의 실제 사례: Obsidian vault 의 `02. Blog SEO/10. Pipeline/` 폴더에 있는 SEO 카드를 Claude 가 직접 읽고, 상태를 업데이트하고, Dataview 쿼리 결과를 참조한다. <Link href="/blog/obsidian-seo-dashboard">Obsidian SEO 관제 시스템 만든 과정</Link>에서 이 대시보드를 어떻게 짰는지, 그리고 MCP 연결 후 관리가 얼마나 편해졌는지 정리했다.
+
+![Claude 가 Obsidian 파일을 읽는 화면](/images/claude-mcp-guide/02-obsidian-mcp-demo.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  "Pipeline 카드 상태 업데이트해줘" → Claude 가 frontmatter 직접 수정
+</figcaption>
+
+실제 대화 예시:
+
+```
+나: "AIGrit pipeline 에서 #3 글 상태를 published 로 바꿔줘"
+Claude: [Obsidian MCP 로 파일 탐색]
+        [해당 카드 frontmatter status: planned → published 로 수정]
+        [publish_date, publish_url 필드 자동 채움]
+        완료. 확인 필요한 필드가 있습니다: ...
+```
+
+복붙 0 회로 frontmatter 관리가 끝난다. 이 패턴은 Notion 도 가능하지만, <Link href="/ko/blog/craft-vs-notion">Craft vs Notion 비교</Link>에서 설명한 이유로 Obsidian MCP 가 응답 속도·파일 직접 접근 면에서 한 수 위다.
+
+## Craft MCP 실전 연동
+
+블로그 초안을 Claude 가 Craft 문서로 자동 저장. `blog-wordpress` 스킬 실행 → Craft `05. Blog Pipeline/01. In Progress/AIGrit/` 에 문서 생성. 완성된 MDX 는 <Link href="/ko/blog/craft-vs-notion">Craft vs Notion</Link>에서 다룬 "리치 텍스트 클립보드" 장점 덕분에 네이버·WordPress 이중 발행도 같은 소스에서 가능해진다.
+
+![Claude 가 Craft 에 초안 저장하는 화면](/images/claude-mcp-guide/03-craft-mcp-demo.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  스킬 실행 결과 → Craft 문서 자동 생성 (제목·본문·태그 포함)
+</figcaption>
+
+## 커스텀 MCP 서버 작성 맛보기
+
+[Python 또는 TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) 로 15분이면 만든다. `@modelcontextprotocol/sdk` 패키지 사용. 기본 템플릿:
+
+```typescript
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+const server = new Server({ name: "my-custom", version: "1.0.0" });
+
+server.setRequestHandler("tools/list", async () => ({
+  tools: [
+    { name: "greet", description: "인사하기", inputSchema: { type: "object" } },
+  ],
+}));
+
+server.setRequestHandler("tools/call", async (req) => {
+  if (req.params.name === "greet") {
+    return { content: [{ type: "text", text: "안녕하세요!" }] };
+  }
+});
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+Node.js 18+ 에서 실행. `claude_desktop_config.json` 에 `command: "node"` + 경로만 추가하면 즉시 Claude 가 이 도구를 호출할 수 있다. [Apple 단축어 AI 자동화](/ko/blog/apple-shortcuts-ai-automation) 에서 HTTP 요청으로 AI API 를 부르는 패턴과 반대 방향 — 여기서는 AI 가 내 코드를 부른다.
+
+## 트러블슈팅
+
+| 증상 | 원인 | 해결 |
+|---|---|---|
+| 플러그 아이콘 안 보임 | config 파일 문법 오류 | JSON 검증 (쉼표 누락 등) |
+| "서버 연결 실패" | Node.js 미설치 | [Node.js 18+](https://nodejs.org) 설치 |
+| 파일 읽기 권한 없음 | allowed directories 미설정 | Filesystem MCP 경로 추가 |
+| Obsidian 검색 안 됨 | vault 경로 오류 | 정확한 vault 루트 경로 확인 |
+
+대부분 설정 파일 문법 오류. `claude_desktop_config.json` 을 VS Code 에 열고 linter 활성화하면 바로 잡을 수 있다.
+
+## 자주 묻는 질문 (FAQ)
+
+### MCP 는 어떤 모델에서 쓰나요?
+
+Claude Desktop 과 [Claude Code](https://claude.ai/claude-code) 에서 사용 가능. Claude.ai 웹에서도 일부 MCP 서버(Craft, Google Drive 등)가 기본 연결된다. 로컬 MCP 서버는 Desktop·CLI 환경에서 가장 강력하다.
+
+### 직접 MCP 서버를 만들 수 있나요?
+
+가능하다. Python/TypeScript SDK 제공. 실전 예시는 GitHub [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) 레포 참조. 15분이면 첫 서버 가동 가능.
+
+### 보안은 안전한가요?
+
+MCP 서버는 로컬에서 실행된다. 외부에 데이터를 보내지 않는다. 다만 서버 코드가 안전한지 확인하고 **신뢰할 수 있는 소스만 설치**해야 한다. Filesystem MCP 는 허용 경로를 명시적으로 제한하는 것이 핵심.
+
+### Cursor 에서도 MCP 가 되나요?
+
+Cursor 최신 버전에서 MCP 지원이 추가됐다. 다만 Claude Desktop 쪽이 설정이 더 단순하고 호환 서버가 많다. IDE 통합 경험을 중시하면 Cursor, 워크스페이스 자동화가 중심이면 Claude Desktop.
+
+### 한 번 설정한 MCP 는 모든 대화에서 쓸 수 있나요?
+
+그렇다. 한 번 `claude_desktop_config.json` 에 등록하면 이후 모든 대화 세션에서 자동으로 로드된다. 도구를 쓸 때마다 명시적으로 허용할지 물어보긴 하지만 (보안 프롬프트), 추가 설정은 필요 없다.
+
+## 마무리
+
+MCP 는 "AI 를 대화창 밖으로 꺼내는 프로토콜"이다. 2026년 현재 가장 빠르게 성장 중인 AI 생태계 레이어이고, <Link href="/ko/blog/notion-ai-guide">Notion AI</Link> 같은 폐쇄형 통합과 <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple 단축어 API 호출</Link> 같은 수동 연동의 중간 지점을 채운다. Claude Desktop 설치 → Filesystem + Obsidian 두 서버 등록이 입문 코스.
