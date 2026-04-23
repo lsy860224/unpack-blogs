@@ -1,0 +1,144 @@
+{
+  "babipanote": [
+    {
+      "slug": "adsense-prep-checklist",
+      "title": "AdSense 승인 준비 — 필수 페이지 4개 만든 과정",
+      "category": "빌드 로그",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "aigrit-month1-revenue",
+      "title": "AIGrit 첫 달 중간 리포트 (1주차) — 수익 0원 · 비용 59,000원",
+      "category": "빌드 로그",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "app-store-review-gentledo-launch",
+      "title": "App Store 심사 2일 통과기 — path_provider 크래시와 iPad 함정",
+      "category": "빌드 로그",
+      "date_str": "2026.04.23"
+    },
+    {
+      "slug": "building-app-with-claude-code",
+      "title": "비개발자가 Claude Code로 Flutter 앱 3개 만든 과정 (바이브 코딩)",
+      "category": "저널",
+      "date_str": "2026.04.15"
+    },
+    {
+      "slug": "building-gentledo-with-claude-code",
+      "title": "비개발자가 Claude Code로 Flutter 앱을 만든다는 것 — GentleDo 개발기",
+      "category": "빌드 로그",
+      "date_str": "2026.04.23"
+    },
+    {
+      "slug": "craft-naver-workflow",
+      "title": "Craft → 네이버 복붙 워크플로우 만들기 — 이중 플랫폼 발행 실전 10단계",
+      "category": "빌드 로그",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "gentledo-naming-from-keelry",
+      "title": "GentleDo라는 이름이 생기기까지 — Keelry를 버린 날",
+      "category": "빌드 로그",
+      "date_str": "2026.04.23"
+    },
+    {
+      "slug": "hello-world",
+      "title": "빌더 저널을 시작합니다",
+      "category": "저널",
+      "date_str": "2026.04.15"
+    },
+    {
+      "slug": "naver-dual-platform-strategy",
+      "title": "네이버 블로그도 시작했다 — 이중 플랫폼으로 간 이유",
+      "category": "빌드 로그",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "obsidian-seo-dashboard",
+      "title": "Obsidian으로 블로그 SEO 관제 시스템 만든 과정",
+      "category": "빌드 로그",
+      "date_str": "2026.04.21"
+    },
+    {
+      "slug": "sprint-week1-review",
+      "title": "Sprint 1주차 회고 — 첫 리뷰 2개 발행 후기",
+      "category": "빌드 로그",
+      "date_str": "2026.04.21"
+    },
+    {
+      "slug": "time-management-solo-builder",
+      "title": "1인 빌더의 시간 관리 — 본업·가족·사이드를 13시간에 담는 법",
+      "category": "빌드 로그",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "week1-sprint-two-blogs",
+      "title": "Turborepo 모노레포로 36시간 만에 블로그 2개 런칭한 후기",
+      "category": "저널",
+      "date_str": "2026.04.15"
+    }
+  ],
+  "aigrit": [
+    {
+      "slug": "ai-tools-2026-guide",
+      "title": "2026 AI 도구 완벽 가이드 — 20개 써보고 살아남은 10개",
+      "category": "AI 도구 비교",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "apple-shortcuts-ai-automation",
+      "title": "Apple 단축어로 만드는 AI 자동화 5가지 — 하루 40분 절약 레시피",
+      "category": "자동화",
+      "date_str": "2026.04.21"
+    },
+    {
+      "slug": "claude-4-sonnet-vs-gpt-4o",
+      "title": "Claude 4 Sonnet vs GPT-4o 비교: 한국어·코딩·추론 실전 테스트 결과",
+      "category": "LLM",
+      "date_str": "2026.04.17"
+    },
+    {
+      "slug": "claude-code-vs-cursor",
+      "title": "Claude Code vs Cursor 비교: 실제 프로젝트로 테스트한 AI 코딩 도구 승자는?",
+      "category": "코딩 도구",
+      "date_str": "2026.04.16"
+    },
+    {
+      "slug": "claude-mcp-guide",
+      "title": "Claude MCP 활용법 — Obsidian·Craft 연결해 AI가 내 파일 직접 다루기",
+      "category": "AI 코딩",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "craft-vs-notion",
+      "title": "Craft vs Notion — 1년 씩 써본 노트앱 비교 (2026 결정 가이드)",
+      "category": "지식관리",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "hello-world",
+      "title": "AIGrit — 리뷰 원칙과 첫 글",
+      "category": "공지",
+      "date_str": "2026.04.15"
+    },
+    {
+      "slug": "notion-ai-guide",
+      "title": "Notion AI 완벽 활용법 — 회의록·DB 쿼리·번역 5가지 용도 실측",
+      "category": "생산성",
+      "date_str": "2026.04.22"
+    },
+    {
+      "slug": "perplexity-ai-guide",
+      "title": "Perplexity AI 사용법 — 구글 검색을 완전히 대체할 수 있을까?",
+      "category": "AI 검색",
+      "date_str": "2026.04.21"
+    },
+    {
+      "slug": "solo-developer-automation-stack",
+      "title": "1인 개발자 자동화 스택 10가지 — 월 6.5만원으로 반복 작업 90% 줄이기",
+      "category": "자동화",
+      "date_str": "2026.04.22"
+    }
+  ]
+}
