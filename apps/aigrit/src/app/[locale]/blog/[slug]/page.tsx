@@ -53,6 +53,16 @@ export async function generateMetadata({
   const post = getPostBySlug(contentDirFor(locale), slug, { brand: "aigrit" });
   if (!post) return {};
   const localized = getLocalizedBrand(locale);
+
+  const hrefLangs: Record<string, string> = {};
+  for (const l of SUPPORTED_LOCALES) {
+    const translatedSlugs = getAllPostSlugs(contentDirFor(l), { brand: "aigrit" });
+    if (translatedSlugs.includes(post.frontmatter.slug)) {
+      hrefLangs[l] = `/${l}/blog/${post.frontmatter.slug}`;
+    }
+  }
+  hrefLangs["x-default"] = hrefLangs.ko ?? hrefLangs[locale];
+
   return buildMetadata({
     title: post.frontmatter.title,
     description: post.frontmatter.description,
@@ -64,11 +74,7 @@ export async function generateMetadata({
     publishedTime: toIsoDatetime(post.frontmatter.date),
     tags: post.frontmatter.tags,
     locale: toOgLocale(locale),
-    hrefLangs: {
-      ko: `/ko/blog/${post.frontmatter.slug}`,
-      en: `/en/blog/${post.frontmatter.slug}`,
-      "x-default": `/ko/blog/${post.frontmatter.slug}`,
-    },
+    hrefLangs,
   });
 }
 

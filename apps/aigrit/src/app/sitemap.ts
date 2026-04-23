@@ -50,18 +50,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
+  const postsByLocale = new Map<string, ReturnType<typeof getAllPostSummaries>>();
   for (const locale of SUPPORTED_LOCALES) {
     const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-    const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" });
-    for (const p of posts) {
+    postsByLocale.set(locale, getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" }));
+  }
+  const slugsByLocale = new Map<string, Set<string>>(
+    Array.from(postsByLocale.entries()).map(([l, ps]) => [
+      l,
+      new Set(ps.map((p) => p.frontmatter.slug)),
+    ]),
+  );
+
+  for (const locale of SUPPORTED_LOCALES) {
+    for (const p of postsByLocale.get(locale) ?? []) {
+      const languages: Record<string, string> = {};
+      for (const l of SUPPORTED_LOCALES) {
+        if (slugsByLocale.get(l)?.has(p.frontmatter.slug)) {
+          languages[l] = `${base}/${l}/blog/${p.frontmatter.slug}`;
+        }
+      }
       entries.push({
         url: `${base}/${locale}/blog/${p.frontmatter.slug}`,
         lastModified: new Date(p.frontmatter.updated ?? p.frontmatter.date),
         changeFrequency: "monthly",
         priority: 0.8,
-        alternates: {
-          languages: buildLanguageMap(base, `/blog/${p.frontmatter.slug}`),
-        },
+        alternates: { languages },
       });
     }
   }
