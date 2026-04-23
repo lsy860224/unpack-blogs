@@ -1,17 +1,32 @@
-# 네이버 에디션 초안 — 첫 3편
+# 네이버 에디션 초안
 
-> AIGrit 본사이트 글을 네이버 독자(직장인·부업러·주부) 기준으로 리프레이밍한 초안 모음.
+> AIGrit / babipanote 본사이트 글을 네이버 독자(직장인·부업러·주부) 기준으로 리프레이밍한 초안 모음.
 > "복붙용 본문"은 각 파일의 "── 제목 ──" 이하.
 
-## 발행 순서 & 리듬
+## Batch 1 — AIGrit 에디션 (첫 주)
 
-| # | 파일 | 카테고리 | 발행 권장일 |
-|:---:|---|---|---|
-| 1 | [01-apple-shortcuts-50000won.md](01-apple-shortcuts-50000won.md) | AI 도구 리뷰 | Day 1 (월요일 오전) |
-| 2 | [02-notion-ai-side-income.md](02-notion-ai-side-income.md) | 생산성 자동화 | Day 3 (수요일 오전) |
-| 3 | [03-perplexity-vs-naver-search.md](03-perplexity-vs-naver-search.md) | AI 도구 리뷰 | Day 5 (금요일 오전) |
+| # | 파일 | 카테고리 | 원본 | 발행 권장일 |
+|:---:|---|---|---|---|
+| 1 | [01-apple-shortcuts-50000won.md](01-apple-shortcuts-50000won.md) | AI 도구 리뷰 | AIGrit | Week 1 · 월요일 |
+| 2 | [02-notion-ai-side-income.md](02-notion-ai-side-income.md) | 생산성 자동화 | AIGrit | Week 1 · 수요일 |
+| 3 | [03-perplexity-vs-naver-search.md](03-perplexity-vs-naver-search.md) | AI 도구 리뷰 | AIGrit | Week 1 · 금요일 |
+
+## Batch 2 — GentleDo 출시 시리즈 (둘째 주)
+
+babipanote #10~#12 (2026-04-23 발행) 의 네이버 리프레이밍. 3편 모두 GentleDo iOS 출시 관련이라 순차 발행으로 서사 형성.
+
+| # | 파일 | 카테고리 | 원본 (babipanote) | 발행 권장일 |
+|:---:|---|---|---|---|
+| 4 | [04-app-naming-failure.md](04-app-naming-failure.md) | IT 일상 / 부업 탐구 | #10 네이밍 스토리 | Week 2 · 월요일 |
+| 5 | [05-ai-ios-app-2weeks.md](05-ai-ios-app-2weeks.md) | AI 도구 리뷰 / 부업 탐구 | #11 Claude Code 개발기 | Week 2 · 수요일 |
+| 6 | [06-appstore-review-2days.md](06-appstore-review-2days.md) | IT 일상 / 부업 탐구 | #12 App Store 심사기 | Week 2 · 금요일 |
 
 **1주일에 3편 일괄 발행 → 체류 블로거 인상.**
+
+**Batch 2 특징:**
+- 3편 모두 **GentleDo App Store 다운로드 CTA** 포함 → 앱 노출 3회 반복 효과
+- 1→2→3화 **서사 연결** (브랜딩 실패 → 개발 과정 → 출시 통과)
+- babipanote 독자(인디해커)와 다른 **네이버 부업러** 타겟 — 같은 내용도 프레이밍 변경
 
 ## 네이버 리프레이밍 공통 원칙
 
@@ -90,11 +105,11 @@ AIGrit 본사이트 → 네이버 변환 규칙:
 
 숫자 적어도 **체류시간·댓글 소통**이 알고리즘에 더 중요합니다.
 
-## 다음 편 후보 (Edition #4~)
+## 다음 편 후보 (Edition #7~)
 
-- **Claude vs ChatGPT 1주일 실험** (본사이트 #2 에디션)
-- **2026 AI 도구 Top 10** (본사이트 #9 Pillar 에디션, 최대 수익 기대)
-- **Claude Code 비개발자 활용법** (본사이트 #1 에디션)
+- **Claude vs ChatGPT 1주일 실험** (AIGrit #2 에디션)
+- **2026 AI 도구 Top 10** (AIGrit #9 Pillar 에디션, 최대 수익 기대)
+- **Claude Code 비개발자 활용법** (AIGrit #1 에디션)
 - **Obsidian SEO 관제 시스템** (babipanote #4 에디션)
 
 ## 관련 문서
