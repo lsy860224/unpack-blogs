@@ -11,7 +11,7 @@ import {
 } from "@unpack/blog-core";
 import { getLocalizedBrand } from "../../../../../brand.config";
 import {
-  CATEGORY_META,
+  getAllCategorySlugs,
   getCategoryBySlug,
   getCategoryNav,
 } from "../../../../lib/categories";
@@ -42,7 +42,7 @@ interface Params {
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return Object.values(CATEGORY_META).map((c) => ({ slug: c.slug }));
+  return getAllCategorySlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

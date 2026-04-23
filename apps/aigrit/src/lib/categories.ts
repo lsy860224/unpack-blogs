@@ -1,11 +1,18 @@
 import path from "node:path";
-import { getAllPostSummaries } from "@unpack/blog-core";
+import { getAllPostSummaries, SUPPORTED_LOCALES } from "@unpack/blog-core";
 
 export interface CategoryMeta {
   slug: string;
   description: string;
 }
 
+/**
+ * Curated metadata for known categories.
+ *
+ * 여기에 없는 카테고리를 글에서 사용하면 `getEffectiveCategories()` 가
+ * 자동으로 kebab-case slug + 제네릭 description 을 생성한다. 단,
+ * 빌드 로그에 경고가 뜨므로 SEO·노출을 위해 여기에 명시 등록 권장.
+ */
 export const CATEGORY_META: Record<string, CategoryMeta> = {
   공지: {
     slug: "notice",
@@ -45,16 +52,93 @@ export const CATEGORY_META: Record<string, CategoryMeta> = {
   },
 };
 
+/** Derive a URL-safe kebab slug for categories not registered in CATEGORY_META. */
+function fallbackSlug(name: string): string {
+  const ascii = name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .trim()
+    .replace(/\s+/g, "-");
+  return ascii.length >= 2 ? ascii : encodeURIComponent(name);
+}
+
+function fallbackMeta(name: string): CategoryMeta {
+  return {
+    slug: fallbackSlug(name),
+    description: `${name} 카테고리의 글 모음`,
+  };
+}
+
+const warnedCategories = new Set<string>();
+
+function warnUnregistered(names: Iterable<string>): void {
+  const fresh = [...names].filter((n) => !warnedCategories.has(n));
+  if (fresh.length === 0) return;
+  for (const n of fresh) warnedCategories.add(n);
+  // Warn on both dev and build — actionable before deploy.
+  console.warn(
+    `[aigrit/categories] Unregistered categor${fresh.length === 1 ? "y" : "ies"} auto-derived: ${fresh
+      .map((n) => `"${n}"`)
+      .join(", ")}. Add to CATEGORY_META with curated slug + description for better SEO.`,
+  );
+}
+
+/** Cached union of CATEGORY_META + any categories actually used across all locales. */
+let _effectiveCache: Map<string, CategoryMeta> | null = null;
+
+function readAllPosts(): Array<{ frontmatter: { category?: string } }> {
+  const all: Array<{ frontmatter: { category?: string } }> = [];
+  for (const locale of SUPPORTED_LOCALES) {
+    try {
+      all.push(
+        ...getAllPostSummaries(
+          path.join(process.cwd(), "content/posts", locale),
+          { brand: "aigrit" },
+        ),
+      );
+    } catch {
+      // locale dir may not exist yet — skip silently
+    }
+  }
+  return all;
+}
+
+export function getEffectiveCategories(): Map<string, CategoryMeta> {
+  if (_effectiveCache) return _effectiveCache;
+  const posts = readAllPosts();
+  const result = new Map<string, CategoryMeta>();
+  for (const [name, meta] of Object.entries(CATEGORY_META)) {
+    result.set(name, meta);
+  }
+  const unregistered: string[] = [];
+  for (const p of posts) {
+    const cat = p.frontmatter.category;
+    if (!cat || result.has(cat)) continue;
+    unregistered.push(cat);
+    result.set(cat, fallbackMeta(cat));
+  }
+  warnUnregistered(unregistered);
+  _effectiveCache = result;
+  return result;
+}
+
 export function getCategorySlug(name: string): string {
-  return CATEGORY_META[name]?.slug ?? encodeURIComponent(name);
+  const meta = getEffectiveCategories().get(name);
+  return meta ? meta.slug : fallbackSlug(name);
 }
 
 export function getCategoryBySlug(
   slug: string,
 ): { name: string; description: string } | null {
-  const hit = Object.entries(CATEGORY_META).find(([, v]) => v.slug === slug);
-  if (!hit) return null;
-  return { name: hit[0], description: hit[1].description };
+  for (const [name, meta] of getEffectiveCategories()) {
+    if (meta.slug === slug) return { name, description: meta.description };
+  }
+  return null;
+}
+
+/** All registered + auto-derived slugs — used by generateStaticParams. */
+export function getAllCategorySlugs(): string[] {
+  return Array.from(getEffectiveCategories().values()).map((m) => m.slug);
 }
 
 export interface CategoryNavEntry {
@@ -85,7 +169,9 @@ export function getCategoryNav(
     href: `/${locale}/blog`,
   };
 
-  const categoryEntries: CategoryNavEntry[] = Object.entries(CATEGORY_META)
+  const categoryEntries: CategoryNavEntry[] = Array.from(
+    getEffectiveCategories().entries(),
+  )
     .map(([name, meta]) => ({
       slug: meta.slug,
       name,
