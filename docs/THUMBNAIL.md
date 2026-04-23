@@ -3,9 +3,26 @@
 > Figma MCP로 OG 이미지(1200×630)를 자동 생성한다.
 > Claude Code가 글 발행 시 이 문서를 참조하여 썸네일을 만든다.
 
+## 📐 Figma 템플릿 파일 (단일 소스)
+
+- **파일명:** UnpackBlogs — OG Templates
+- **URL:** https://www.figma.com/design/1Md9ud8CQ43AQn2dKUo7YV
+- **fileKey:** `1Md9ud8CQ43AQn2dKUo7YV`
+- **구조:**
+  - Page 1 `babipanote` — Master Component `OG — babipanote (Master)` (node `1:20`)
+  - Page 2 `AIGrit` — Master Component `OG — AIGrit (Master)` (node `6:13`)
+- **사용법:** Cmd+D로 컴포넌트 복제 → title/category/date/subtitle 텍스트 레이어만 교체 → Export PNG 1x
+- **스펙 변경 시:** 이 파일의 Master Component 업데이트. 이후 재생성은 해당 Master를 소스로 삼음.
+
 ## 생성 도구
 
-**Figma MCP** (`mcp__claude_ai_Figma__use_figma`) — JavaScript Plugin API로 Figma 파일에 OG 프레임 생성 → PNG 내보내기.
+**Figma MCP** (`mcp__claude_ai_Figma__use_figma`) — JavaScript Plugin API로 위 Figma 파일에서 Master Component 인스턴스 생성 → 텍스트 덮어쓰기 → `get_screenshot`으로 PNG 내보내기.
+
+**폰트 가용성 주의 (Figma 클라우드 기준, 2026-04 확인):**
+- ✅ Gowun Batang (Bold, Regular) — babipanote 제목·로고
+- ✅ Lora (Bold, Regular, Semi Bold, Medium 등) — babipanote 인용 장식
+- ❌ Pretendard — 미포함. `Inter` 폴백 또는 `Noto Sans KR`로 대체 고려
+- ✅ Inter (Bold, Semi Bold, Regular) — AIGrit 전체
 
 ## 사이트별 템플릿
 
