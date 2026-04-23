@@ -11,13 +11,37 @@ export const CATEGORY_META: Record<string, CategoryMeta> = {
     slug: "notice",
     description: "AIGrit 운영 공지 및 업데이트",
   },
-  "코딩 도구": {
-    slug: "coding-tools",
-    description: "Cursor, Claude Code 등 개발 보조 AI 도구 리뷰",
+  "AI 도구 비교": {
+    slug: "ai-tools",
+    description: "여러 AI 도구를 직접 써보고 숫자로 비교",
   },
   LLM: {
     slug: "llm",
     description: "GPT, Claude, Gemini 등 대형 언어 모델 비교",
+  },
+  "코딩 도구": {
+    slug: "coding-tools",
+    description: "Cursor, Claude Code 등 개발 보조 AI 도구 리뷰",
+  },
+  "AI 코딩": {
+    slug: "ai-coding",
+    description: "AI 페어 프로그래밍·MCP·에이전트 코딩 실전",
+  },
+  "AI 검색": {
+    slug: "ai-search",
+    description: "Perplexity 등 AI 기반 검색·리서치 도구",
+  },
+  자동화: {
+    slug: "automation",
+    description: "Apple 단축어·Make·Zapier로 만드는 반복 업무 자동화",
+  },
+  생산성: {
+    slug: "productivity",
+    description: "Notion AI·생산성 앱으로 업무 효율 올리기",
+  },
+  지식관리: {
+    slug: "knowledge",
+    description: "Obsidian·Craft·Notion 등 PKM 도구 비교",
   },
 };
 
