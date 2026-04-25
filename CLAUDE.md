@@ -53,15 +53,28 @@ npx --no-install tsc --noEmit -p .        # 타입 체크
 
 ---
 
+## 🛡️ 절대 준수 사항 (전 블로그 공통)
+
+1. **OG 이미지는 반드시 제목을 포함한다** — 1200×630 캔버스 내 글 제목 시각적 배치
+2. **이미지 생성 시 Figma를 우선 고려**한다 — Master Component 인스턴스 사용, 직접 수정 금지
+3. **인포그래픽은 NapkinAI를 우선 고려**한다 — 데이터 시각화 자동 생성 → 톤 조정
+
+---
+
 ## 🖊️ 글쓰기 워크플로우 — "글쓰기 시작" 시 이 순서를 따른다
 
 ### Step 1: 대상 확인
 
-어느 블로그? (aigrit / babipanote) + 어떤 글? (slug 또는 번호)
-→ 해당 글쓰기 가이드 읽기:
-- AIGrit → `docs/POST_AIGRIT.md` + `docs/CONTENT_RULES.md`
-- babipanote → `docs/POST_BABIPANOTE.md`
-- 네이버 에디션 → `docs/POST_NAVER.md`
+어느 블로그? (aigrit / babipanote / 네이버) + 어떤 글? (slug 또는 번호)
+→ 해당 블로그의 **3개 가이드 세트** 읽기:
+
+| 블로그 | 글 | 이미지 | SEO |
+|---|---|---|---|
+| **AIGrit** | [`docs/post/AIGRIT.md`](docs/post/AIGRIT.md) | [`docs/image/AIGRIT.md`](docs/image/AIGRIT.md) | [`docs/seo/AIGRIT.md`](docs/seo/AIGRIT.md) |
+| **babipanote** | [`docs/post/BABIPANOTE.md`](docs/post/BABIPANOTE.md) | [`docs/image/BABIPANOTE.md`](docs/image/BABIPANOTE.md) | [`docs/seo/BABIPANOTE.md`](docs/seo/BABIPANOTE.md) |
+| **네이버** | [`docs/post/NAVER.md`](docs/post/NAVER.md) | [`docs/image/NAVER.md`](docs/image/NAVER.md) | [`docs/seo/NAVER.md`](docs/seo/NAVER.md) |
+
+공통: [`docs/CONTENT_RULES.md`](docs/CONTENT_RULES.md) · [`docs/THUMBNAIL.md`](docs/THUMBNAIL.md) · [`docs/PUBLISH_CHECKLIST.md`](docs/PUBLISH_CHECKLIST.md)
 
 ### Step 2: 초안 존재 확인
 
@@ -116,17 +129,28 @@ Craft 초안 → frontmatter 생성 → 마커 치환 → slug 검증 → git pu
 
 ## 문서 가이드
 
-### 📝 글 작성
+### 📝 블로그별 규칙 (글 × 이미지 × SEO 매트릭스)
 
-| 문서 | 언제 읽나 |
+| 블로그 | 글 작성 | 이미지 | SEO |
+|---|---|---|---|
+| **AIGrit** (aigrit.dev) | [`docs/post/AIGRIT.md`](docs/post/AIGRIT.md) | [`docs/image/AIGRIT.md`](docs/image/AIGRIT.md) | [`docs/seo/AIGRIT.md`](docs/seo/AIGRIT.md) |
+| **babipanote** (babipanote.com) | [`docs/post/BABIPANOTE.md`](docs/post/BABIPANOTE.md) | [`docs/image/BABIPANOTE.md`](docs/image/BABIPANOTE.md) | [`docs/seo/BABIPANOTE.md`](docs/seo/BABIPANOTE.md) |
+| **네이버** (blog.naver.com/aigrit) | [`docs/post/NAVER.md`](docs/post/NAVER.md) | [`docs/image/NAVER.md`](docs/image/NAVER.md) | [`docs/seo/NAVER.md`](docs/seo/NAVER.md) |
+
+**블로그별 요약**
+- **AIGrit**: 존댓말·데이터 중심·3인칭 분석가 / Indigo+Cyan / AdSense + 제휴
+- **babipanote**: 1인칭 저널·종이 감성 / Plum+Terracotta (Gowun Batang 세리프 헤딩) / 광고 OFF
+- **네이버**: 친근한 스토리 훅·모바일 가독성 / 이미지 8장+ 패키지 / 애드포스트 + 협찬
+
+### 📚 공통 규칙
+
+| 문서 | 용도 |
 |---|---|
-| `docs/POST_AIGRIT.md` | AIGrit 글 작성 시 |
-| `docs/POST_BABIPANOTE.md` | babipanote 글 작성 시 |
-| `docs/POST_NAVER.md` | 네이버 에디션 작성 시 |
-| `docs/CONTENT_RULES.md` | 마커·내부 링크·금지어 |
-| **`docs/THUMBNAIL.md`** | **OG 썸네일 Figma 자동 생성** |
-| `docs/WORKFLOW.md` | 파이프라인 전체 흐름 |
-| `docs/PUBLISH_CHECKLIST.md` | 발행 전 점검·프롬프트 템플릿 |
+| [`docs/CONTENT_RULES.md`](docs/CONTENT_RULES.md) | 마커·내부 링크·금지어 |
+| [`docs/THUMBNAIL.md`](docs/THUMBNAIL.md) | **OG 썸네일 Figma 자동 생성 (제목 포함 필수)** |
+| [`docs/WORKFLOW.md`](docs/WORKFLOW.md) | 파이프라인 전체 흐름 |
+| [`docs/PUBLISH_CHECKLIST.md`](docs/PUBLISH_CHECKLIST.md) | 발행 전 점검·프롬프트 템플릿 |
+| `scripts/generate-naver-thumbs.py` | 네이버 프롤로그 1:1 썸네일 자동 생성 |
 
 ### 🔧 개발
 

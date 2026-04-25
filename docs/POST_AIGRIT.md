@@ -1,4 +1,9 @@
-# AIGrit 글쓰기 가이드
+> ⚠️ **이 파일은 요약본입니다.** 상세 가이드는 아래 3개 문서를 따르세요:
+> - 글: [`docs/post/AIGRIT.md`](post/AIGRIT.md)
+> - 이미지: [`docs/image/AIGRIT.md`](image/AIGRIT.md)
+> - SEO: [`docs/seo/AIGRIT.md`](seo/AIGRIT.md)
+
+# AIGrit 글쓰기 가이드 (요약)
 
 > aigrit.dev — AI·생산성 도구를 직접 써보고 솔직하게 비교하는 리뷰 블로그
 

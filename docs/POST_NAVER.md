@@ -1,4 +1,9 @@
-# 네이버 에디션 글쓰기 가이드
+> ⚠️ **이 파일은 요약본입니다.** 상세 가이드는 아래 3개 문서를 따르세요:
+> - 글: [`docs/post/NAVER.md`](post/NAVER.md)
+> - 이미지: [`docs/image/NAVER.md`](image/NAVER.md) (8장 패키지 + 1:1 프롤로그 썸네일)
+> - SEO: [`docs/seo/NAVER.md`](seo/NAVER.md) (C-Rank·D.I.A. 전략)
+
+# 네이버 에디션 글쓰기 가이드 (요약)
 
 > babipa의 AIGrit — AIGrit 본사이트의 생활·재테크 프레임 에디션 + 협찬 전용
 

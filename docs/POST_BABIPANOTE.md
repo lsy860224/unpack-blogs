@@ -1,4 +1,9 @@
-# babipanote 글쓰기 가이드
+> ⚠️ **이 파일은 요약본입니다.** 상세 가이드는 아래 3개 문서를 따르세요:
+> - 글: [`docs/post/BABIPANOTE.md`](post/BABIPANOTE.md)
+> - 이미지: [`docs/image/BABIPANOTE.md`](image/BABIPANOTE.md)
+> - SEO: [`docs/seo/BABIPANOTE.md`](seo/BABIPANOTE.md)
+
+# babipanote 글쓰기 가이드 (요약)
 
 > babipanote.com — 1인 빌더의 실험·실패·성공을 가감 없이 기록하는 개인 저널
 
