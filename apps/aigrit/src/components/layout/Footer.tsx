@@ -46,9 +46,14 @@ export function Footer({ locale }: { locale: string }) {
     <footer className="mt-24 border-t border-[color-mix(in_oklab,var(--foreground)_8%,transparent)]">
       <div className="mx-auto max-w-5xl px-6 py-10 grid gap-8 sm:grid-cols-4 text-sm">
         <div className="sm:col-span-2">
+          {/* Brand Master `[AI]Grit Wordmark` 사양 — Header.tsx와 동일 */}
           <p className="text-base font-extrabold tracking-tight">
-            <span className="text-[var(--color-brand-secondary)]">[AI]</span>
-            <span className="ml-1 text-[var(--color-brand-primary)]">Grit</span>
+            <span className="text-[var(--color-brand-secondary)]">[</span>
+            <span className="text-[var(--color-brand-primary)] dark:text-white">
+              AI
+            </span>
+            <span className="text-[var(--color-brand-secondary)]">]</span>
+            <span className="ml-1 text-[var(--foreground)]">Grit</span>
           </p>
           <p className="mt-2 text-[color-mix(in_oklab,var(--foreground)_65%,transparent)] leading-relaxed max-w-sm">
             {brand.description}

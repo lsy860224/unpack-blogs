@@ -56,13 +56,18 @@ export function Header({ locale }: { locale: string }) {
   return (
     <header className="sticky top-0 z-40 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] bg-[color-mix(in_oklab,var(--background)_92%,transparent)] backdrop-blur">
       <div className="mx-auto max-w-5xl px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
+        {/* Logo — Brand Master `[AI]Grit Wordmark` 사양:
+            bracket=secondary, AI=primary(light)/snow(dark), Grit=foreground */}
         <Link
           href={`/${locale}`}
           className="flex items-baseline font-display font-extrabold tracking-logo shrink-0"
         >
-          <span className="text-[var(--color-brand-secondary)]">[AI]</span>
-          <span className="ml-1 text-[var(--color-brand-primary)]">Grit</span>
+          <span className="text-[var(--color-brand-secondary)]">[</span>
+          <span className="text-[var(--color-brand-primary)] dark:text-white">
+            AI
+          </span>
+          <span className="text-[var(--color-brand-secondary)]">]</span>
+          <span className="ml-1 text-[var(--foreground)]">Grit</span>
         </Link>
 
         {/* Desktop nav (md+) */}
