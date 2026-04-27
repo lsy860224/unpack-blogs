@@ -58,6 +58,7 @@ npx --no-install tsc --noEmit -p .        # 타입 체크
 1. **OG 이미지는 반드시 제목을 포함한다** — 1200×630 캔버스 내 글 제목 시각적 배치
 2. **이미지 생성 시 Figma를 우선 고려**한다 — Master Component 인스턴스 사용, 직접 수정 금지
 3. **인포그래픽은 NapkinAI를 우선 고려**한다 — 데이터 시각화 자동 생성 → 톤 조정
+4. **글 발행 시 `date` 필드는 반드시 작성 시점 실제 KST 시각**을 사용한다 — `date '+%Y-%m-%d %H:%M'` 결과를 그대로 입력. 미래 시각·임의 과거 시각·"22:00" 같은 어림수 금지. 사유: sitemap `<lastmod>`, OG `article:published_time`, JSON-LD `Article.datePublished` 4곳에 그대로 노출되어 미래 시각이면 검색엔진이 "예약 발행"으로 인식. 상세는 `.claude/rules/mdx-content.md` 참조.
 
 ---
 
