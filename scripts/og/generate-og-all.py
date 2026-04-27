@@ -246,6 +246,7 @@ AG_SUBTITLES = {
     "notion-ai-guide": "5가지 용도 실측 후기",
     "perplexity-ai-guide": "구글을 완전히 대체할까",
     "solo-developer-automation-stack": "월 6.5만원 자동화 스택",
+    "claude-code-flutter-app-guide": "비개발자 2주 App Store 출시기",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -260,6 +261,7 @@ AG_TITLE_OVERRIDES = {
     "solo-developer-automation-stack": "1인 개발자 자동화 스택 10가지",
     "ai-tools-2026-guide": "2026 AI 도구 완벽 가이드",
     "hello-world": "AIGrit — 리뷰 원칙과 첫 글",
+    "claude-code-flutter-app-guide": "Claude Code + Flutter로 앱 만들기 실전 가이드",
 }
 
 # babipanote: shorten overly long titles for OG if needed
