@@ -35,6 +35,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "next-mdx-remote": "^6.0.0",
     "reading-time": "^1.5.0",
