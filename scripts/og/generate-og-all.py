@@ -247,6 +247,8 @@ AG_SUBTITLES = {
     "perplexity-ai-guide": "구글을 완전히 대체할까",
     "solo-developer-automation-stack": "월 6.5만원 자동화 스택",
     "claude-code-flutter-app-guide": "비개발자 2주 App Store 출시기",
+    "ai-side-income-100man-roadmap": "직장인 가능 6가지 경로 비교",
+    "make-automation-guide": "Slack·Notion·Gmail 30분 컷 자동화",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -262,6 +264,8 @@ AG_TITLE_OVERRIDES = {
     "ai-tools-2026-guide": "2026 AI 도구 완벽 가이드",
     "hello-world": "AIGrit — 리뷰 원칙과 첫 글",
     "claude-code-flutter-app-guide": "Claude Code + Flutter로 앱 만들기 실전 가이드",
+    "ai-side-income-100man-roadmap": "AI로 월 100만원 만들기 — 2026 직장인 로드맵",
+    "make-automation-guide": "Make 자동화 사용법 — Slack·Notion·Gmail 30분 컷",
 }
 
 # babipanote: shorten overly long titles for OG if needed
@@ -276,6 +280,8 @@ BB_TITLE_OVERRIDES = {
         "1인 빌더의 시간 관리 — 주 13시간 분할법",
     "aigrit-month1-revenue":
         "AIGrit 첫 달 중간 리포트 (1주차)",
+    "turborepo-brand-config":
+        "Turborepo brand.config.ts로 사이트 2개 운영하는 법",
 }
 
 

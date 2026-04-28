@@ -1,0 +1,193 @@
+---
+title: "Make 자동화 사용법 — 첫 시나리오부터 Slack·Notion·Gmail 연동까지"
+date: "2026-04-28 11:41"
+slug: "make-automation-guide"
+description: "Make(구 Integromat)로 반복 업무를 30분 안에 자동화하는 실전 가이드. Zapier 비교, 무료 플랜 한도, 실제 시나리오 3개와 트러블슈팅 패턴까지 1년 사용 기준으로 정리."
+tags:
+  [
+    "Make",
+    "자동화",
+    "Zapier 대안",
+    "Make 사용법",
+    "노코드 자동화",
+    "직장인 생산성",
+  ]
+thumbnail: "/images/make-automation-guide/og.png"
+featured: false
+category: "자동화"
+topic_cluster: "생산성 자동화"
+cluster_role: cluster
+---
+
+**결론부터: Make로 Slack·Notion·Gmail을 연결하면 반복 업무 한 종류는 30분 만에 자동화된다. Zapier보다 무료 한도가 크고 시각 빌더가 직관적이지만, 한국어 도움말이 부족한 게 진입장벽이다.**
+
+[Make](https://www.make.com)(구 Integromat)는 시각 노드 빌더로 앱 간 데이터를 흐르게 하는 노코드 자동화 도구다. Zapier와 양대 산맥인데 정작 한글 자료가 적다. 1년간 12개 시나리오를 돌려본 기준으로, 처음 쓰는 사람이 가장 빠르게 첫 자동화를 완성하는 경로를 정리한다.
+
+## Make란? 1분 설명
+
+쉽게 말하면 **앱 간 "if this then that" 자동화**다. "Gmail에 특정 키워드 메일이 오면 → Notion DB에 자동 저장 → Slack에 알림"같은 흐름을 코드 없이 만든다.
+
+| 핵심 개념 | 설명 |
+|---|---|
+| Scenario | 자동화 한 단위 (워크플로우) |
+| Module | 시나리오 안의 노드 (Gmail·Notion 등 앱 동작 1개) |
+| Operation | 시나리오 1회 실행당 차감되는 카운트 |
+| Connection | 앱 인증 정보 (한 번 연결 후 재사용) |
+| Webhook | 외부 트리거 (즉시 반응) |
+
+Zapier가 "Trigger → Action 1줄짜리 흐름"에 강점이라면, Make는 **Router·Filter·Iterator 등 분기·반복이 풍부**해서 복잡한 자동화에 우위. 단, 그만큼 처음 진입할 때 학습량이 더 크다.
+
+## Make와 Zapier 중 어느 쪽을 써야 할까?
+
+![Make vs Zapier 비교 — 무료 한도·가격·분기·반복·앱 통합 7개 항목](/images/make-automation-guide/01-make-vs-zapier.png)
+
+세 가지 기준으로 보면 답이 명확하다.
+
+| 항목 | Make | Zapier |
+|---|---|---|
+| 무료 한도 | **1,000 ops/월** | 100 tasks/월 |
+| 유료 시작가 | **$10.59/월** (10K ops) | $19.99/월 (750 tasks) |
+| 시각 빌더 | ✅ 노드 그래프 (Make의 강점) | ⚠️ 단순 리스트 |
+| 분기·반복 | ✅ Router·Iterator·Aggregator | ⚠️ Paths만 (유료) |
+| 앱 통합 수 | 약 1,800+ | 약 7,000+ |
+| 한국어 도움말 | ❌ 영문만 | ⚠️ 일부 한국어 |
+| 학습 곡선 | 중상 | 낮음 |
+| AI 기능 | OpenAI·Anthropic 모듈 | OpenAI·Code by Zapier |
+
+**결론:**
+- 단순 1줄 자동화 = **Zapier** (학습 빠름)
+- 분기·반복·복잡한 워크플로우 = **Make** (가격·자유도)
+- 매월 100건 미만 자동화 = **Make 무료** (Zapier 무료보다 10배 여유)
+
+이 글은 Make 기준으로 진행하지만, 더 가벼운 모바일 자동화는 [Apple 단축어로 만드는 AI 자동화 5가지](/ko/blog/apple-shortcuts-ai-automation)가 적합하고, 1인 개발자의 전체 자동화 스택은 [1인 개발자 자동화 스택 10가지](/ko/blog/solo-developer-automation-stack)에 묶어뒀다.
+
+## 가입 & 첫 시나리오 만들기 (10분 컷)
+
+![Make 시나리오 빌더 흐름 — Trigger → Filter → 3개 Action 노드 그래프](/images/make-automation-guide/02-scenario-builder.png)
+
+순서대로 따라하면 첫 시나리오가 동작한다.
+
+1. make.com 가입 (Google 계정 권장 — 추후 OAuth 연동 편리)
+2. 좌측 사이드바 → **Scenarios** → **Create a new scenario**
+3. 중앙 큰 + 버튼 클릭 → **Trigger 앱 선택** (예: Gmail)
+4. Trigger Module 선택 (예: Watch emails)
+5. Connection 추가 (앱 OAuth 한 번)
+6. 트리거 조건 설정 (예: 받은 메일함 · "invoice" 포함)
+7. + 버튼 → 다음 Module 추가 (예: Notion → Create a database item)
+8. 데이터 매핑 (Gmail의 Subject → Notion 제목 컬럼 등)
+9. 우측 하단 **Run once** → 테스트
+10. 좌측 하단 토글 **ON** → 자동 실행 활성화
+
+**핵심 팁:** 처음엔 **Run once**를 5~10번 돌려서 동작 확인. 토글 ON 후엔 실수로 1,000 ops를 한 시간에 다 써버릴 수 있다 (필터 누락 시).
+
+## 실전 #1 — 블로그 발행 → Slack 알림
+
+![실전 시나리오 3가지 비교 — RSS·Gmail·Sheets · 셋업 시간과 무료 한도 내 가능 횟수](/images/make-automation-guide/03-3-real-cases.png)
+
+가장 단순한 시나리오. 시작 추천.
+
+**구성:**
+1. RSS Trigger — 블로그 RSS 피드 watch (5분 간격)
+2. Slack Module — Send message to channel
+3. 메시지 템플릿: `📝 새 글: {title}\n{link}`
+
+**소요:** 6분. **Operations:** 글 1편당 2 ops (Trigger + Slack).
+
+**팁:** RSS Trigger는 "Maximum number of returned items"를 1로 설정. 안 그러면 첫 실행에 과거 글 전체를 한 번에 처리해서 ops 폭증.
+
+## 실전 #2 — Gmail → Notion DB 자동 저장
+
+받은 메일함을 자동 분류·아카이브하는 데 유용. 예: 뉴스레터를 카테고리별 Notion DB로 정리.
+
+**구성:**
+1. Gmail Trigger — Watch emails (라벨 필터 "Newsletter" 사용)
+2. **Filter** Module — Subject에 특정 키워드 포함 여부 분기
+3. Notion Module — Create a database item
+4. (선택) Gmail Module — 메일에 라벨 "Archived" 적용 + 받은 메일함 제거
+
+**소요:** 12분. **Operations:** 메일 1통당 3~4 ops.
+
+**팁:** Notion DB의 컬럼 타입을 사전에 맞춰두기. Title·URL·Tags(multi-select)·Created가 표준 조합. [Notion AI 완벽 활용법](/ko/blog/notion-ai-guide)에서 다룬 DB 구조 패턴을 그대로 적용하면 워크플로우가 깔끔해진다.
+
+## 실전 #3 — Google Sheets → 이메일 일괄 발송
+
+뉴스레터·회원 알림에 유용. 단, 무료 한도 빨리 소진되니 주의.
+
+**구성:**
+1. Google Sheets Trigger — Watch new rows
+2. **Iterator** Module — 행 순회
+3. Gmail Module — Send email (To: 수신자, Body: 템플릿)
+
+**소요:** 18분. **Operations:** 행 1개당 3 ops (Iterator는 항목당 1 ops 별도).
+
+**팁:** Iterator 안에 **Sleep Module**을 1초 추가 — Gmail 발송 속도 제한 회피. 100명 이상 발송 시 필수.
+
+## 무료 플랜으로 어디까지 가능할까?
+
+월 1,000 ops가 한도. 계산식:
+
+| 시나리오 | 1회 ops | 월 한도 안에서 가능 횟수 |
+|---|:---:|:---:|
+| RSS → Slack | 2 | 500회 |
+| Gmail → Notion | 4 | 250회 |
+| Sheets → 이메일 (10명) | 13 | 76회 |
+| 복합 (Webhook → Filter → API → Notion) | 6~8 | 125~166회 |
+
+**현실 운영 기준:**
+- 개인 부업 자동화 = 무료 충분 (월 200~400 ops 사용)
+- 1인 사업자 = $10.59 Core 플랜 (10K ops)
+- 팀·고빈도 = $18.82 Pro 플랜 (10K ops + Custom Variables)
+
+가격 모델은 OpenAI API와 비슷한 사용량 기반이라 [Claude 4 Sonnet vs GPT-4o 비교](/ko/blog/claude-4-sonnet-vs-gpt-4o)에서 다룬 모델 비용 계산 패턴이 그대로 적용된다.
+
+## 트러블슈팅 — 자주 만나는 5가지 함정
+
+**1. Filter 누락 → 무한 ops 폭증**
+
+원인: Trigger 후 즉시 Action으로 연결했지만 조건 필터를 안 걸어서 모든 데이터에 반응. 해결: Trigger와 Action 사이에 항상 Filter Module 1개 추가.
+
+**2. Webhook 응답 timeout (40초)**
+
+원인: 외부 Webhook 호출 후 응답 처리에 40초 이상 걸림. 해결: Webhook Response Module을 즉시 200 응답으로 분리, 본 처리는 Async 시나리오로.
+
+**3. Gmail OAuth 만료 (90일)**
+
+원인: Google OAuth 토큰이 90일 후 자동 만료. 해결: Gmail Connection을 만들 때 "Show Advanced Settings" → "Use scope: full access" 선택.
+
+**4. Notion API rate limit**
+
+원인: Notion은 초당 3회 요청 제한. Iterator로 100건 한 번에 보내면 절반 실패. 해결: Sleep Module 0.4초 추가.
+
+**5. JSON 파싱 에러**
+
+원인: 외부 API 응답이 예상과 다름. 해결: Set Multiple Variables Module로 응답 구조를 먼저 분리해서 디버그. [Claude MCP 활용법](/ko/blog/claude-mcp-guide)에서 다룬 JSON Schema 검증 패턴이 도움이 된다.
+
+## 자주 묻는 질문 (FAQ)
+
+### Make 한국어 지원되나요?
+
+UI 일부는 한국어 가능 (좌측 사이드바·기본 메뉴). 단, 도움말·튜토리얼·에러 메시지는 영문만. 한국어 자료는 커뮤니티(Reddit r/Integromat)에서 구글 번역으로 보는 게 현실. 영어 거부감이 크면 Zapier 일부 페이지가 한국어로 더 친화적.
+
+### Zapier보다 정말 저렴한가요?
+
+무료는 10배(1,000 vs 100), 유료는 약 절반($10.59 vs $19.99). 단, Zapier가 자동화 1개당 단순 흐름이면 이 가격 차이가 의미 없을 수 있다. 분기·반복이 들어가는 순간 Make 우위 확정.
+
+### 코딩 지식이 필요한가요?
+
+기본 자동화는 필요 없음. 단, 복잡한 데이터 변환이 들어가면 JavaScript 1~2줄 (Tools → Set variable에 expression) 정도는 익숙해야 한다. 그 정도는 ChatGPT에 물어보면 즉답 가능.
+
+### Webhook을 트리거로 쓰면 즉시 반응하나요?
+
+예. Webhook 트리거는 polling 아니라 push 방식. 외부에서 Make의 Webhook URL로 POST 보내면 즉시 시나리오 실행. RSS·Gmail polling은 5분~15분 간격이라 실시간 자동화엔 Webhook이 필수.
+
+### 무료 플랜에서 시나리오 몇 개까지 만들 수 있나요?
+
+시나리오 개수 자체는 무제한. 단, 동시 활성화는 2개까지. 더 만들고 싶으면 토글 OFF 시키고 다른 걸 ON. 실제로는 시나리오 5개를 미리 만들어두고 필요할 때만 켜는 패턴이 흔하다.
+
+## 총정리
+
+자동화 도구 선택은 결국 "복잡한 흐름이 얼마나 자주 필요한가"가 분기점. 단순 1줄 자동화는 Zapier, 분기·반복이 자주 들어가는 워크플로우는 Make. 월 100건 미만이면 Make 무료로 시작 → 한도 부족할 때 Core $10.59로 업그레이드가 가장 가성비 좋은 경로다.
+
+자동화 도구의 더 넓은 지형도는 [2026 AI 도구 완벽 가이드](/ko/blog/ai-tools-2026-guide)에 정리해뒀고, 자동화로 절약한 시간을 어떤 부업으로 환산할지는 분기 갱신 중인 별도 글에서 다룬다.
+
+다음 글에서는 Make로 만든 시나리오 5개를 한 번에 백업·복원하는 패턴(Custom Apps + Templates 활용)을 정리할 예정이다.
