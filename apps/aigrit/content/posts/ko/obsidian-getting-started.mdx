@@ -1,0 +1,153 @@
+---
+title: "Obsidian 시작 가이드 — 30분 만에 1인 지식 시스템 만들기"
+date: "2026-04-29 22:50"
+updated: "2026-04-29 22:50"
+slug: "obsidian-getting-started"
+description: "Obsidian 처음 쓰는 사람을 위한 30분 셋업 가이드. 설치·기본 단축키·추천 플러그인 10개·Dataview 레시피 5개·제텔카스텐 적용·Claude MCP 연동까지 실사용 기준으로 정리했다."
+tags: ["Obsidian", "지식관리", "노트앱", "제텔카스텐", "Dataview", "생산성"]
+thumbnail: "/images/obsidian-getting-started/og.png"
+featured: false
+category: "지식관리"
+topic_cluster: "지식관리"
+cluster_role: cluster
+---
+
+**결론부터: Obsidian은 로컬 마크다운 노트앱이다. 30분 셋업이면 평생 쓸 수 있는 1인 지식 시스템이 완성되고, 비용은 0원이다.** 공식 사이트: [obsidian.md](https://obsidian.md).
+
+Obsidian을 1년 넘게 vault 한 곳에 블로그 SEO 관제·독서 노트·일일 회고를 모두 넣어 운영해 본 후기다. 설치부터 추천 플러그인 10개, Dataview 레시피 5개, 제텔카스텐 적용, Claude MCP 연동까지 — 처음 30분에 결정할 것들만 추렸다.
+
+## Obsidian이 Notion보다 나은 점은?
+
+핵심 차이는 4가지다.
+
+| 항목 | Obsidian | Notion |
+|---|---|---|
+| 저장 위치 | **로컬 .md 파일** | 클라우드 DB |
+| 가격 | 개인 사용 무료 | 유료 ($10/월~) |
+| 속도 | 즉시 (네이티브) | 1~2초 로딩 |
+| 백링크·그래프 | ✅ 기본 탑재 | ❌ |
+| DB 쿼리 | Dataview 플러그인 | 기본 탑재 |
+| 협업 | ⚠️ 약함 | ✅ 강함 |
+
+**가장 큰 차이는 "내 글이 내 디스크에 있다"는 점이다.** Notion은 회사가 망하면 데이터가 사라지지만, Obsidian의 `.md` 파일은 텍스트 에디터 어떤 것으로도 열린다. 10년 뒤에도 읽을 수 있는 포맷이 1인 지식관리에서 가장 중요했다.
+
+DB 기능이 핵심이거나 팀 협업이 우선이면 <Link href="/ko/blog/notion-ai-guide">Notion AI 활용법</Link> 또는 <Link href="/ko/blog/craft-vs-notion">Craft vs Notion 비교</Link>를 먼저 보는 편이 낫다. Obsidian은 "개인 지식 그래프"에 특화돼 있다.
+
+## 30분 셋업 — 설치부터 첫 vault까지
+
+설치 순서다.
+
+1. [obsidian.md](https://obsidian.md)에서 macOS·Windows·Linux 빌드 다운로드 (또는 iOS·Android 앱)
+2. 실행 → "Create new vault" → vault 폴더 위치 선택 (iCloud·Dropbox 폴더 안에 두면 자동 동기화)
+3. vault 이름은 `notes` 같은 단순한 영문으로 — 나중에 백업 스크립트가 편해진다
+4. Settings → Editor → Default view: "Live preview" (마크다운+미리보기 동시)
+5. Settings → Files & Links → Default location for new attachments: `99. Attachments` 폴더 지정
+
+vault는 **"분류 전 임시 → 분류 후 영구"** 2단 구조가 가장 오래 갔다. 처음에 폴더를 잘게 나누면 결국 비어 있는 폴더가 늘어난다.
+
+![Obsidian vault 표준 폴더 레이아웃 — 1인 지식관리 6단 구조](/images/obsidian-getting-started/01-vault-structure.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  실제 1년 운영 vault — `00.Inbox`로 모든 노트가 들어오고, 매주 `02.Projects`/`03.Notes`로 이관
+</figcaption>
+
+기본 단축키 5개만 알면 시작은 충분하다.
+
+- `Cmd+N` 새 노트 / `Cmd+O` 노트 검색
+- `Cmd+E` 편집 ↔ 미리보기 전환
+- `[[` 입력으로 **백링크** (이게 Obsidian의 핵심)
+- `Cmd+P` 명령 팔레트 (모든 기능 검색)
+- `Cmd+Shift+F` vault 전체 텍스트 검색
+
+처음 일주일은 노트를 잘게 쪼개기보다 **"하루 한 개 데일리 노트"**부터 쌓아 보는 편을 권한다. 백링크가 자연스럽게 늘면서 그래프 뷰가 의미를 갖기 시작한다.
+
+## 꼭 설치해야 할 플러그인 10개는?
+
+Obsidian은 코어가 가볍고 플러그인으로 확장한다. Settings → Community plugins → Browse에서 검색·설치하면 된다.
+
+![Obsidian 필수 커뮤니티 플러그인 10개 — 무료 우선](/images/obsidian-getting-started/02-plugin-top10.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  무료 플러그인만으로도 1년 이상 vault 운영이 가능하다
+</figcaption>
+
+설치 우선순위는 다음과 같다.
+
+1. **Dataview** — 노트를 DB처럼 쿼리. 다음 절에서 다룬다
+2. **Templater** — 데일리 노트·회의록 템플릿 자동 삽입
+3. **Calendar** — 좌측 사이드바 달력에서 데일리 노트 점프
+4. **Periodic Notes** — 주간·월간 노트 자동 생성
+5. **Kanban** — `.md` 파일을 보드 뷰로 보기
+6. **Excalidraw** — vault 안에 손글씨 다이어그램
+7. **Tag Wrangler** — 태그 일괄 변경·통합
+8. **Outliner** — 리스트 단축키 (Workflowy 스타일)
+9. **Style Settings** — 테마 색상·폰트 미세 조정
+10. **Obsidian Git** — 자동 commit + GitHub 백업
+
+이 10개로 1년 이상 무리 없이 굴러간다. 유료는 공식 [Obsidian Sync](https://obsidian.md/sync)($10/월) 정도가 실용적이지만, iCloud나 Git 백업으로 거의 대체 가능하다.
+
+## Dataview 레시피 5개 — DB처럼 쿼리하기
+
+Dataview가 Obsidian을 "그냥 노트앱"에서 "1인 지식 OS"로 만든다. 마크다운 코드 블록 안에 SQL-like 쿼리를 쓰면 결과가 실시간 표·리스트로 렌더링된다.
+
+![Dataview 레시피 5종 — 한 줄 쿼리 예시](/images/obsidian-getting-started/03-dataview-recipes.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  vault 안에서 그대로 복붙해 쓸 수 있는 5가지 쿼리
+</figcaption>
+
+가장 자주 쓰는 5개다.
+
+```dataview
+TABLE file.ctime AS "작성일"
+FROM ""
+WHERE file.cday >= date(today) - dur(7 days)
+SORT file.ctime DESC
+```
+
+이 한 줄이 **"이번 주 새로 쓴 노트 전부"** 대시보드가 된다. 회고 노트 상단에 박아 두면 일주일 흐름이 한눈에 보인다.
+
+블로그 SEO 관제용으로 발행 글에 `topic_cluster: AI 도구 비교` 같은 frontmatter를 넣어 두면, `GROUP BY topic_cluster`로 클러스터별 글 수를 즉시 집계할 수 있다. <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택</Link>의 7번째 도구가 정확히 이 역할이다. 모바일 캡처·요약 자동화까지 함께 묶고 싶다면 <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple 단축어 AI 자동화 5가지</Link>의 "스크린샷 → vault 저장" 레시피와 결합하는 흐름을 추천한다.
+
+## 제텔카스텐 적용 — 원자 노트 → 영구 노트
+
+Obsidian은 제텔카스텐(Zettelkasten) 구현에 가장 적합한 도구로 평가받는다. 핵심은 3단 구조다.
+
+| 단계 | 위치 | 특징 |
+|---|---|---|
+| **1. Fleeting Note** | `00. Inbox/` | 즉석 메모. 오타·약어 OK |
+| **2. Literature Note** | `01. Reference/` | 책·아티클 인용 + 출처 |
+| **3. Permanent Note** | `03. Notes/` | 한 노트 = 한 아이디어. 자기 언어로 |
+
+규칙은 두 가지뿐이다. **(1) 한 노트에 한 아이디어만, (2) 노트끼리 `[[백링크]]`로 연결.** 이 두 가지를 지키면 6개월 후 vault 검색 한 번으로 글 한 편 분량의 재료가 튀어나온다.
+
+처음에는 영구 노트를 매주 1~2개만 만들어도 충분하다. 양보다 **"미래의 내가 검색했을 때 발견 가능한 형태"**가 중요하다. 태그는 최대 3개로 제한하면 정리 비용이 줄어든다.
+
+## Claude MCP 연동 — AI가 vault를 읽게 하기
+
+Obsidian의 vault는 그냥 `.md` 파일 모음이라, Claude Desktop에 [Obsidian MCP 서버](https://github.com/StevenStavrakis/obsidian-mcp)를 연결하면 **Claude가 내 vault 전체를 직접 검색·읽기·쓰기 할 수 있다**. 글쓰기 워크플로우가 한 단계 가벼워진다.
+
+설정은 `claude_desktop_config.json`에 vault 경로를 넣으면 끝이다. 이후 Claude에게 "지난주 데일리 노트에서 블로그 아이디어 3개 뽑아 줘" 같은 요청을 그대로 던질 수 있다. MCP 전반에 익숙하지 않다면 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 활용법</Link>에서 셋업·권한 모델부터 다뤘다.
+
+리서치 자체는 <Link href="/ko/blog/perplexity-ai-guide">Perplexity AI 사용법</Link>으로 모으고, 정리는 vault에 쌓는 식의 분업이 효율적이다. 도구 전체 지도는 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 완벽 가이드</Link>에 정리해 뒀다.
+
+## FAQ
+
+### Obsidian은 정말 무료인가요?
+
+개인 사용은 무료다. 상업적 사용(회사 자산으로 vault 운영)만 Obsidian for Work 라이선스($50/유저/년)를 요구한다. 1인 부업·블로그·개인 지식관리 범위에서는 모든 코어 기능과 커뮤니티 플러그인을 무료로 쓸 수 있다.
+
+### 동기화는 어떻게 하나요?
+
+iCloud Drive·Dropbox 폴더 안에 vault를 두면 무료로 자동 동기화된다. 충돌 위험을 줄이려면 공식 Obsidian Sync($10/월) 또는 Obsidian Git 플러그인 + GitHub 무료 저장소가 안정적이다. 모바일까지 쓴다면 iCloud가 가장 마찰이 적다.
+
+### 모바일에서도 쓸 수 있나요?
+
+iOS·Android 앱이 정식으로 있다. PC 버전과 동일한 vault에 동일한 플러그인이 작동한다(일부 데스크톱 전용 플러그인 제외). 출근길에 데일리 노트만 열어 메모 → 저녁에 데스크톱에서 정리하는 흐름이 가장 효율적이었다.
+
+### Markdown을 모르는데 시작해도 될까요?
+
+Obsidian은 "Live Preview" 모드에서 굵은 글씨·헤딩·리스트를 워드프로세서처럼 바로 보여준다. 단축키 3개(`Cmd+B` 굵게, `Cmd+I` 기울임, `[[` 백링크)만 알면 처음 한 주는 충분하다. 마크다운 자체는 일주일이면 익숙해진다.
+
+### 데이터 백업은 어떻게 하나요?
+
+vault 폴더 자체가 백업 단위다. 가장 안전한 조합은 **(1) iCloud 동기화 + (2) Obsidian Git 플러그인으로 GitHub 비공개 저장소 push + (3) 월 1회 외장 디스크 복사**다. `.md`는 평문이라 어떤 백업 도구로도 처리 가능하다는 게 클라우드 노트앱 대비 큰 안전 마진이다.
+
+처음 30분은 vault 만들고 Dataview·Templater 두 개만 깔아 보는 게 충분하다. 일주일치 데일리 노트가 쌓이면 그래프 뷰가 의미를 갖기 시작하고, 그때부터 제텔카스텐과 백링크가 비로소 효용을 낸다. 첫 주는 양보다 **"꾸준히 한 자리에 쌓는다"**는 감각만 잡으면 된다.
