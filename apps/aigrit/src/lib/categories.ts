@@ -50,6 +50,10 @@ export const CATEGORY_META: Record<string, CategoryMeta> = {
     slug: "knowledge",
     description: "Obsidian·Craft·Notion 등 PKM 도구 비교",
   },
+  수익화: {
+    slug: "monetization",
+    description: "AI 부업·블로그 수익화·AdSense 등 실전 수익 경로",
+  },
 };
 
 /** Derive a URL-safe kebab slug for categories not registered in CATEGORY_META. */
