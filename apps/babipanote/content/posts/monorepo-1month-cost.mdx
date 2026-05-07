@@ -1,0 +1,67 @@
+---
+title: "Turborepo 모노레포 한 달 비용 명세 — 사이트 2개 0원으로 운영하기"
+date: "2026-05-07 11:24"
+slug: "monorepo-1month-cost"
+description: "AIGrit과 babipanote, 같은 모노레포에서 굴리는 사이트 2개의 한 달치 인프라 비용을 항목별로 공개. Vercel free tier·GitHub Free·도메인까지 — 실제로 청구된 금액은 얼마였나."
+tags: ["buildlog", "lesson", "Turborepo", "Vercel", "비용", "1인빌더", "인프라"]
+thumbnail: "/images/monorepo-1month-cost/og.png"
+featured: false
+---
+
+AIGrit + babipanote 한 달 인프라 비용 — **약 13달러**, 절반 이상이 도메인 연납이라 월로 떼면 **사실상 0원**. [지난 글](/blog/turborepo-brand-config)에서 `brand.config.ts`로 사이트 2개를 묶는 구조를 정리했다면, 이번엔 한 달 굴리고 받은 청구서 이야기.
+
+## 한 달 청구서 — 결론부터
+
+| 항목 | 한 달 비용 |
+|---|---|
+| Vercel Hobby | $0 |
+| GitHub Free | $0 |
+| aigrit.dev | 연 $12 (월 $1) |
+| babipanote.com | 연 $10~$20 (월 약 $1) |
+| GA4 · Giscus · IndexNow | $0 |
+| **합계 (월 환산)** | **약 $2 / 월** |
+
+표를 비율로 풀어보면 도메인 두 건이 **합계의 100%**, 호스팅·저장소·분석은 정확히 0원이다. 카드에 찍힌 건 **첫 달 도메인 등록비뿐**, 나머지 11개월 0원. 다만 **인프라 비용** 한정 — 모노레포 세팅·글 14편·디자인 시스템에 들어간 시간을 시급으로 환산하면 수백 배. "0원"은 절반의 진실이다.
+
+## 비용 항목 5가지
+
+블로그 모노레포의 청구처는 호스팅·저장소·도메인·DB·분석 다섯. unpack-blogs가 돈 쓴 건 **도메인뿐**. 정적 MDX·Giscus·GA4 조합이면 **동적 백엔드 없이 비용은 0에 수렴한다.**
+
+## Vercel Free 한계
+
+[Vercel Hobby](https://vercel.com/pricing)는 1인 사이드 프로젝트에 가장 후하다.
+
+| 항목 | Hobby | 한 달 사용량 |
+|---|---|---|
+| Bandwidth | 100GB / 월 | 5~10GB |
+| Build Minutes | 6,000분 / 월 | 200~400분 |
+
+Vercel 대시보드 Usage 패널을 열면 Bandwidth 게이지는 한 달 내내 막대 한 칸을 채우지 못하고 끝났다. 한도의 **5~10%**, 10배 돼도 안전권. 다만 Hobby **상업적 사용 금지** 약관 때문에 AIGrit처럼 광고 게재 사이트는 트래픽이 늘면 Pro($20/월)로 가야 한다. push 한 번에 두 사이트가 빌드돼도 Turborepo 캐시로 두 번째는 거의 0초.
+
+## 도메인과 free 도구 라인업
+
+aigrit.dev 연 $12, babipanote.com $10~$20. [Cloudflare Registrar](https://www.cloudflare.com/products/registrar/)는 도매가(약 $9.7) 마진 0. **분리할 가치는 있다** — 묶으면 검색엔진이 한 권위로 평가, 분리하면 백링크·CTR이 독립으로 쌓인다.
+
+도메인 외엔 다 무료. [GitHub Free](https://github.com/pricing) public repo·Actions 무제한, Giscus는 Disqus($11/월) 대체, GA4·IndexNow free.
+
+## 다음 한 달 — 어디서 깨질까
+
+[지난달 수익 보고](/blog/aigrit-month1-revenue)에서 다뤘듯 트래픽이 늘면 구조가 깨진다. 가장 먼저 찍힐 건 **Vercel Pro $20/월** — AIGrit 광고 매출이 의미 있게 되면 약관상 강제. 그다음 Plausible $9/월, 뉴스레터 시 Buttondown. Pro는 비용보다 "수익이 났다는 증거"다. [런칭 첫 주 회고](/blog/week1-sprint-two-blogs)에서 사이트 2개를 묶은 이유는 유지보수 시간이었는데, 비용도 0이라 결정이 더 가볍다.
+
+## 자주 묻는 질문
+
+### 모노레포라서 더 비싸지지는 않나요?
+
+반대다. Vercel은 **계정 단위**로 한도를 묶어 사이트를 따로 굴려도 묶어도 한도는 같다. GitHub도 repo 수가 아니라 Actions 분 수 기준이라 모노레포 보너스는 없다.
+
+### 광고 수익이 나면 무조건 Pro로 올려야 하나요?
+
+Hobby 약관 "상업적 사용 금지" 때문에 AdSense·제휴처럼 사이트가 직접 매출을 내면 Pro로 가는 게 맞다. babipanote처럼 광고 없는 사이트는 한도(100GB) 안이면 Hobby OK.
+
+### 도메인을 더 싸게 사는 법이 있나요?
+
+Cloudflare Registrar가 도매가(.com 약 $9.7). 신규 등록 불가, **이전(transfer)** 만 받는다. Namecheap·Porkbun 첫 해 할인가로 사고 60일 후 옮기는 패턴인데, 한 푼 아끼는 수고가 시급에 맞는지는 따져볼 일.
+
+## 마무리
+
+콘텐츠와 인프라 비용의 **불균형**이 인상적이다. 수백 시간 들어갔는데 카드엔 도메인 두 개 값만. free tier가 후한 시대에 1인 빌더의 진짜 비용은 시간. `brand.config.ts` 같은 구조에 시간을 미리 투자하는 의미는 — 두 번째, 세 번째 사이트의 한계비용이 0이 되니까.
