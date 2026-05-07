@@ -1,0 +1,69 @@
+---
+title: "GSC 색인 추적 시스템 1주 운영 — 14편 중 7편이 0 impression이었다"
+date: "2026-05-07 11:24"
+slug: "gsc-tracking-system-1week"
+description: "GSC 색인 추적 시스템을 Obsidian 대시보드에 붙여 1주 돌렸더니 14편 중 7편이 0 impression이었다. 도메인 historical 데이터 흔적까지 발견한 빌더 저널."
+tags: ["buildlog", "lesson", "GSC", "SEO", "1인빌더", "Obsidian", "블로그 운영"]
+thumbnail: "/images/gsc-tracking-system-1week/og.png"
+featured: false
+---
+
+import Link from "next/link";
+
+지난 2주 <Link href="/blog/obsidian-seo-dashboard">Obsidian SEO 대시보드</Link>에 GSC 색인 추적을 붙였다. 1주 돌리고 펼치니 14편 중 7편이 0 impression. 그날 밤, 도메인 historical 흔적까지 발견했다.
+
+## 자동화한 이유
+
+처음엔 손으로 했다. [Google Search Console](https://search.google.com/search-console)에서 URL 검사·색인 요청, 며칠 뒤 재확인. 14편이 되니 매번 14개 붙여넣는 게 우스웠다.
+
+진짜 결심은 다른 데서. 어떤 글은 일주일 지나도록 색인 상태를 안 봤다. "느낌상 잘 되겠지"가 가장 위험하다. 7편이 0인 채로 한 달이 흐른다.
+
+## 시스템 구조
+
+```
+[GSC URL Inspection API]
+        ↓ (1일 1회 cron)
+[Python 스크립트]
+        ↓ (frontmatter patch)
+[Obsidian Pipeline 카드]
+        ↓ (Dataview 쿼리)
+[06. Dashboard.md]
+```
+
+URL Inspection 엔드포인트가 핵심. "색인됨 / 발견됨 미색인 / 크롤링됨 미색인 / 미발견"을 돌려준다. 14개에 호출해 결과를 각 카드 frontmatter `gsc_status`, `impressions_7d`로 박고 Dataview가 펼친다.
+
+Indexing API는 [지금은 일반 페이지엔 deprecated](https://developers.google.com/search/blog/2022/02/spammy-indexing-api-use). 확인은 자동, 요청은 여전히 손이다. IndexNow도 붙였지만 Google은 받지 않는다.
+
+## 1주차 결과 — 0 impression 7편
+
+대시보드를 펼치니 빨간 줄이 7개. 14편 중 7편이 7일 노출 0회였다. "색인됨" 11편, "발견됨 미색인" 3편. 색인됐는데 노출이 0이면 검색엔진이 "보여줄 쿼리를 못 찾겠다"고 판단한 거다.
+
+다섯 편은 제목이 추상적이었다 — "왜 만들었는가", "1주차 회고"는 검색하는 사람이 없다. 두 편은 키워드는 있었지만 본문 1,200자 아래. 짧은 글은 색인은 되지만 랭킹을 못 얻는다.
+
+뜻밖이었던 건 "잘 될 것 같다"고 골랐던 리뷰 글보다 별 생각 없이 적은 도구 비교 글이 더 노출된 점. <Link href="/blog/sprint-week1-review">Sprint 1주차 회고</Link>에 적었던 "트래픽 0에 가깝다"의 진짜 그림이었다.
+
+## 예상 못한 발견 — 과거 도메인 흔적
+
+GSC "쿼리" 탭을 우연히 열었다. 본 적 없는 키워드 — 상가, 분양, 임대.
+
+어 이게 왜 살아있지. 이 도메인은 몇 년 전 짧게 워드프레스 부동산 리뷰 사이트였다. 진작 내리고 DNS도 새로 잡았는데, GSC가 기억하고 있었다. 색인 URL 리포트에는 `/category/sangga/`, `/wp-content/uploads/...`, `/?p=237` 같은 워드프레스식 슬러그가 수십 개 잔존, 일부는 여전히 "유효" 상태로 잡혀 있었다.
+
+무서운 점 둘. 그 페이지로 들어오는 사람은 100% 잘못 들어와 즉시 뒤로가기. 그리고 "이 도메인은 부동산"이라고 학습된 잔재가 새 콘텐츠 분류에 영향을 줄 수 있다.
+
+## 처치 — 410 Gone
+
+옵션 셋. 404 방치(수개월), 301(사용자에게 사기), 410 Gone + GSC 제거 도구. 3번. Next.js 미들웨어에서 워드프레스식 슬러그(`/category/`, `/wp-content/`, `/?p=`)를 매칭해 410 반환, GSC URL 제거 도구로 즉시 차단. 6개월 임시 차단 사이 봇이 영구 색인 해제를 처리할 시간을 번다.
+
+1시간 안 걸렸다. 시스템이 없었으면 흔적 자체를 몰랐을 거다. 자동화의 진짜 가치는 — **시간 절감이 아니라, 안 보이던 걸 보이게 한다**.
+
+## W19에 적용할 변경
+
+첫째, 발행 직전 체크리스트에 "제목에 검색 의도 키워드가 있는가" 강제. <Link href="/blog/turborepo-brand-config">Turborepo brand.config</Link> 발행 워크플로우에도 반영.
+
+둘째, 발행 7일 시점 자동 알림. "7일째 0 impression"이면 보강 큐로.
+
+셋째, 도메인 historical 잔재 점검 영구 항목화. 도메인을 새로 사거나 용도 변경할 때 GSC 쿼리 리포트의 "처음 보는 키워드"는 무조건 훑는다.
+
+진짜 ROI는 색인 모니터링이 아니라, "내 콘텐츠가 검색에서 어떻게 보이는지"를 매주 강제로 마주하게 한 점이었다. 시스템 없이는 한 달 더 모를 뻔했다.
+
+다음 주에 다시 적는다.

@@ -1,0 +1,47 @@
+---
+title: "Sprint 2주차 회고 — 발행 4편, SNS 0편, GSC가 알려준 진실"
+date: "2026-05-07 11:24"
+slug: "sprint-week2-review"
+description: "unpack-blogs Sprint 2주차 회고. 발행 4편은 챙겼는데 SNS 자산은 0편, GSC는 14편 중 7편이 0 impression이라고 알려줬다. 발행 페이스가 후속 작업을 추월한 한 주의 솔직한 정리."
+tags: ["essay", "회고", "Sprint", "1인빌더", "SEO", "발행"]
+thumbnail: "/images/sprint-week2-review/og.png"
+featured: false
+---
+
+새벽 2시. W18(2026-04-27 ~ 05-03) 회고. 열어둔 탭 세 개 — GitHub 커밋, GSC Performance, 텅 빈 SNS 폴더. 셋이 한꺼번에 뜨자 이번 주가 정리됐다.
+
+**발행 4편은 했다. SNS 자산 0편, GSC는 14편 중 7편이 안 보인다고 알려줬다.** 자축하다 뒤 두 숫자에 정신 차렸다.
+
+## 이번 주 발행 — 4편, 룰은 다 지켰다
+
+5일간 AIGrit 3편 + babipanote 1편. 평균 글당 3시간 살짝 안 들었다. <Link href="/blog/sprint-week1-review">1주차 회고</Link>의 "3.5 → 3시간" 목표 달성 — 배치 캡처 + 구조 먼저 잡기 효과다.
+
+룰도 다 지켰다 — `date` 실제 KST, 1,500자+, 내부 링크 3~5개, broken image 0, Vercel 빌드 4번 성공. <Link href="/blog/time-management-solo-builder">1인 빌더의 시간 관리</Link>에서 적은 "발행 의식"이 자리 잡았다. 문제는 발행이 끝이 아니라는 거다. 발행 4편 옆에 IG 0·X 0이 나란히 놓이는 순간, 격차는 변명할 수 없게 또렷해졌다.
+
+## SNS 자산 0% — 발행이 "끝"으로 느껴진 문제
+
+룰은 글 1편당 IG 5(각 5장+) + Threads 5 + X 5. 4편이면 IG 20·X 20. **현실 0.** `~/dev/sns/` 빈 폴더.
+
+이유는 한 줄 — **빌드 성공에서 도파민이 끊겼다.** 캐러셀→IG→X 예약은 따로 의식해야 하는데 머리는 다음 글로 가 있었다. 시간 부족이 아니라 **워크플로우 종료 지점이 잘못 잡힌 문제**. "발행 = 완료"가 아니라 "발행 + SNS = 완료"로 정의를 바꿔야 한다.
+
+## GSC 첫 분석 — 14편 중 7편이 0 impression
+
+GSC Performance 16일치. aigrit.dev 14클릭/280노출, babipanote.com 18/307. 합 32/587. 1주차 0은 벗어났다.
+
+글 단위로 보면 얘기가 달라진다. Performance 화면에서 페이지별로 줄을 세워보니 **14편 중 7편이 0 impression.** 정확히 절반이 검색결과에 한 번도 안 떴다는 뜻이다. 5편은 발행 7일 미만(색인 미완료 가능성), 2편은 7일+인데도 0 — 이쪽이 신경 쓰인다. [Google Search Console 공식 문서](https://support.google.com/webmasters/answer/9128668)의 URL Inspection으로 한 편씩 찍어야 답이 나오는데, 이번 주는 거기까지 못 갔다.
+
+## 도메인 historical 흔적
+
+GSC 키워드에 부동산 분양·모델하우스 쿼리가 babipanote.com 상위에 잡혔다. 이 도메인은 [Vercel](https://vercel.com/) 배포 전 워드프레스 부동산 사이트로 운영되다 만료된 걸 인수한 거라 이전 운영자 historical 데이터가 살아있다는 뜻. 단점은 잘못 노출 → CTR 0%, 장점은 DA 출발이 0이 아닐 수 있다는 점. 이 노이즈 인지가 이번 주 가장 의외의 발견.
+
+## 다음 주(W19) 우선순위 3가지
+
+1. **0 impression 7편 색인 점검** — 7일+ 글 2편 GSC URL 검사. 미색인이면 요청, 색인됐는데 0이면 title·description 재점검.
+2. **SNS 자산 backfill** — 4편+1주차 일부 = 5~6편치를 한꺼번에. <Link href="/blog/aigrit-month1-revenue">AIGrit 첫 달 수익 회고</Link>에서도 봤듯 검색+SNS 양쪽이 굴러야 한다.
+3. **모니터링 자동화 1차** — GSC + GA4 + Vercel을 한 화면 마크다운으로 떨어뜨리는 스크립트.
+
+## 마치며
+
+발행 4편은 성과다. 1주차 2편 대비 두 배. 그런데 **발행 외 모든 후속 작업이 페이스를 못 따라간다.** SNS 0%, GSC 점검 0%, 자동화 0%.
+
+한 줄 진단 — "글 잘 쓰는 운영자에서, 발행한 글이 살아있는지 끝까지 책임지는 운영자로." 스프린트 절반 전에 짚어서 다행이다. W19에서 만나자.
