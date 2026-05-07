@@ -184,7 +184,7 @@ def render_babipanote(title, category, date_str):
 
 
 # === AIGrit renderer ===
-def render_aigrit(title, category, subtitle):
+def render_aigrit(title, category, subtitle, lang="ko"):
     img = gradient(AG["bgTop"], AG["bgBot"])
     draw = ImageDraw.Draw(img)
 
@@ -222,7 +222,8 @@ def render_aigrit(title, category, subtitle):
               font=font("pretendard_semi", 24))
 
     # Tagline (Pretendard Regular 14 Slate)
-    draw.text((60, 556), "AI의 알맹이만 남긴다",
+    tagline = "AI의 알맹이만 남긴다" if lang == "ko" else "Only the essence of AI"
+    draw.text((60, 556), tagline,
               fill=AG["slate"], font=font("pretendard_reg", 14))
 
     # Domain right-align
@@ -312,6 +313,18 @@ def main():
         img.save(out, "PNG", optimize=True)
         kb = out.stat().st_size / 1024
         print(f"✓ aigrit/{p['slug']}/og.png  ({kb:.1f}KB)")
+        count += 1
+
+    # AIGrit EN — title·subtitle·category use raw frontmatter strings (no overrides)
+    # Saved as og-en.png alongside og.png in the same image folder.
+    for p in posts.get("aigrit_en", []):
+        out_dir = base / "aigrit" / "public" / "images" / p["slug"]
+        out_dir.mkdir(parents=True, exist_ok=True)
+        img = render_aigrit(p["title"], p["category"], p["subtitle"], lang="en")
+        out = out_dir / "og-en.png"
+        img.save(out, "PNG", optimize=True)
+        kb = out.stat().st_size / 1024
+        print(f"✓ aigrit/{p['slug']}/og-en.png  ({kb:.1f}KB)")
         count += 1
 
     print(f"\n✅ Generated {count} OG images.")
