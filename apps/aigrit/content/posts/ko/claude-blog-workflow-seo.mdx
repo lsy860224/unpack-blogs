@@ -1,0 +1,113 @@
+---
+title: "Claude로 블로그 글쓰기·발행·SEO 추적까지 — 1인 운영자의 자동화 SOP"
+date: "2026-05-06 13:17"
+slug: "claude-blog-workflow-seo"
+description: "Claude 블로그 워크플로우와 SEO 자동화를 결합한 1인 운영자 SOP. 초안·발행·색인·추적 4단계를 30분에 끝내는 실측 가이드와 도구 통합 패턴, 트러블슈팅 사례까지 공개합니다."
+tags:
+  [
+    "Claude",
+    "Claude Code",
+    "블로그 워크플로우",
+    "SEO 자동화",
+    "1인 빌더",
+    "콘텐츠 자동화",
+    "AI 자동화",
+  ]
+thumbnail: "/images/claude-blog-workflow-seo/og.png"
+featured: false
+category: "자동화"
+topic_cluster: "생산성 자동화"
+cluster_role: cluster
+---
+
+**결론부터: Claude로 짠 블로그 워크플로우는 글 1편 발행을 30분에 끝낸다. 핵심은 도구 통합이지 도구 자체가 아니다.**
+
+블로그 1편에는 키워드 조사·구조·초안·OG 이미지·내부 링크·성과 추적이 따라옵니다. 1인 운영자가 매일 손으로 거치면 글보다 운영에 시간이 더 들어갑니다. 이 글은 Claude Desktop·Claude Code·Obsidian·GSC·IndexNow를 한 줄로 엮어 6주 운영하며 정착시킨 SOP입니다. 전체 흐름은 **초안 → 발행 → 색인 → 추적** 4단계로 직선화되어 있고, 각 단계는 도구 1~2개로 닫혀 있어 다음 단계로 전달되는 산출물이 1개뿐입니다.
+
+## 워크플로우 4단계 한눈 — 초안·발행·색인·추적
+
+블로그 운영을 4단계로 쪼개고 각 단계에 도구 1~2개만 배치합니다. 단계가 늘수록 깨질 확률이 커지므로 단계 자체를 줄이는 것이 자동화의 첫 원칙입니다.
+
+| 단계 | 도구 | 소요 | 산출물 |
+|---|---|---|---|
+| 1. 초안 | Claude Desktop / Claude Code | 20분 | MDX 초안 |
+| 2. 발행 | Git + Vercel + IndexNow | 5분 | 라이브 URL |
+| 3. 색인 | GSC URL Inspection API | 자동 | 일일 리포트 |
+| 4. 추적 | Obsidian + GSC export | 10분 | 다음 글 키워드 |
+
+이미지 리사이즈·OG 합성·RSS·sitemap 갱신은 빌드 파이프라인이 처리합니다. 사람 손이 닿는 지점은 4곳뿐입니다. 같은 사고를 다른 작업으로 확장한 사례는 <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택 10가지</Link>에 모았습니다. 정적 사이트(Next.js·Astro·Hugo) 전제지만 워드프레스·노션 호스팅에서는 git push 자리에 webhook이 들어갈 뿐 구조는 같습니다.
+
+## Step 1: Claude로 초안 30분 — 키워드 → 구조 → FAQ
+
+초안 단계는 Claude Desktop과 Claude Code의 역할 분담이 핵심입니다. Claude Desktop은 [Anthropic 공식 앱](https://www.anthropic.com/)으로 MCP 연결과 긴 대화에 강하고, [Claude Code](https://github.com/anthropics/claude-code)는 CLI에서 파일 시스템·git을 직접 다룹니다. 결과적으로 "구조 잡기와 검색 의도 분석"은 Desktop, "본문 생성과 파일 쓰기"는 Code로 분리되어 한 채팅 안에서 둘이 섞이지 않습니다.
+
+순서는 이렇습니다.
+
+1. **키워드 입력 — Claude Desktop**: GSC에서 노출은 있지만 클릭이 적은 쿼리 1개를 가져와 "이 키워드로 H2 5~7개와 FAQ 3개 구조를 제안해줘"로 시작합니다.
+2. **본문 초안 — Claude Code**: 합의된 구조를 `.md`에 적어두고 "이 구조 그대로 본문 2,500자, 톤은 기존 글 3편 참고"로 지시합니다. 기존 글 경로를 컨텍스트에 넣으면 톤·문장 길이가 맞춰집니다.
+3. **FAQ 자동 추출**: 본문 완성 후 "검색 의도가 명확한 질문 5개로 FAQ를 만들어줘. 답변 40~80자"로 마무리합니다. JSON-LD FAQPage 스니펫을 노린 단계로 색인 후 1주일 안에 리치 결과로 잡히는 경우가 많습니다.
+
+여기까지 평균 20~25분, 글의 70%가 완성됩니다. 다른 채널로 확장한 패턴은 <Link href="/ko/blog/notion-ai-guide">Notion AI 가이드</Link>에 있습니다. 남은 시간은 사람이 합니다 — 데이터 검증, 본인 사례 1~2개 삽입, 문장 다듬기. 1인 운영자의 경쟁력은 "본인이 실제로 했는가"라는 1차 데이터입니다.
+
+## Step 2: Git → Vercel 자동 발행 + IndexNow ping
+
+발행은 git push 한 번입니다. `apps/{블로그}/content/posts/`에 MDX를 넣고 커밋하면 Vercel이 1~2분 안에 라이브로 올립니다. 무료 100GB 대역폭·빌드 6,000분이면 1인 블로그 2~3개에 한도 부담이 없습니다. 파이프라인 순서는 **로컬 commit → GitHub push → Vercel 빌드 트리거 → CDN 배포 → 발행 hook**으로, 사람이 손대는 지점은 commit 메시지 한 줄뿐입니다.
+
+발행 직후 자동으로 도는 작업은 4가지입니다.
+
+- **OG 카드 생성**: `public/images/{slug}/og.png`가 빌드 단계에서 SVG 템플릿 기반으로 합성됩니다. 사이트별 브랜드 컬러와 글 제목이 자동 합성되어 수동 작업이 사라집니다.
+- **sitemap·RSS 갱신**: Next.js의 `sitemap.ts`가 새 MDX를 감지해 `<lastmod>`를 자동 갱신합니다.
+- **IndexNow ping**: 발행 hook이 [IndexNow 표준](https://www.indexnow.org/)으로 새 URL을 전송합니다. Bing·Yandex가 평균 6시간 안에 색인합니다. Google은 미채택이라 별도 절차가 필요합니다.
+- **GSC 큐 적재**: 커밋 메시지가 `post:` 프리픽스면 발행 hook이 GSC URL Inspection 호출 큐에 URL을 추가합니다.
+
+Google Indexing API는 2022년 이후 채용 공고·라이브 영상 외 비공개라, 색인 요청은 검증(URL Inspection)까지만 자동화하고 색인 자체는 GSC가 자율 처리하도록 둡니다. 모바일 버전은 <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple Shortcuts AI 자동화</Link>로 확장합니다.
+
+## Step 3: GSC 색인 자동 모니터링 — Obsidian 대시보드 활용
+
+발행했다고 끝이 아닙니다. Google 기준 색인까지 평균 3~7일이 걸리고, 그 사이 색인 누락이 발생하면 추적 없이 묻힙니다. Obsidian을 SEO 관제실로 두는 이유입니다. 관제실의 핵심 지표는 **발행 → 색인 대기 → 색인 완료 → 누락 알림** 4상태와, 글별 GSC 노출·클릭·CTR 3개 숫자뿐 — 이 6개만 매일 보면 됩니다.
+
+vault 안에 글마다 노트 1개씩 만들고 frontmatter에 status·indexed_at·target_query를 적습니다. Claude Code는 매일 1회 cron으로 다음을 처리합니다.
+
+- 발행 14일 이내 글에 GSC URL Inspection API를 호출해 status 조회
+- INDEXED로 바뀌면 indexed_at 기록, 7일 지나도 NOT_INDEXED면 알림 큐 적재
+- Obsidian Dataview가 "발행됨 / 색인됨 / 누락" 3개 카운터를 새로고침
+
+Notion·Sheets도 후보지만 Obsidian을 고른 이유는 로컬 파일 기반이라 Claude Code가 권한 문제 없이 직접 수정 가능하고, 노트 1,000개 이상에서도 검색이 즉시 끝나기 때문입니다. 도입은 <Link href="/ko/blog/obsidian-getting-started">Obsidian 시작 가이드</Link>, MCP 서버 적재가 부담된다면 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 가이드</Link>의 최소 구성 패턴을 권장합니다.
+
+## Step 4: 주간 GSC 분석으로 다음 글 결정
+
+운영 6주를 돌리면서 가장 큰 변화는 "다음에 뭘 쓸까"라는 질문이 사라진 것입니다. GSC 주간 export를 Claude에 넘기면 다음 글 후보가 데이터 기반으로 정렬됩니다.
+
+월요일 아침 루틴은 이렇습니다.
+
+1. GSC에서 지난 7일 쿼리·페이지 export(CSV)를 받아 vault에 저장합니다.
+2. Claude Desktop에 "노출 100회 이상이면서 클릭률 1% 미만인 쿼리 10개를 뽑고, 기존 글로 커버되는 건 글 ID, 신규 글이 필요한 건 키워드만"이라고 묻습니다.
+3. 보강 글과 신규 슬롯이 1주 분량(2~3편)으로 정리되면 Step 1로 돌아갑니다.
+
+루틴이 정착하면 글 주제가 GSC 노출 데이터로 결정되므로 상상 속 키워드를 쓰지 않게 됩니다. 노출이 발생한 쿼리는 검색 의도가 검증된 키워드이고, 클릭률이 낮다는 것은 제목·메타·내부 링크 중 하나가 비어 있다는 신호입니다. 외부 도구로 자동 트리거하려면 <Link href="/ko/blog/make-automation-guide">Make 자동화 가이드</Link>의 webhook 패턴을 GSC export에 결합하면 됩니다.
+
+## 자주 묻는 질문 (FAQ)
+
+### 글 1편 30분이 정말 가능한가요?
+
+키워드와 구조가 미리 정해진 후 본문·이미지·발행까지 측정한 시간입니다. 키워드 발굴, 본인 사례 검증, 데이터 점검까지 포함하면 1편당 1~2시간이며 30분은 자동화 영역입니다.
+
+### Claude 대신 다른 LLM도 가능한가요?
+
+가능합니다. 도구 호출 안정성과 긴 컨텍스트에서 Claude를 선택했지만 핵심은 LLM 자체가 아니라 4단계 구조입니다. GPT·Gemini로도 같은 SOP가 구성됩니다.
+
+### IndexNow가 Google 색인에도 도움이 되나요?
+
+도움이 되지 않습니다. IndexNow는 Bing·Yandex 표준이며 Google은 미채택입니다. Google 색인은 GSC 사이트 등록·sitemap 제출·내부 링크로 해결합니다.
+
+### Obsidian 없이도 워크플로우 구성이 가능한가요?
+
+가능합니다. 핵심은 frontmatter 기반 markdown 노트가 1곳에 모이는 것이고, Notion·VS Code·정적 markdown 폴더도 같은 역할을 합니다.
+
+### Vercel·GitHub 무료 플랜으로 어디까지 운영할 수 있나요?
+
+블로그 2~3개와 월 방문자 10만 명까지 Vercel 무료 100GB 대역폭과 GitHub Free 무제한 public repo로 충분합니다.
+
+## 마무리
+
+블로그 워크플로우의 진짜 비용은 글쓰기가 아니라 단계 사이의 빈틈입니다. 빈틈마다 1인 운영자는 결정을 내리고 손을 움직여야 합니다. Claude·Vercel·Obsidian을 한 줄로 엮은 이 SOP는 빈틈을 자동화로 메우고 사람의 결정 지점을 4곳으로 줄입니다. 도구를 더 늘리는 것보다 단계를 줄이는 것이 1인 운영자의 핵심 전략입니다.
