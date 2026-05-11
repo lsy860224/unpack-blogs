@@ -1,0 +1,66 @@
+---
+title: "Sprint 3주차 회고 — Claude로 만든 슬래시 커맨드가 발행 속도를 바꿨다"
+date: "2026-05-12 00:38"
+slug: "sprint-week3-review"
+description: "unpack-blogs Sprint 3주차 회고. 글쓰기보다 도구를 만드는 시간이 더 많았던 한 주. 슬래시 커맨드 4개를 정착시키고 발행 7편 — 발행 1편당 작업 시간이 절반으로 줄었다."
+tags: ["essay", "회고", "Sprint", "1인빌더", "Claude Code", "슬래시 커맨드", "워크플로우"]
+thumbnail: "/images/sprint-week3-review/og.png"
+featured: false
+---
+
+W20(2026-05-04 ~ 05-11) 회고. 노트북 시계 자정 막 넘긴 시각. 이번 주는 한 문장으로 정리된다.
+
+**글쓰기보다 도구를 만드는 시간이 더 많았다.** 그런데 결과는 정반대 — 발행 7편, Sprint 들어와 최다.
+
+## 이번 주 발행 — 7편, Sprint 최고치
+
+5일+주말. AIGrit 3편, babipanote 3편, 네이버 1편.
+
+- **AIGrit Pillar 1편 + Cluster 2편**: #13 ai-side-income-100man-roadmap(Pillar, 8,457자)이 W20의 무게중심. #14 claude-blog-workflow-seo, #15 obsidian-mcp-plugins-best-5가 같은 cluster로 따라붙었다.
+- **babipanote 3편**: gsc-tracking-system-1week, monorepo-1month-cost, 그리고 W19 회고편. W19 sprint 마무리 3편 + W20 진입 1편.
+- **네이버 1편**: #8 obsidian-30min-setup. babipa의 AIGrit 에디션 인덱싱 회복 트랙.
+
+<Link href="/blog/sprint-week2-review">2주차 회고</Link>에서 "발행 4편 옆에 IG 0·X 0이 나란히 놓인다"라고 적었다. 이번 주 발행은 두 배 가까이 늘었는데 — SNS 백로그는 여전히 손 안 댔다. 모순. 그런데 그 모순을 만든 원인이 이번 주의 진짜 이야기다.
+
+## 슬래시 커맨드 4개 — 발행 1편당 시간 50% 단축
+
+W19까지 발행 1편당 평균 3시간 살짝 안 들었다. W20에는 1.5시간 근처. 글이 단순해진 게 아니다. **도구가 작업 단위를 잘게 쪼개줬다.**
+
+이번 주 만든 슬래시 커맨드 4개.
+
+1. `/blog-review` — 자체 도메인(AIGrit + babipanote) GSC 주간 분석. 검색 콘솔 데이터 → 0 impression 글·CTR 낮은 글 자동 추출 → 마크다운 리포트.
+2. `/blog-review-naver` — 네이버 에디션 전용. C-Rank 추정·키워드 노출·인덱싱 상태 확인.
+3. `/review-post` — 발행 전 Preflight. 글자수·H2·내부 링크 broken·이미지 broken·금지어 한 번에 검증. <Link href="/blog/gsc-tracking-system-1week">GSC 추적 시스템 1주차</Link>에서 적었던 "발행 직전 체크리스트"를 자동화한 형태.
+4. `/publish-post` — 발행 자체. frontmatter 검증, sitemap 갱신 트리거, IndexNow ping까지 한 호출로.
+
+[Claude Code 공식 문서](https://docs.claude.com/en/docs/claude-code/slash-commands)에 따르면 슬래시 커맨드는 `.claude/commands/*.md` 한 장에 워크플로우를 문자 그대로 적어두면 된다. Claude가 그 명령서를 매 실행마다 읽고 실행한다. 외주 직원을 두는 감각에 가까웠다.
+
+## 도구 만든 시간 vs 글 쓴 시간 — 솔직한 비율
+
+W20 작업 시간 어림 22시간. 도구·인프라 약 11시간, 글쓰기 약 9시간, 영문 차트 약 2시간. **도구 시간이 글 시간을 추월했다.**
+
+처음엔 죄책감이 있었다. 발행자가 발행을 미루고 도구를 만든다는 느낌. 그런데 후반부터 도구가 만들어준 시간이 글쓰기로 돌아왔다. 슬래시 커맨드 정착 후 발행한 5편은 검증·발행이 모두 자동화된 상태에서 나왔다. <Link href="/blog/time-management-solo-builder">1인 빌더의 시간 관리</Link>에서 정리한 "주 1회 1시간 인프라 투자"가 한꺼번에 청산된 셈.
+
+## EN 차트 — NapkinAI 크레딧 부족 → matplotlib + Figma
+
+영문 에디션 트랙도 같이 굴렸다. en/claude-4-sonnet-vs-gpt-4o + en/claude-code-vs-cursor 본문 영문화 + 차트 6장 재제작 (각 3장씩).
+
+원래 NapkinAI 한 번에 만들 계획이었는데 무료 크레딧 소진. 6장은 유료 플랜이 필요했다. **연간 약정 vs 일회성 대안**, 후자가 답. matplotlib(코드 재현)과 Figma Master 인스턴스(디자인 일관성) 두 갈래로 분리했다. 영문 OG도 따라왔다 — `scripts/og/generate-og-all.py`에 영문 모드 추가.
+
+## 인프라 fix + 캡쳐 백로그
+
+categories.ts에서 "수익화" → "monetization" slug 매핑이 빠져 있었다. AIGrit #13 발행 직전 빌드 에러로 발견, 한 줄 수정. **/review-post가 못 잡는 영역**이라 다음 sprint에 매핑 검증을 추가할지 고민 중.
+
+캡쳐 백로그도 정리. 글마다 본문 이미지 마커는 뒀는데 실제 캡처가 미뤄지면서 누적 12~15장. Obsidian `02. Blog SEO/13. 캡처 백로그 & 이미지 가이드.md`를 신설해 글별 캡처 목록·우선순위·후처리 메모를 한 곳에 모았다.
+
+## 다음 주(W21) 우선순위
+
+1. **캡쳐 백로그 정리** — 누적 12~15장. 한 번에 캡처·후처리 세션을 잡고 끝낸다.
+2. **미발행 글 2편 마무리** — 초안만 있고 caption·내부 링크 미정인 채로 멈춘 글들.
+3. **SNS 자산 backfill 재시도** — W19 회고에서 다짐한 것 또 못 했다. 도구 만들기로 시간을 벌었으니 이번엔 SNS 시간을 의식적으로 따로 잡아야 한다.
+
+## 마치며
+
+3주차 한 줄 — **글 쓰는 사람이 자기 작업장을 정비한 한 주.** 발행 7편은 표면 숫자고, 그 아래 깔린 건 슬래시 커맨드 4개와 영문 파이프라인의 모양새다.
+
+도구를 만드는 시간이 글쓰기 시간을 추월해도 괜찮다는 걸 이번 주에 배웠다. 단 — 그 도구가 다음 주 발행으로 돌아오는지 측정해야 한다는 조건 위에서. W21에서 그 답을 본다.
