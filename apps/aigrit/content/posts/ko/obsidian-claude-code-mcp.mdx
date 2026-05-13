@@ -1,0 +1,146 @@
+---
+title: "Obsidian × Claude Code MCP 연결 — 노트와 코드를 한 워크플로우로"
+date: "2026-05-13 23:36"
+updated: "2026-05-13 23:36"
+slug: "obsidian-claude-code-mcp"
+description: "Obsidian Claude Code MCP 연결 실전 가이드. 1인 빌더가 노트 vault와 터미널 코드 베이스를 Model Context Protocol 하나로 잇고, 노트→코드·코드→노트 양방향 자동화로 GUI 없는 IDE를 만든 과정을 정리했다."
+tags: ["Obsidian", "Claude Code", "MCP", "Model Context Protocol", "AI 코딩", "1인 빌더"]
+thumbnail: "/images/obsidian-claude-code-mcp/og.png"
+featured: false
+category: "AI 코딩"
+topic_cluster: "AI 코딩"
+cluster_role: cluster
+---
+
+**TL;DR: Obsidian vault를 Claude Code의 컨텍스트로 물리고, Claude가 만든 코드·로그를 다시 같은 vault로 떨어뜨리면, 노트와 코드가 한 워크플로우로 합쳐진다. 1인 빌더에게는 사실상 GUI 없는 IDE다.**
+
+지난 두 달 동안 작업 기록과 실제 코드 베이스가 하루에도 수십 번 오갔다. Obsidian에서 기획을 적고, 터미널에서 [Claude Code](https://github.com/anthropics/claude-code)로 구현하고, 다시 Obsidian으로 돌아와 결과를 정리하는 흐름이다. 그 사이를 [Model Context Protocol](https://modelcontextprotocol.io)이 연결하면서 복붙 왕복이 거의 사라졌다. 이 글은 그 연결 구조와 설정, 실전 사용 패턴을 정리한 기록이다. MCP 자체의 개요와 다른 도구 연동은 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 활용법</Link>에 따로 정리해 두었으니, 본 글은 "Obsidian + Claude Code" 한 조합에 집중한다.
+
+## 왜 이 조합인가 — 노트와 코드의 분리 비용
+
+1인 빌더가 가장 자주 잃는 것은 "맥락"이다. 어제 적은 기획 노트, 오늘 짠 코드, 내일 정리할 회고가 서로 다른 앱에 흩어져 있으면 같은 결정을 두 번씩 내리게 된다. 기존에는 Obsidian에서 기획을 짜고, VS Code나 [Cursor](https://cursor.com)에 옮겨 코드를 작성하고, 결과를 다시 Obsidian으로 복사해 정리하는 식이었다. 한 번의 기능 추가에 같은 텍스트가 세 번 이동했다.
+
+Claude Code는 터미널에서 직접 파일을 읽고 쓴다. 여기에 Obsidian MCP 서버를 더하면, Claude는 vault의 노트를 코드 베이스의 일부처럼 다룰 수 있다. <Link href="/ko/blog/obsidian-getting-started">Obsidian 시작하기</Link>에서 적었듯, vault는 결국 마크다운 파일 폴더다. Claude Code 입장에서는 다른 git 레포 하나가 더 붙은 것과 비슷하다. 두 도구의 비교가 필요하다면 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor</Link>를 같이 보자.
+
+이 조합의 핵심 효과는 단순하다. **기획·구현·회고가 한 명령어 안에서 끝난다.** "이 노트 읽고, 그대로 implementation 만들고, 끝나면 변경사항을 같은 노트 하단에 요약해" 한 줄이면 된다. 구조로 보면 Obsidian vault와 Claude Code 터미널 사이에 MCP 서버 하나가 다리 역할로 들어가는 형태다. 양쪽이 서로의 파일을 직접 만지지는 않지만, MCP가 같은 컨텍스트 위에서 둘을 동시에 다루도록 묶어준다.
+
+## 연결 구조 — MCP 서버가 양쪽을 잇는 방식
+
+MCP는 Anthropic이 공개한 오픈 프로토콜이다. 클라이언트(Claude Desktop·Claude Code)와 서버(도구 어댑터) 사이의 표준 통신 규약이다. Obsidian MCP 서버는 vault 폴더를 stdio로 노출한다. Claude Code는 그 서버를 호출해 노트를 읽고, 새 노트를 생성하고, frontmatter를 수정한다.
+
+| 레이어 | 역할 | 실제 구성 |
+|---|---|---|
+| 클라이언트 | 명령 입력 + LLM 추론 | Claude Code CLI (터미널) |
+| 프로토콜 | JSON-RPC 표준 | MCP (stdio 또는 SSE) |
+| 서버 | 도구 어댑터 | obsidian-mcp · filesystem MCP |
+| 데이터 | 마크다운 노트 + 코드 파일 | Obsidian vault + git 레포 |
+
+Claude Code 자체가 이미 로컬 파일시스템에 접근한다. 그래서 vault를 Claude Code의 작업 디렉토리 안에 두면 별도 MCP 서버 없이도 노트를 읽을 수 있다. 다만 검색·태그·백링크 같은 Obsidian 고유 기능을 활용하려면 전용 MCP 서버가 더 강력하다. 이 글에서는 둘 다 다룬다.
+
+## 설정 단계 — Claude Code CLI + Obsidian MCP 등록
+
+먼저 [Claude Code](https://github.com/anthropics/claude-code)를 설치한다. 터미널에서 한 줄이다.
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude --version
+```
+
+다음으로 Obsidian MCP 서버를 추가한다. Claude Code는 프로젝트 루트의 `.mcp.json` 또는 사용자 홈의 `~/.claude.json`을 읽는다. 아래는 vault를 직접 노출하는 최소 설정이다.
+
+```json
+{
+  "mcpServers": {
+    "obsidian": {
+      "command": "npx",
+      "args": ["-y", "obsidian-mcp"],
+      "env": {
+        "OBSIDIAN_VAULT_PATH": "/Users/me/Obsidian/main-vault"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/me/Obsidian/main-vault"]
+    }
+  }
+}
+```
+
+설정을 저장한 뒤 터미널에서 `claude`를 실행하고 `/mcp`를 입력하면 등록된 서버 목록과 연결 상태가 보인다. `connected` 표시가 뜨면 준비 끝이다. `obsidian`은 vault 전용 어댑터, `filesystem`은 같은 폴더에 코드까지 함께 두고 일반 파일 작업까지 노출하는 보조 서버로 두 개를 같이 등록해두면 노트와 코드를 한 명령에서 같이 다룰 수 있다.
+
+여기까지가 기본 골격이다. 자동화 스택의 다른 도구와 조합하는 방법은 <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택</Link>을 참고하자.
+
+## 실전 사용 패턴 1 — 노트에서 코드로
+
+가장 자주 쓰는 흐름이다. Obsidian에 적어둔 기획 노트를 Claude Code가 읽어 코드로 바꾸는 방향이다. 예를 들어 `Projects/seo-dashboard/spec.md`에 입력 스키마와 화면 구조를 정리해 두었다고 하자. 터미널에서는 한 줄이면 된다.
+
+```bash
+claude "Projects/seo-dashboard/spec.md 를 읽고 Next.js 16 App Router로 구현해. content/dashboard 디렉토리에 RSC로 짜고, 검증은 zod로."
+```
+
+Claude Code는 노트를 그대로 컨텍스트에 올린 뒤, 프로젝트 컨벤션을 추적하면서 파일을 생성한다. 기획서가 길어질수록 효과가 크다. 1,500자짜리 spec을 매번 채팅창에 붙여 넣는 부담이 사라지기 때문이다. 비슷한 패턴을 Flutter 앱에 적용한 사례는 <Link href="/ko/blog/claude-code-flutter-app-guide">Claude Code Flutter 앱 가이드</Link>에 정리했다.
+
+이때 중요한 한 가지. **Claude Code의 컨텍스트는 무한이 아니다.** vault 전체를 통째로 읽히려 하면 토큰이 폭발한다. 노트를 호출할 때는 항상 정확한 경로를 지정하거나, MCP 서버의 `search_notes` 도구로 부분 검색을 시키는 편이 안전하다. 명령이 끝나면 vault의 `spec.md`는 그대로 남고, 코드 트리에 `app/dashboard/page.tsx` 같은 새 파일이 생기면서 두 폴더가 한 번에 갱신된다.
+
+## 실전 사용 패턴 2 — 코드에서 노트로
+
+반대 방향도 자주 쓴다. 커밋 직후 Claude Code에 "오늘 변경 요약을 `99. Devlog/2026-05-04.md`에 추가해" 같은 요청을 넣는다. Claude는 `git diff`와 최근 커밋 메시지를 읽고, vault의 데일리 노트에 변경 요약을 append한다. 코드 변경의 "왜"를 매일 자동으로 vault에 누적하는 흐름이다.
+
+```bash
+claude "오늘 main 에 들어간 변경사항을 요약해서 Obsidian 의 99. Devlog/$(date +%Y-%m-%d).md 끝에 ## 변경 요약 섹션으로 추가해"
+```
+
+이렇게 쌓인 데일리 로그는 회고에 그대로 쓰인다. 같은 작업을 [Make](https://www.make.com) 같은 자동화 도구로도 할 수 있지만, diff를 직접 해석해 자연어로 압축하는 부분은 LLM 쪽이 압도적으로 잘한다. 비교는 <Link href="/ko/blog/make-automation-guide">Make 자동화 가이드</Link>에 정리해 두었다.
+
+## 실전 사용 패턴 3 — 양방향 동기화
+
+세 번째 패턴은 docstring과 노트를 한 쌍으로 묶는 방법이다. 함수 docstring을 vault 노트에 임베드 형식으로 옮겨두면, 코드를 수정할 때마다 Claude가 docstring과 노트를 동시에 갱신한다.
+
+```bash
+claude "src/lib/seo.ts 의 함수별 docstring 을 읽고, Obsidian 의 70. Reference/seo-functions.md 에 동일한 시그니처로 동기화해. 신규 함수는 추가, 사라진 함수는 archive 표기."
+```
+
+이 패턴은 Apple Shortcuts나 단축키로 한 번에 묶어 두면 편하다. 매일 아침 자동 실행으로 걸어둔 사례는 <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple Shortcuts AI 자동화</Link>에 정리했다. 한 명령 안에서 코드 수정·docstring 갱신·vault 노트 동기화가 동시에 일어나기 때문에, 문서와 구현이 시간차로 어긋나는 일이 거의 사라진다.
+
+## babipa의 실제 사례 — Obsidian SEO 대시보드
+
+이 글에서 설명한 구조는 [babipanote의 Obsidian SEO 대시보드](https://babipanote.com/blog/obsidian-seo-dashboard)에서 실제로 돌아간다. GSC에서 받은 키워드 데이터를 vault 노트에 누적하고, Claude Code가 그 노트를 읽어 다음 글의 키워드 우선순위를 정하는 흐름이다. 데이터 쪽은 Python 스크립트가 채우고, "다음에 뭐 쓸까" 판단은 Claude Code가 내린다. 노트와 코드가 한 vault에 같이 있으니, 키워드 한 줄을 보고 그대로 새 MDX 초안 파일까지 같은 명령에서 생성된다.
+
+직접 만든 스택을 한 번 더 정리하면 이렇다. Obsidian이 데이터 레이어, Claude Code가 작업 레이어, MCP가 통신 레이어다. 1인 빌더가 IDE 없이도 일이 돌아가는 이유다.
+
+## 트러블슈팅 — 자주 만나는 에러 3개
+
+**1. `Server failed to start: ENOENT npx`**
+Claude Code가 `npx`를 못 찾는 경우다. macOS에서 nvm을 쓰는 경우 자주 난다. `.mcp.json`의 `command`에 `npx` 대신 절대 경로(`/Users/me/.nvm/versions/node/v22.22.2/bin/npx`)를 직접 박으면 해결된다.
+
+**2. vault 경로의 공백·한글 문제**
+`OBSIDIAN_VAULT_PATH`에 공백이나 한글이 있으면 일부 MCP 서버가 인식하지 못한다. 영문 경로로 옮기거나 심볼릭 링크를 쓰는 게 안전하다.
+
+**3. `Permission denied: write outside vault`**
+Claude Code가 vault 바깥 파일을 만들려 할 때 발생한다. 의도된 동작이다. vault 외부 파일을 다뤄야 하면 `filesystem` MCP 서버에 별도로 그 디렉토리를 등록해야 한다.
+
+## 자주 묻는 질문 (FAQ)
+
+### Claude Desktop과 Claude Code 중 어느 쪽이 Obsidian MCP에 더 적합한가요?
+
+작업 성격에 따라 갈린다. 노트만 다루고 코드를 거의 안 만지는 흐름은 Claude Desktop이 충분하다. 반대로 노트와 코드를 함께 편집하고 git까지 다루는 1인 빌더라면 Claude Code 쪽이 압도적으로 빠르다. 같은 MCP 서버 설정을 공유할 수 있으니 둘 다 등록해두고 상황별로 갈아타는 사람도 많다.
+
+### Obsidian MCP 서버는 vault 전체를 읽나요? 보안이 걱정됩니다.
+
+기본은 vault 루트 한 폴더만 노출된다. 그 안의 모든 마크다운에 읽기·쓰기가 가능하므로, 민감 정보(개인 일기·금융 메모 등)는 별도 vault로 분리하는 편이 안전하다. 또한 MCP는 로컬 stdio 통신이라 외부 네트워크로 노트가 새지는 않지만, Claude에 전달되는 노트 본문은 Anthropic 서버로 올라간다는 점은 기억해야 한다.
+
+### 코드 작성 중에 노트 검색이 느려지는 일이 있나요?
+
+vault 크기가 크면 첫 검색에서 1~2초씩 지연이 생긴다. 1만 개 이상 노트가 있는 vault라면 MCP 서버 인덱스를 미리 빌드해두는 옵션을 켜는 편이 좋다. 작업 시작 시 한 번 `claude "/list_notes Projects"` 같은 가벼운 호출로 캐시를 데우는 패턴도 효과가 있다.
+
+### 이 조합은 윈도우에서도 잘 돌아가나요?
+
+된다. 다만 경로 구분자(`\` vs `/`)와 셸 차이 때문에 `.mcp.json`의 `command`를 `cmd /c npx ...` 형태로 감싸야 하는 경우가 있다. WSL2에서 돌리면 macOS·리눅스 설정과 거의 동일하게 사용할 수 있어 권장한다.
+
+### 무료로 끝까지 쓸 수 있나요?
+
+Obsidian과 Claude Code CLI는 무료다. Claude API 호출은 Pro 구독 또는 API 종량제 요금이 든다. 하루 30~50회 정도 빌더 워크플로우 기준으로 월 $20 Pro 플랜이 보통 충분하지만, 대량 코드 생성·리팩토링을 자주 돌리는 경우 종량제 쪽이 오히려 저렴할 수 있다.
+
+## 마무리
+
+Obsidian과 Claude Code는 따로 쓰면 좋은 도구지만, MCP로 묶어 두면 1인 빌더에게는 한 단계 다른 환경이 된다. 노트가 곧 컨텍스트가 되고, 코드 변경이 곧 회고로 쌓인다. GUI에 의존하지 않는 워크플로우가 가능해진다는 뜻이다. 무엇보다 같은 명령에서 기획·구현·기록이 끝나기 때문에, "오늘 뭐했지" 회상에 들이는 시간이 거의 사라진다. 이 한 줄을 위해 며칠 설정을 매만진 시간은 충분히 회수됐다.
