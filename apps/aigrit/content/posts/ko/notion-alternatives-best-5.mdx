@@ -1,0 +1,179 @@
+---
+title: "Notion 대체 앱 BEST 5 — 1년 써본 노트앱 진짜 비교 (2026)"
+date: "2026-05-14 23:45"
+updated: "2026-05-14 23:45"
+slug: "notion-alternatives-best-5"
+description: "Notion 대체 노트앱 5개를 1년 이상 써본 비교. Obsidian·Craft·Logseq·Anytype·Capacities의 가격·플랫폼·강점·약점을 2026년 기준 실측 정리해 어떤 사용자에게 어떤 앱이 맞는지 결정 기준을 제시한다."
+tags: ["Notion 대체", "노트앱 비교", "Obsidian", "Craft", "지식관리", "노트 앱 추천", "Logseq"]
+thumbnail: "/images/notion-alternatives-best-5/og.png"
+featured: true
+category: "지식관리"
+topic_cluster: "지식관리"
+cluster_role: pillar
+---
+
+**TL;DR — 1년 동안 Obsidian·Craft·Logseq·Anytype·Capacities 5개를 모두 메인으로 굴려본 결과, "Notion 하나로 다 한다"는 환상은 깨진다. Apple 쓰는 글쓰기 중심이면 Craft, 평생 보관 + 로컬 우선이면 Obsidian, 데일리 메모 위주면 Logseq, Notion 클론을 그대로 원하면 Anytype, 객체+캘린더 통합이면 Capacities다.**
+
+Notion을 5년 가까이 메인으로 썼다. 좋은 도구지만 2024년 들어 무거운 페이지 로딩, 오프라인의 답답함, 데이터가 내 컴퓨터에 없다는 불안이 누적됐다. 그래서 2025년 한 해 동안 5개의 대체 후보를 차례로 메인 자리에 올려보고 일·메모·DB·블로그 초안을 모두 옮겨봤다. 이 글은 그 1년의 실측 결과다.
+
+먼저 각 앱의 위치 — Notion과 Craft 직접 비교는 별도 글에서 다뤘고 (이 글 끝에서 다시 인용), <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor</Link> 비교에서 도구 선택 일반론을 정리했다. 1인 개발자 도구 스택 전체 맥락은 <Link href="/ko/blog/solo-developer-automation-stack">자동화 스택 10가지</Link>에 있다. 이 글은 그 비교의 시야를 5개 노트앱으로 확장한다.
+
+![Notion 대체 노트앱 BEST 5 한눈 비교](/images/notion-alternatives-best-5/01-five-apps-overview.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  1년간 메인 자리에서 검증한 5개 앱 — 같은 카테고리로 묶이지만 해결 문제가 다 다르다
+</figcaption>
+
+## Notion을 떠나야 하는 5가지 신호
+
+Notion은 여전히 "협업 + 관계형 DB"의 기준선이다. 무조건 떠나야 하는 도구가 아니다. 다만 다음 5가지 중 2개 이상이 본인에게 해당된다면 대체 후보를 진지하게 검토할 가치가 있다.
+
+1. **3,000자 넘는 문서에서 입력 지연이 느껴진다.** 웹 기반 에디터의 본질적 한계. 누적되면 글 쓰기 자체가 피곤해진다.
+2. **이동 중 오프라인 작업이 잦다.** 비행기·지하철·시골에서 캐시되지 않은 페이지가 안 열려서 좌절한 적이 있다면.
+3. **데이터가 클라우드에만 있는 게 불안하다.** 서비스 종료·계정 정지 시 내 5년치 노트가 어떻게 되나 생각해본 적 있다면.
+4. **데일리 노트·아웃라인 사고를 많이 한다.** Notion의 페이지 모델은 트리 구조라 흐르는 사고에 적합하지 않다.
+5. **연 12만 원(개인 Plus) 이상의 비용이 부담스럽다.** 무료 플랜은 협업 시 빠르게 답답해진다.
+
+이 신호들이 강하면 강할수록, 아래 5개 중 본인에게 맞는 후보가 분명히 있다.
+
+## 1. Obsidian — 가격 0원, 로컬 우선의 평생 노트
+
+내가 1년 실험 끝에 "장기 보관용 메인"으로 정착시킨 앱이다. 모든 노트가 내 컴퓨터의 마크다운 `.md` 파일로 존재한다. Obsidian 회사가 망해도 내 노트는 그대로 남는다.
+
+- **가격:** 개인 사용 무료. 동기화(Sync)는 월 $4, 게시(Publish)는 월 $8 — 둘 다 옵션. iCloud·Dropbox·Git으로 자가 동기화 가능
+- **플랫폼:** macOS·Windows·Linux·iOS·Android 전부 네이티브
+- **강점:** 로컬 마크다운·1,800+ 커뮤니티 플러그인·그래프 뷰·Vim 모드·CSS 완전 커스텀
+- **약점:** 협업 약함(공유 vault 구조 어려움)·초기 설정 시간 비용·DB는 Dataview 플러그인 의존
+- **공식:** [obsidian.md](https://obsidian.md)
+
+Obsidian의 진짜 강점은 "내가 죽어도 30년 뒤 후손이 텍스트 에디터로 열 수 있다"는 점이다. 데이터 소유권을 1순위에 두는 사람의 답이다. 입문은 본 글 끝의 관련 글에서 다룬다.
+
+## 2. Craft — Apple 사용자에게 가장 미려한 글쓰기 도구
+
+Apple 생태계에 잠긴 사람이 글쓰기를 즐기고 싶다면 Craft가 답이다. 1년 사용한 결과 "디자인 미려함"이 단순 외형이 아니라 글 쓰는 동안의 집중력에 직접 영향을 준다는 걸 체감했다.
+
+- **가격:** 무료 플랜(문서 1,000개)·Personal 월 $5(Plus 연결제 $48)·Team $8/월 — 정확한 현재 가격은 craft.do 공식 페이지 확인
+- **플랫폼:** macOS·iOS·iPadOS·Windows·Web (Android는 웹뷰 수준)
+- **강점:** Apple 네이티브 속도·복붙 시 포맷 유지·블록 기반인데 "문서 같은" 디자인·공식 MCP 서버 지원
+- **약점:** 관계형 DB 없음·Android 사실상 미지원·협업 5인 한도가 작음
+- **공식:** [craft.do](https://www.craft.do)
+
+블로그 초안을 Craft에 작성하고 네이버·티스토리에 그대로 복붙해도 테이블·이미지·헤딩이 깨지지 않는다. 이 한 가지 이유만으로 글 쓰는 사람에게 Craft는 강하게 권장된다. <Link href="/ko/blog/craft-vs-notion">Craft vs Notion 직접 비교</Link>에서 두 앱의 분기점을 더 자세히 다뤘다.
+
+두 앱을 나란히 띄워 한 문단을 같은 글로 옮겨 적어 보면 차이가 명확해진다. Craft는 "이 문장이 얼마나 예쁜가"를 묻는 도구다 — 본문 폰트의 자간·행간, 인용 박스의 코너 라운딩, 이미지의 그림자까지 통일된 디자인 언어를 강제한다. 반면 Obsidian은 "이 노트가 전체 그래프 어디에 연결되나"를 묻는다 — 한 노트의 미적 완성도보다 vault 전체의 백링크 구조가 더 중요하다.
+
+## 3. Logseq — 데일리 노트와 아웃라이너의 표준
+
+Roam Research가 비싸서 못 가던 사람들이 모두 정착한 곳이다. 모든 노트는 "오늘 날짜" 페이지로 시작하고, 블록 단위로 양방향 링크된다. 페이지보다 "흐르는 사고"를 쓰는 사람에게 적합하다.
+
+- **가격:** 완전 무료(오픈소스). Logseq Sync는 베타 단계로 별도 구독
+- **플랫폼:** macOS·Windows·Linux·iOS·Android·Web (오픈소스라 자체 빌드도 가능)
+- **강점:** 아웃라이너 사고 모델·데일리 노트 자동·블록 참조·로컬 마크다운 저장·완전 무료
+- **약점:** UI가 거칠다·페이지 단위 글 쓰기는 어색함·플러그인 생태계는 Obsidian 대비 작음
+- **공식:** logseq.com (공식 페이지에서 다운로드)
+
+Logseq를 1년 쓰면서 깨달은 건 "데일리 노트는 회의록·아이디어 메모에 압도적으로 좋다"는 사실. 다만 잘 정리된 글 한 편을 쓰는 데는 어울리지 않는다. 메모 + 아이디어 캡처 도구로 분리해서 쓰는 게 정답에 가깝다.
+
+## 4. Anytype — Notion을 그대로 옮긴 오픈소스 후계자
+
+"Notion의 협업·DB·페이지 모델을 그대로 가져가면서 데이터는 내 기기에 두고 싶다"는 사람을 위한 답. 2024년 이후 빠르게 성숙해 2025년 시점엔 실사용 가능 수준이 됐다.
+
+- **가격:** 개인 사용 무료. Builder 플랜과 Co-creator 플랜은 anytype.io 공식 가격 페이지 참고
+- **플랫폼:** macOS·Windows·Linux·iOS·Android — 모든 주요 OS
+- **강점:** Notion 클론 UX·로컬 우선 + P2P 동기화·관계형 DB·완전 오픈소스
+- **약점:** 웹 클라이언트 없음·협업 기능은 Notion 대비 부족·아직 진화 중이라 변경 잦음
+- **공식:** [anytype.io](https://anytype.io)
+
+Notion에서 Anytype으로 마이그레이션은 공식 임포터로 70% 정도 자동화된다. DB·관계 필드까지 옮기려면 손이 좀 가지만, "Notion 그대로지만 내 데이터는 내 거"가 필요한 사람의 답이다.
+
+## 5. Capacities — 객체 기반 + 캘린더 통합
+
+가장 늦게 발견했지만 가장 신선한 모델이었다. Capacities는 "페이지" 대신 "객체(Object)"가 1차 시민이다. 책·영화·사람·프로젝트가 각자 타입을 갖고, 자동으로 캘린더에 묶인다.
+
+- **가격:** 무료 플랜(2,000 객체)·Pro 월 $10(연결제 시 약 $84/년) — 정확한 현재 가격은 capacities.io 공식 확인
+- **플랫폼:** Web·macOS·Windows·iOS·Android — 모두 지원하지만 데이터는 클라우드 우선
+- **강점:** 객체 기반 사고 모델·데일리 노트 + 캘린더 자동 연동·미려한 UI·태그·백링크
+- **약점:** Notion 대비 협업 약함·로컬 우선 아님·러닝 커브 있음
+- **공식:** [capacities.io](https://capacities.io)
+
+"내가 아는 책 / 만난 사람 / 본 영화"를 별도 타입으로 누적하고 싶은 사람, 즉 **개인 위키 + 일기장의 결합**이 목표라면 Capacities가 가장 미래지향적이었다.
+
+## 5개 앱 한눈 비교표
+
+| 앱 | 가격(개인) | 플랫폼 | 핵심 강점 | 약점 |
+|---|---|---|---|---|
+| **Obsidian** | 무료 (Sync $4/월) | 전 플랫폼 | 로컬 마크다운·플러그인·소유권 | 협업·DB·초기 설정 |
+| **Craft** | 무료~$5/월 | Apple+Win+Web | Apple 속도·복붙·디자인 | DB·Android 약함 |
+| **Logseq** | 완전 무료 | 전 플랫폼 (OSS) | 아웃라이너·데일리·무료 | UI 거침·긴 글 |
+| **Anytype** | 무료~Builder | 전 플랫폼 | Notion 클론·로컬 우선·OSS | 웹 없음·협업 |
+| **Capacities** | 무료~$10/월 | 전 플랫폼 | 객체·캘린더·UI | 클라우드 우선·협업 |
+
+가격은 2026년 5월 기준 공식 페이지에서 확인한 값이며, 변동 가능성이 있어 결제 직전엔 반드시 공식 사이트를 다시 확인하기 바란다.
+
+![5개 앱 비교 매트릭스](/images/notion-alternatives-best-5/03-comparison-matrix.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  X축: 로컬 ↔ 클라우드 / Y축: 글쓰기 ↔ DB 중심 — 본인이 어느 사분면에 있는지가 답
+</figcaption>
+
+## 어떤 사용자가 어떤 앱?
+
+1년 동안 5개를 다 굴려본 결론을 사용자 유형별로 정리하면 이렇다.
+
+- **Apple 한 우물 + 글쓰기 중심:** Craft. 더 고민 안 해도 된다.
+- **데이터 소유권 + 평생 보관:** Obsidian. 30년 뒤에도 열린다는 안정감.
+- **데일리 메모 + 아이디어 캡처:** Logseq. 회의록·아이디어를 흐름대로.
+- **Notion이 좋은데 데이터만 내 거였으면:** Anytype. 가장 직관적인 마이그레이션.
+- **개인 위키 + 일기 통합:** Capacities. 객체 모델이 사고를 확장한다.
+- **팀 협업 5명 이상:** 그냥 Notion. 대안들은 아직 협업이 부족하다.
+
+![사용자 유형별 추천 앱 결정 매트릭스](/images/notion-alternatives-best-5/04-user-type-decision.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  6가지 사용자 유형 × 5개 앱 매핑. 본인 유형 1개를 먼저 정한다.
+</figcaption>
+
+내 현재 셋업은 **Obsidian(평생 보관) + Craft(블로그 초안) + Notion(팀 + 강력한 DB)** 3개 병행이다. 한 앱이 전부를 해결한다는 환상을 버리면 오히려 각 앱의 강점이 분명해진다.
+
+AI 도구 전반의 큰 그림이나 Notion AI 자체 기능, 1인 개발·운영 자동화 맥락에서 노트앱을 어떻게 끼우는지는 본 글 끝의 관련 글에서 다룬다.
+
+## 자주 묻는 질문 (FAQ)
+
+### Notion을 5년 썼는데 진짜로 옮길 만한가요?
+
+옮겨야 할 만한 이유가 분명하면 옮길 가치가 있습니다. 입력 지연·오프라인 답답함·데이터 소유권 불안 중 하나라도 강하게 느낀다면 일단 1개 앱을 1주일 메인으로 굴려보세요. 저는 부분 마이그레이션(블로그 초안만 Craft, 평생 노트만 Obsidian)부터 시작해 1년에 걸쳐 자연스럽게 정착했습니다. 한 번에 다 옮기려 하면 실패합니다.
+
+### 무료로 가장 강력한 앱은?
+
+기능 절대량으로는 Logseq가 1위입니다. 완전 오픈소스에 모든 기능 무료. 다만 UI가 거칠어서 진입이 어렵습니다. 디자인까지 고려하면 Obsidian 무료 플랜(Sync 빼면 0원)이 균형이 좋고, 플러그인 생태계가 Logseq를 압도합니다.
+
+### Apple만 쓰는데 Craft 말고 답이 있나요?
+
+Apple만 쓴다면 Craft가 압도적으로 추천되지만, "글쓰기보다 평생 보관"이 우선이라면 Obsidian + iCloud 동기화도 충분히 좋습니다. iCloud로 vault를 동기화하면 macOS↔iOS 작동이 매끄럽고 무료입니다. Craft는 글쓰기, Obsidian은 보관 — 이렇게 역할을 분리해도 됩니다.
+
+### Notion에서 Anytype으로 데이터를 그대로 옮길 수 있나요?
+
+Anytype 공식 임포터가 Notion 워크스페이스 export를 받아서 자동 변환합니다. 페이지·텍스트·이미지는 90% 이상 보존되지만, 관계형 DB의 복잡한 필터·뷰·롤업은 수동으로 다시 만들어야 하는 경우가 많습니다. 1,000페이지 규모 워크스페이스 기준 6~10시간의 후처리를 예상해 두면 됩니다.
+
+### AI 통합은 어떤 앱이 가장 강한가요?
+
+2026년 5월 기준, 공식 통합도 측면에선 Notion AI가 여전히 가장 매끄럽습니다. 다만 Obsidian은 Smart Connections·Copilot 같은 커뮤니티 플러그인으로 로컬 LLM·OpenAI·Claude를 자유롭게 연결할 수 있어 자유도가 가장 높습니다. Claude를 직접 노트앱에 연결하는 방법은 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 가이드</Link>를 참고하세요. 검색 기반 AI 활용은 <Link href="/ko/blog/perplexity-ai-guide">Perplexity 가이드</Link>가 따로 있습니다.
+
+![6개 노트앱의 AI 통합도 점수 비교](/images/notion-alternatives-best-5/02-ai-integration-depth.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  공식 통합은 Notion·Obsidian이 강세 — Anytype·Logseq는 아직 초기 단계
+</figcaption>
+
+![5개 앱의 데이터 소유·플랫폼·가격 위치를 한 그림으로](/images/notion-alternatives-best-5/05-cluster-positioning.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  5개 앱의 위치를 데이터 소유권(가로) × 협업(세로) 축으로 나눠본 결과
+</figcaption>
+
+## 마무리 — 결국 어떤 걸 골라야
+
+1년 동안 5개 앱을 메인에 올려본 결론을 한 줄로 압축하면 이렇다. **"Notion 하나로 다 한다"는 환상을 버리고, 본인의 1순위 가치(글쓰기 / 보관 / 흐름 / 협업 / 객체)에 맞는 앱을 1개만 정한다. 나머지는 보조다.**
+
+가장 흔한 실수는 "5개 다 깔고 다 써보겠다"이다. 1년 실험을 통해 명확해진 건 — 메인을 1개로 정하지 않으면 어떤 앱도 진짜 자기 도구가 되지 않는다. 1주 단위로 1개 앱을 메인으로 굴리고, 4주 뒤 가장 자연스럽게 손이 가는 앱이 정답이다.
+
+선택을 미루는 시간이 가장 비싸다. 이 글을 읽고 있다는 건 이미 Notion이 100% 만족스럽지 않다는 뜻이다. 위 5개 중 본인 유형에 가장 맞는 1개를 골라 다음 한 주만 메인으로 써보기를 권한다.
+
+---
+
+**관련 글**: <Link href="/ko/blog/notion-ai-guide">Notion AI 활용법 5가지</Link>·<Link href="/ko/blog/obsidian-getting-started">Obsidian 30분 입문</Link>·<Link href="/ko/blog/apple-shortcuts-ai-automation">Apple 단축어 AI 자동화</Link>·<Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 완벽 가이드</Link>·<Link href="/ko/blog/make-automation-guide">Make 자동화 입문</Link>.
