@@ -1,0 +1,76 @@
+---
+title: "발행했는데 안 보였다 — 카테고리 매핑 한 줄이 빠진 날"
+date: "2026-05-14 13:16"
+slug: "category-mapping-debug"
+description: "AIGrit Pillar 글을 발행했는데 카테고리 페이지에서 안 보였다. 글 자체는 HTTP 200, 카테고리 페이지는 500. 카테고리 매핑 한 줄이 빠진 Next.js 라우팅 디버깅 회고."
+tags: ["essay", "buildlog", "디버깅", "Next.js", "1인빌더", "카테고리 라우팅", "blog 운영"]
+thumbnail: "/images/category-mapping-debug/og.png"
+featured: false
+---
+
+일요일 새벽, AIGrit Pillar 글을 막 발행하고 잠들기 직전. 사용자 메시지. "글이 게시가 안 된 것 같아." 분명히 발행은 됐다 — 커밋도 머지됐고 Vercel 빌드도 초록색. 노트북을 다시 켰다.
+
+## 글은 200 OK, 카테고리는 500 — 첫 진단
+
+발행한 글 URL을 직접 쳐봤다.
+
+```bash
+$ curl -I https://aigrit.dev/ko/blog/ai-side-income-100man-roadmap
+HTTP/2 200
+```
+
+글 자체는 멀쩡했다. "안 보인다"는 건 메인 네비의 "수익화" 탭에서 글이 등장하지 않는다는 뜻이었다.
+
+```bash
+$ curl -I https://aigrit.dev/ko/category/수익화
+HTTP/2 500
+```
+
+500. 글은 발행됐지만 카테고리 페이지가 깨져 있었다. 다른 카테고리들은 정상, "수익화"만 무너졌다. 글이 sitemap에 등록돼도 hub가 깨지면 [내부 링크 구조](https://nextjs.org/docs/app/building-your-application/routing)가 통째로 끊긴다.
+
+## fallback slug 한 줄이 만든 한글 URL 인코딩 지옥
+
+`apps/aigrit/src/lib/categories.ts`를 열었다. `CATEGORY_META`가 한글 카테고리명을 영문 slug로 매핑하는 단일 소스다.
+
+```typescript
+export const CATEGORY_META: Record<string, CategoryMeta> = {
+  "공지": { slug: "notice", description: "..." },
+  "AI 도구 비교": { slug: "ai-tools", description: "..." },
+  "코딩 도구": { slug: "coding", description: "..." },
+  // ... "수익화" 가 없었다
+};
+```
+
+객체에 없는 키는 fallback 함수로 떨어진다. 알고리즘은 단순 — `[^a-z0-9\s-]` 정규식으로 영문/숫자/공백/하이픈 외 모든 글자를 제거. 한글은 전부 걸려 사라지고 결과는 빈 문자열. 마지막 안전망 `encodeURIComponent`로 "수익화"는 `%EC%88%98%EC%9D%B5%ED%99%94`가 됐고, [Next.js App Router](https://nextjs.org/docs/app/api-reference/file-conventions/dynamic-routes)의 동적 세그먼트가 generateStaticParams와 매칭 못 해 500이 났다.
+
+## categories.ts에 한 객체 추가
+
+fix는 [PR #15](https://github.com/lsy860224/unpack-blogs/pull/15) 한 줄. 정확히는 객체 하나.
+
+```typescript
+"수익화": {
+  slug: "monetization",
+  description: "AI 부업·블로그 수익화·AdSense 등 실전 수익 경로",
+},
+```
+
+commit 1185613. description도 같이 박았다 — 메타·OG 값이라 비워두면 안 된다. 이런 버그가 제일 골치 아프다 — 코드는 5초면 고치는데 진단이 한 시간을 잡아먹는다.
+
+## fix 검증 — sitemap·home·nav 모두 정상화
+
+push 후 Vercel 빌드가 끝나고 다시 호출해봤다.
+
+```bash
+$ curl -I https://aigrit.dev/ko/category/monetization
+HTTP/2 200
+```
+
+200. 메인 네비의 "수익화" 링크도 `/ko/category/monetization`을 가리켰고, 페이지에 새 Pillar 글이 첫 번째로 노출됐다. sitemap도 다음 빌드에 같은 path를 추가했다.
+
+[GSC 추적 시스템](/blog/gsc-tracking-system-1week)을 일주일 전에 깔지 않았으면 며칠 더 방치했을 거다. 원본 Pillar(https://aigrit.dev/ko/blog/ai-side-income-100man-roadmap)는 처음부터 정상이었지만 — 글이 정상이어도 hub가 깨지면 독자는 도달 못 한다.
+
+## 회고 — 새 cluster 추가 시 잊지 말 것
+
+[모노레포 brand.config 구조](/blog/turborepo-brand-config)처럼 정체성이 한 파일에 모이는 패턴은 강력하지만 — 항목 추가를 잊으면 사이트 한 면이 통째로 무너진다. categories.ts는 사실상 카테고리의 brand.config다. 새 카테고리를 만든다는 건 frontmatter `category` 한 줄이 아니라, 매핑 한 객체까지 같은 커밋에 묶는 작업이다.
+
+fallback 함수도 의심해야 한다. 영문 환경 가정 정규식이 한글 입력에서 의도와 정반대로 동작한다. 다음 PR에는 lint script를 박을 생각이다 — `category` 값이 `CATEGORY_META`에 있는지 빌드 시점 검사. fix 한 줄을 잊는 사람이 또 있을 거고, 그 사람은 거의 확실히 나다.
