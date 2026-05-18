@@ -7,6 +7,8 @@ tags: ["Claude Code", "Cursor", "AI코딩도구", "AI코딩비교", "코딩어�
 thumbnail: "/images/claude-code-vs-cursor/og.png"
 featured: true
 category: "코딩 도구"
+topic_cluster: "AI 도구 비교"
+cluster_role: cluster
 ---
 
 ## 한 줄 요약
@@ -52,7 +54,7 @@ category: "코딩 도구"
 | 첫 빌드 성공 | O | X (import 누락 2회) |
 | 수정 횟수 | 1회 (미세 조정) | 4회 |
 
-Claude Code가 **CLAUDE.md를 읽고 프로젝트 전체 맥락**을 파악한 상태에서 iOS Swift, Android Kotlin, Flutter Dart 파일을 한 번에 생성했다. Cursor는 파일을 하나씩 열어서 작업해야 했고, 다른 파일의 import 경로를 놓치는 경우가 있었다. 이 "프로젝트 전체 인식" 패턴이 Claude Code 사용 경험의 핵심 — 같은 이유로 <Link href="/blog/building-app-with-claude-code">Flutter 앱 3개 만든 과정</Link>에서도 결정적 요인이었다.
+Claude Code가 **CLAUDE.md를 읽고 프로젝트 전체 맥락**을 파악한 상태에서 iOS Swift, Android Kotlin, Flutter Dart 파일을 한 번에 생성했다. Cursor는 파일을 하나씩 열어서 작업해야 했고, 다른 파일의 import 경로를 놓치는 경우가 있었다. 이 "프로젝트 전체 인식" 패턴이 Claude Code 사용 경험의 핵심 — 같은 이유로 <Link href="https://babipanote.com/blog/building-app-with-claude-code">Flutter 앱 3개 만든 과정</Link>에서도 결정적 요인이었다.
 
 ### 시나리오 2: 버그 수정
 
@@ -88,7 +90,7 @@ Claude Code가 **CLAUDE.md를 읽고 프로젝트 전체 맥락**을 파악한 �
 | 설정 파일 | 정확 | 정확 |
 | 보일러플레이트 | 최소화 (필요한 것만) | 풍부 (템플릿 기반) |
 
-비슷한 결과. Cursor의 Composer 모드가 여러 파일을 한 번에 생성하는 데 편리했고, Claude Code는 "왜 이 구조인지" 설명을 곁들이며 진행했다. <Link href="/blog/week1-sprint-two-blogs">36시간 스프린트로 블로그 2개 런칭</Link>한 실제 경험도 두 도구를 번갈아 쓴 결과다.
+비슷한 결과. Cursor의 Composer 모드가 여러 파일을 한 번에 생성하는 데 편리했고, Claude Code는 "왜 이 구조인지" 설명을 곁들이며 진행했다. <Link href="https://babipanote.com/blog/week1-sprint-two-blogs">36시간 스프린트로 블로그 2개 런칭</Link>한 실제 경험도 두 도구를 번갈아 쓴 결과다.
 
 ### 시나리오 5: 반복 작업 (i18n, 테스트)
 
