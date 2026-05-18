@@ -1,0 +1,58 @@
+---
+title: "AdSense 체크리스트 글을 쓰고 내 사이트 점검했다 — 5 FAIL 발견한 날"
+date: "2026-05-18 09:50"
+updated: "2026-05-18 09:50"
+slug: "wrote-adsense-guide-found-5-fails"
+description: "AIGrit에 AdSense 승인 체크리스트 13항목을 정리해 발행한 직후, 같은 기준으로 내 블로그 18편을 점검했더니 5편이 FAIL이었다. ads.txt 부재·broken 링크·이미지 0장. 가이드를 쓴다는 건 자기 자신부터 통과시켜야 한다는 뜻이라는 걸 W21에 깨달았다."
+tags: ["1인 빌더", "buildlog", "AdSense", "자기검증", "blog audit"]
+thumbnail: "/images/wrote-adsense-guide-found-5-fails/og.png"
+featured: false
+---
+
+토요일 오후, AIGrit에 <Link href="https://aigrit.dev/ko/blog/adsense-approval-prep-checklist">AdSense 승인 체크리스트 13항목</Link>을 발행했다. 1차 거절 사유 7가지를 역산해 정리한, 자신감 있는 글이었다. 발행 버튼을 누르고 5분 후, 같은 기준으로 내 블로그 18편을 점검해보기로 했다. 결과는 — **5편 FAIL, 11편 WARN, 통과 1편**이었다.
+
+가이드를 쓰는 것과 가이드를 통과하는 건 다른 일이다. 이 글은 그날 발견한 5가지 FAIL의 정체와, "지침서 쓰는 사람"이 가장 먼저 해야 할 일에 대한 짧은 회고다.
+
+## 거절 사유 1번이 내 사이트 첫 항목
+
+체크리스트의 1번 항목은 `/ads.txt` 파일 존재였다. 신청 전에 빈 파일이라도 두라고 글에 썼다.
+
+내 사이트는 `https://aigrit.dev/ads.txt` 가 HTTP 404였다.
+
+같은 글의 2번 항목, AdSense 스크립트 라이브 노출. 내 사이트 HTML을 View Source로 확인했다. `adsbygoogle.js` 문자열이 없었다. Vercel 환경변수 `NEXT_PUBLIC_ADSENSE_ID` 가 비어 있어서 `AdSenseScript` 컴포넌트가 null을 반환하고 있었다.
+
+다시 말해 — **거절 사유 7가지 중 가장 많이 인용되는 1·2번 항목**(인프라 미비, 합산 41%)에서 내 사이트가 동시에 FAIL이었다. 이게 가이드를 쓴 사람의 사이트 상태였다.
+
+## 18편 전수조사가 발견한 broken 5건
+
+`/review-post` 슬래시 커맨드를 18편에 병렬로 돌렸다. broken link·broken image 검출에 30분이 걸렸다.
+
+- `apple-shortcuts-ai-automation`: 본문 안 `/blog/time-management-solo-builder` 링크가 깨져 있었다. babipanote 글인데 `/blog/` 상대경로로 적어서 AIGrit 도메인에서 404가 뜨고 있었다.
+- `claude-4-sonnet-vs-gpt-4o`: 이미지 참조가 `score-comparison.png` 인데 실제 파일명은 `04-score-comparison.png`. **2주 전 발행 시점부터 broken 상태였다.**
+- `perplexity-ai-guide`: 또 다른 `/blog/obsidian-seo-dashboard` 상대경로 broken.
+- `obsidian-mcp-plugins-best-5` · `obsidian-claude-code-mcp`: 본문 이미지 0장. 발행 당시 마커만 제거하고 "추후 캡쳐 보강" 패턴으로 둔 채 두 글이 사실상 텍스트 전용으로 남아 있었다.
+
+같은 cluster 글들 중에는 H2가 17개·15개로 권장 상한을 두 배 초과한 글도 있었고, FAQ 질문에 물음표가 빠진 글도 두 편 있었다. 모두 **내가 직접 발행한 글**이었다.
+
+![18편 전수 점검 결과 — PASS 1 · WARN 11 · FAIL 5](/images/wrote-adsense-guide-found-5-fails/01-audit-result.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  W21 자가점검 결과 — 직접 만든 체크리스트로 직접 발행한 글을 검증
+</figcaption>
+
+## "가이드를 쓰면 자신이 가장 늦게 적용한다"는 법칙
+
+이날 가장 크게 깨달은 건, 가이드를 쓰는 행위가 본인 인프라를 점검하게 만드는 가장 강력한 강제 장치라는 사실이다. 글을 안 썼으면 발견 못 했을 5 FAIL이었다. 점검 자체가 매주 의제에 오르지 않으면 "글 발행"에 묻혀 그대로 라이브에 남았다.
+
+이건 1인 빌더 운영의 본질적인 함정이기도 하다. <Link href="/blog/sprint-week3-review">3주차 회고</Link>에서 "슬래시 커맨드가 발행 속도를 바꿨다"고 썼지만, 발행 속도가 빨라진 만큼 점검 빈도가 따라잡지 못했다. 발행 자동화는 broken을 발견하지 않는다 — 발견은 별도의 의지가 필요한 별개의 루프다.
+
+W21의 깨달음은 짧다. **체크리스트를 만들 때마다 자기 자신부터 통과시키고, 그 결과를 글로 한 번 더 공개하라.** 가이드의 신뢰는 "남에게 적용했을 때 동작한다"가 아니라 "쓴 사람이 먼저 통과했다"에서 온다.
+
+## W22의 최우선 작업 — fix-everything 1주
+
+다음 한 주는 신규 글 작성을 멈춘다. 5 FAIL 수정 + 11 WARN 정돈 + AdSense 인프라(ads.txt·환경변수·정책 페이지 3종) 셋업을 한 번에 묶어 PR 시리즈로 처리한다. 발행 페이스를 비우고 한 주를 통째로 메타 작업에 쓰는 건 처음이 아니지만, 이번엔 그 동기가 "본인이 쓴 가이드에 본인이 통과 못 했다"는 부끄러움이라는 점이 다르다.
+
+같은 cluster의 디버깅 모먼트는 <Link href="/blog/category-mapping-debug">발행했는데 안 보였다</Link>에서도 한 번 다뤘다. 글이 잘 보이지 않는 이유는 항상 한 줄짜리 빠진 설정이다. 이번 5 FAIL도 본질적으로 같은 종류였다. 한 줄짜리 누락이 5번 반복되어 쌓인 것뿐이다.
+
+이 글이 끝나면 ads.txt 빈 파일 생성과 Vercel 환경변수 추가부터 작업한다. 1번 항목을 통과시키지 못한 채 1주를 더 보내고 싶지 않다. 점검은 결국 자기 사이트에서 시작된다.
+
+공식 원문이 궁금하다면 [Google AdSense 정책](https://support.google.com/adsense/answer/48182)과 [ads.txt 가이드](https://support.google.com/adsense/answer/7532444) 페이지로.
