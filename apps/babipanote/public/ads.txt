@@ -1,0 +1,3 @@
+# Google AdSense — ads.txt
+# babipanote is monetization-off per brand.config (adsense: false).
+# Empty file kept so crawlers receive HTTP 200 instead of 404.
