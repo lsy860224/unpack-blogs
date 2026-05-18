@@ -56,6 +56,23 @@ function AboutKo() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <PageHeader subtitle={`${brandConfig.name} · ${brandConfig.url.replace(/^https?:\/\//, "")}`} />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
+        <h2>운영자</h2>
+        <p>
+          <strong>babipa</strong> — 1인 빌더로 Flutter 기반 iOS 앱(App Store
+          라이브)·Next.js 블로그 모노레포(AIGrit·babipanote)·자동화 시스템을
+          직접 만들고 운영합니다. AI 도구는 마케팅 카피가 아니라 본인의 실제
+          워크플로우에 며칠씩 넣어보고, 결과만 글로 옮깁니다. 운영기는 자매
+          사이트{" "}
+          <a
+            href="https://babipanote.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            babipanote
+          </a>
+          에 1인칭으로 기록합니다.
+        </p>
+
         <h2>우리가 하는 일</h2>
         <p>
           {brandConfig.name}은 AI 도구를 직접 며칠간 써본 뒤, 속도·비용·정확도를
@@ -104,6 +121,9 @@ function AboutKo() {
 
         <h2>문의</h2>
         <p>
+          이메일:{" "}
+          <a href="mailto:contact@aigrit.dev">contact@aigrit.dev</a>
+          <br />
           {brandConfig.social.x && (
             <>
               X:{" "}
@@ -127,8 +147,12 @@ function AboutKo() {
               >
                 {brandConfig.social.github}
               </a>
+              <br />
             </>
           )}
+          개인정보 처리 방침은{" "}
+          <Link href="/ko/privacy">Privacy</Link>, 제휴 마케팅·광고 고지는{" "}
+          <Link href="/ko/disclaimer">Disclaimer</Link>에서 확인하세요.
         </p>
       </section>
     </div>
@@ -140,6 +164,24 @@ function AboutEn() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <PageHeader subtitle={`${brandConfig.name} · ${brandConfig.url.replace(/^https?:\/\//, "")}`} />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
+        <h2>Who runs this site</h2>
+        <p>
+          <strong>babipa</strong> — a solo builder running a Flutter-based iOS
+          app (live on App Store), a Next.js blog monorepo (AIGrit and
+          babipanote), and supporting automation systems. Every AI tool covered
+          here is used for several days in real workflows before publication;
+          marketing copy is excluded. The first-person operations log lives at
+          the sister site{" "}
+          <a
+            href="https://babipanote.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            babipanote
+          </a>
+          .
+        </p>
+
         <h2>What we do</h2>
         <p>
           {brandConfig.name} is a hands-on AI tool review blog. We use each tool
@@ -186,6 +228,8 @@ function AboutEn() {
 
         <h2>Contact</h2>
         <p>
+          Email: <a href="mailto:contact@aigrit.dev">contact@aigrit.dev</a>
+          <br />
           {brandConfig.social.x && (
             <>
               X:{" "}
@@ -209,8 +253,12 @@ function AboutEn() {
               >
                 {brandConfig.social.github}
               </a>
+              <br />
             </>
           )}
+          See <Link href="/en/privacy">Privacy</Link> for data handling and{" "}
+          <Link href="/en/disclaimer">Disclaimer</Link> for ad & affiliate
+          policy.
         </p>
       </section>
     </div>
