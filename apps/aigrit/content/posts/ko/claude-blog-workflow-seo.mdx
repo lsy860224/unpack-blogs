@@ -37,6 +37,16 @@ cluster_role: cluster
 
 이미지 리사이즈·OG 합성·RSS·sitemap 갱신은 빌드 파이프라인이 처리합니다. 사람 손이 닿는 지점은 4곳뿐입니다. 같은 사고를 다른 작업으로 확장한 사례는 <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택 10가지</Link>에 모았습니다. 정적 사이트(Next.js·Astro·Hugo) 전제지만 워드프레스·노션 호스팅에서는 git push 자리에 webhook이 들어갈 뿐 구조는 같습니다.
 
+![Claude 블로그 워크플로우 4단계 — 초안·발행·색인·추적](/images/claude-blog-workflow-seo/01-workflow-4steps.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  각 단계가 도구 1~2개로 닫혀 있어 전달 산출물이 1개 — 4단계 합산 30분
+</figcaption>
+
+![Step별 도구 매핑 — 어떤 단계에 무엇을 쓰는가](/images/claude-blog-workflow-seo/02-step-tooling.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  한 도구로 다 하지 않음 — 단계별 강점 도구를 묶는 게 자동화 원칙
+</figcaption>
+
 ## Step 1: Claude로 초안 30분 — 키워드 → 구조 → FAQ
 
 초안 단계는 Claude Desktop과 Claude Code의 역할 분담이 핵심입니다. Claude Desktop은 [Anthropic 공식 앱](https://www.anthropic.com/)으로 MCP 연결과 긴 대화에 강하고, [Claude Code](https://github.com/anthropics/claude-code)는 CLI에서 파일 시스템·git을 직접 다룹니다. 결과적으로 "구조 잡기와 검색 의도 분석"은 Desktop, "본문 생성과 파일 쓰기"는 Code로 분리되어 한 채팅 안에서 둘이 섞이지 않습니다.
@@ -48,6 +58,11 @@ cluster_role: cluster
 3. **FAQ 자동 추출**: 본문 완성 후 "검색 의도가 명확한 질문 5개로 FAQ를 만들어줘. 답변 40~80자"로 마무리합니다. JSON-LD FAQPage 스니펫을 노린 단계로 색인 후 1주일 안에 리치 결과로 잡히는 경우가 많습니다.
 
 여기까지 평균 20~25분, 글의 70%가 완성됩니다. 다른 채널로 확장한 패턴은 <Link href="/ko/blog/notion-ai-guide">Notion AI 가이드</Link>에 있습니다. 남은 시간은 사람이 합니다 — 데이터 검증, 본인 사례 1~2개 삽입, 문장 다듬기. 1인 운영자의 경쟁력은 "본인이 실제로 했는가"라는 1차 데이터입니다.
+
+![한 글당 누적 30분 — 단계별 시간 소비 타임라인](/images/claude-blog-workflow-seo/03-30min-timeline.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  예전 4시간짜리 작업이 W18 자동화 후 30분으로 압축 — 초안에 가장 많이 투자
+</figcaption>
 
 ## Step 2: Git → Vercel 자동 발행 + IndexNow ping
 
