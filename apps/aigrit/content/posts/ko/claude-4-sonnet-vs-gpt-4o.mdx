@@ -2,11 +2,13 @@
 title: "Claude 4 Sonnet vs GPT-4o 비교: 한국어·코딩·추론 실전 테스트 결과"
 date: "2026-04-17 03:00"
 slug: "claude-4-sonnet-vs-gpt-4o"
-description: "Claude 4 Sonnet과 GPT-4o를 한국어 성능, 코딩, 추론, 창작까지 실전 테스트로 비교했습니다. 토큰당 비용, 속도, 컨텍스트 윈도우 데이터 포함."
+description: "Claude 4 Sonnet과 GPT-4o를 한국어 성능, 코딩, 추론, 창작까지 14일 실전 테스트로 비교했습니다. 토큰당 비용, 응답 속도, 컨텍스트 윈도우, 종합 점수까지 5개 태스크 데이터를 정리해 어떤 작업에 어떤 모델이 맞는지 결정 기준을 제시합니다."
 tags: ["Claude 4 Sonnet", "GPT-4o", "LLM비교", "AI모델비교", "한국어AI", "토큰비용", "AI성능테스트"]
 thumbnail: "/images/claude-4-sonnet-vs-gpt-4o/og.png"
 featured: true
 category: "LLM"
+topic_cluster: "AI 도구 비교"
+cluster_role: cluster
 ---
 
 ## 한 줄 요약
@@ -64,7 +66,7 @@ Claude 4 Sonnet의 한국어가 더 자연스럽다. 특히 "~합니다" 체와 
 | 주석 품질 | 적절 | 과다 |
 | 응답 시간 | 6.1초 | 4.3초 |
 
-두 모델 모두 기능적으로 정확했지만, Claude는 `@riverpod` 어노테이션과 Dart 3.x null-safety를 더 정확하게 반영했다. GPT-4o는 `late` 키워드 사용이 불필요한 곳에 등장하는 등 미세한 차이가 있었다. 실제 앱 개발 경험은 <Link href="/blog/building-app-with-claude-code">Claude Code로 Flutter 앱 3개 만든 과정</Link>에 자세히 기록했다.
+두 모델 모두 기능적으로 정확했지만, Claude는 `@riverpod` 어노테이션과 Dart 3.x null-safety를 더 정확하게 반영했다. GPT-4o는 `late` 키워드 사용이 불필요한 곳에 등장하는 등 미세한 차이가 있었다. 실제 앱 개발 경험은 <Link href="https://babipanote.com/blog/building-app-with-claude-code">Claude Code로 Flutter 앱 3개 만든 과정</Link>에 자세히 기록했다.
 
 ### 태스크 3: 추론 — 복합 조건 분석
 
@@ -130,7 +132,7 @@ API 기준으로 GPT-4o가 약 25% 저렴하다. 하지만 구독 플랜($20/월
 
 ## 종합 점수
 
-![Claude 4 Sonnet 8.6 vs GPT-4o 8.4 — 5가지 태스크 종합 점수](/images/claude-4-sonnet-vs-gpt-4o/score-comparison.png)
+![Claude 4 Sonnet 8.6 vs GPT-4o 8.4 — 5가지 태스크 종합 점수](/images/claude-4-sonnet-vs-gpt-4o/04-score-comparison.png)
 
 | 태스크 | Claude 4 Sonnet | GPT-4o | 승자 |
 |--------|:--------------:|:------:|:----:|
