@@ -72,6 +72,23 @@ function AboutKo() {
           </a>
           에 1인칭으로 기록합니다.
         </p>
+        <p>
+          <strong>경력 요약</strong> — 비개발자 출신으로 2026년 1분기부터
+          Claude Code·Cursor·MCP 4종 도구 스택을 1인 빌더 워크플로우에 도입해
+          Flutter iOS 앱 3종(GentleDo·GentleFast·GentleStudy)을 App Store에
+          출시했습니다. 블로그 모노레포는 Next.js 16 App Router + Turborepo +
+          MDX 기반으로 직접 설계·운영 중이고, 6주 운영하며 글 20편을 누적
+          발행했습니다. AI 도구를 평가할 때 항상 "이 도구를 내 실제
+          프로젝트에 며칠 넣었을 때 무엇이 빨라지거나 막혔는가"를 1차 데이터로
+          확보한 뒤 글로 옮깁니다.
+        </p>
+        <p>
+          <strong>리뷰 신뢰도 근거</strong> — 본 사이트의 모든 글은 작성자가
+          직접 사용한 결과를 기반으로 합니다. 스폰서 리뷰는 받지 않고, 제휴
+          링크가 들어가는 글에는 본문 안 명시적 라벨과 글 상단 1줄 고지를
+          동시에 표기합니다. 데이터·수치는 측정 환경과 표본 크기를 함께
+          공개하며, 분기마다 도구 변화에 맞춰 Pillar 글을 갱신합니다.
+        </p>
 
         <h2>우리가 하는 일</h2>
         <p>
@@ -180,6 +197,28 @@ function AboutEn() {
             babipanote
           </a>
           .
+        </p>
+        <p>
+          <strong>Background</strong> — Coming from a non-engineering
+          background, the operator adopted a four-tool AI coding stack (Claude
+          Code, Cursor, Claude Desktop with MCP, and Obsidian MCP) in early
+          2026 and shipped three Flutter iOS apps (GentleDo, GentleFast,
+          GentleStudy) to the App Store. The blog monorepo is built on Next.js
+          16 App Router, Turborepo, and MDX, designed and operated end-to-end
+          by the same single person, and has accumulated 20+ published posts
+          over six weeks of active use. Every tool review starts with the
+          question "what got faster or broke when I pushed this tool into a
+          real project for several days," then becomes a writeup only after
+          the first-party data exists.
+        </p>
+        <p>
+          <strong>Review credibility</strong> — Every post on this site is
+          based on hands-on use by the author. We do not accept sponsored
+          reviews. Affiliate links carry both an inline label inside the
+          paragraph and a one-line disclosure at the top of the article. Data
+          and numbers are published with the measurement setup and sample
+          size, and Pillar posts are revised quarterly to reflect tool
+          changes.
         </p>
 
         <h2>What we do</h2>
