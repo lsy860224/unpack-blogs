@@ -78,9 +78,9 @@ function AboutKo() {
           Flutter iOS 앱 3종(GentleDo·GentleFast·GentleStudy)을 App Store에
           출시했습니다. 블로그 모노레포는 Next.js 16 App Router + Turborepo +
           MDX 기반으로 직접 설계·운영 중이고, 6주 운영하며 글 20편을 누적
-          발행했습니다. AI 도구를 평가할 때 항상 "이 도구를 내 실제
-          프로젝트에 며칠 넣었을 때 무엇이 빨라지거나 막혔는가"를 1차 데이터로
-          확보한 뒤 글로 옮깁니다.
+          발행했습니다. AI 도구를 평가할 때 항상 &ldquo;이 도구를 내 실제
+          프로젝트에 며칠 넣었을 때 무엇이 빨라지거나 막혔는가&rdquo;를 1차
+          데이터로 확보한 뒤 글로 옮깁니다.
         </p>
         <p>
           <strong>리뷰 신뢰도 근거</strong> — 본 사이트의 모든 글은 작성자가
@@ -207,9 +207,9 @@ function AboutEn() {
           16 App Router, Turborepo, and MDX, designed and operated end-to-end
           by the same single person, and has accumulated 20+ published posts
           over six weeks of active use. Every tool review starts with the
-          question "what got faster or broke when I pushed this tool into a
-          real project for several days," then becomes a writeup only after
-          the first-party data exists.
+          question &ldquo;what got faster or broke when I pushed this tool
+          into a real project for several days,&rdquo; then becomes a writeup
+          only after the first-party data exists.
         </p>
         <p>
           <strong>Review credibility</strong> — Every post on this site is
