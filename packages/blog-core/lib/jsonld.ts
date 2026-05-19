@@ -106,8 +106,10 @@ export interface FaqJsonLdInput {
   inLanguage?: string;
 }
 
+// JavaScript regex 주의: `\b`는 한국어 글자 뒤에서 매칭 실패 (`\w` 경계 룰),
+// `\Z`는 JS에 없는 anchor (Python/Ruby 전용). 그래서 단순 lookahead 사용.
 const FAQ_SECTION_PATTERN =
-  /^##\s+(?:자주\s*묻는\s*질문|FAQ|Frequently\s+Asked\s+Questions|FAQs)\b[^\n]*\n([\s\S]*?)(?=^##\s|\Z)/m;
+  /(?:^|\n)##\s+(?:자주\s*묻는\s*질문|FAQ|Frequently\s+Asked\s+Questions|FAQs)[^\n]*\n([\s\S]*?)(?=\n## |$)/;
 
 interface FaqPair {
   question: string;
