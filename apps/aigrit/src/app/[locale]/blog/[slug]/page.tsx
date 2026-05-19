@@ -6,6 +6,8 @@ import {
   PostRenderer,
   buildMetadata,
   buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
   buildReviewJsonLd,
   getAllPostSlugs,
   getAllPostSummaries,
@@ -118,6 +120,17 @@ export default async function PostPage({
       })
     : null;
 
+  const faqJsonLd = buildFaqJsonLd({
+    content: post.content,
+    inLanguage: bcp47,
+  });
+
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: localized.name, url: `${localized.url}/${locale}` },
+    { name: locale === "en" ? "Blog" : "블로그", url: `${localized.url}/${locale}/blog` },
+    { name: post.frontmatter.title, url: `${localized.url}/${locale}/blog/${post.frontmatter.slug}` },
+  ]);
+
   const adsEnabled = brandConfig.monetization.adsense;
   const adsPubId = brandConfig.monetization.adsensePublisherId;
   const hrefBase = `/${locale}/blog`;
@@ -132,6 +145,18 @@ export default async function PostPage({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
+        />
+      )}
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      {breadcrumbJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
       )}
 

@@ -7,6 +7,8 @@ import {
   PostRenderer,
   RelatedPosts,
   buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  buildFaqJsonLd,
   buildMetadata,
   defaultMdxComponents,
   getAllPostSlugs,
@@ -74,12 +76,35 @@ export default async function PostPage({
     inLanguage: brandConfig.locale,
   });
 
+  const faqJsonLd = buildFaqJsonLd({
+    content: post.content,
+    inLanguage: brandConfig.locale,
+  });
+
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: brandConfig.name, url: brandConfig.url },
+    { name: "Blog", url: `${brandConfig.url}/blog` },
+    { name: post.frontmatter.title, url: `${brandConfig.url}/blog/${post.frontmatter.slug}` },
+  ]);
+
   return (
     <article className="mx-auto max-w-3xl px-6 py-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      {breadcrumbJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+      )}
       <PostHeader post={post} />
       <div className="prose prose-neutral max-w-none dark:prose-invert">
         <PostRenderer source={post.content} components={defaultMdxComponents} />

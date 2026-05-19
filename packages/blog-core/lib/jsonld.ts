@@ -100,6 +100,83 @@ export function buildWebSiteJsonLd(input: WebSiteJsonLdInput) {
   };
 }
 
+export interface FaqJsonLdInput {
+  /** 본문 MDX 원본. FAQ 섹션과 ### 질문 패턴을 자동 추출한다. */
+  content: string;
+  inLanguage?: string;
+}
+
+const FAQ_SECTION_PATTERN =
+  /^##\s+(?:자주\s*묻는\s*질문|FAQ|Frequently\s+Asked\s+Questions|FAQs)\b[^\n]*\n([\s\S]*?)(?=^##\s|\Z)/m;
+
+interface FaqPair {
+  question: string;
+  answer: string;
+}
+
+function extractFaqPairs(content: string): FaqPair[] {
+  const match = FAQ_SECTION_PATTERN.exec(content);
+  if (!match) return [];
+  const block = match[1];
+  const pairs: FaqPair[] = [];
+  const h3Re = /^###\s+(.+?)\s*$/gm;
+  const matches = [...block.matchAll(h3Re)];
+  for (let i = 0; i < matches.length; i++) {
+    const m = matches[i];
+    const question = m[1].trim();
+    const start = (m.index ?? 0) + m[0].length;
+    const end = i + 1 < matches.length ? (matches[i + 1].index ?? block.length) : block.length;
+    const raw = block.slice(start, end).trim();
+    const answer = raw
+      .split(/\n{2,}/)
+      .map((p) => p.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .join(" ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      .trim();
+    if (question && answer) pairs.push({ question, answer });
+  }
+  return pairs;
+}
+
+export function buildFaqJsonLd(input: FaqJsonLdInput) {
+  const pairs = extractFaqPairs(input.content);
+  if (pairs.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: pairs.map((p) => ({
+      "@type": "Question",
+      name: p.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: p.answer,
+      },
+    })),
+    ...(input.inLanguage ? { inLanguage: input.inLanguage } : {}),
+  };
+}
+
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export function buildBreadcrumbJsonLd(items: BreadcrumbItem[]) {
+  if (items.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
 function joinUrl(base: string, path: string): string {
   if (/^https?:\/\//i.test(path)) return path;
   const b = base.replace(/\/+$/, "");
