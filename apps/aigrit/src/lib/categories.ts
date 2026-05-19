@@ -18,33 +18,19 @@ export const CATEGORY_META: Record<string, CategoryMeta> = {
     slug: "notice",
     description: "AIGrit 운영 공지 및 업데이트",
   },
+  // 통합 후 (2026-05-19): 글 1편짜리 4개 카테고리(LLM·AI 검색·코딩 도구·생산성)는
+  // AI 도구 비교·AI 코딩·자동화로 흡수되었다. 기존 URL은 next.config.ts redirect로 보존.
   "AI 도구 비교": {
     slug: "ai-tools",
-    description: "여러 AI 도구를 직접 써보고 숫자로 비교",
-  },
-  LLM: {
-    slug: "llm",
-    description: "GPT, Claude, Gemini 등 대형 언어 모델 비교",
-  },
-  "코딩 도구": {
-    slug: "coding-tools",
-    description: "Cursor, Claude Code 등 개발 보조 AI 도구 리뷰",
+    description: "Claude·GPT·Gemini·Perplexity 등 AI 도구를 직접 써보고 숫자로 비교",
   },
   "AI 코딩": {
     slug: "ai-coding",
-    description: "AI 페어 프로그래밍·MCP·에이전트 코딩 실전",
-  },
-  "AI 검색": {
-    slug: "ai-search",
-    description: "Perplexity 등 AI 기반 검색·리서치 도구",
+    description: "Claude Code·Cursor·MCP — AI 페어 프로그래밍과 1인 빌더 워크플로우",
   },
   자동화: {
     slug: "automation",
-    description: "Apple 단축어·Make·Zapier로 만드는 반복 업무 자동화",
-  },
-  생산성: {
-    slug: "productivity",
-    description: "Notion AI·생산성 앱으로 업무 효율 올리기",
+    description: "Apple 단축어·Make·Notion AI로 만드는 반복 업무 자동화",
   },
   지식관리: {
     slug: "knowledge",
