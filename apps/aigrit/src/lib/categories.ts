@@ -54,6 +54,15 @@ export const CATEGORY_META: Record<string, CategoryMeta> = {
     slug: "monetization",
     description: "AI 부업·블로그 수익화·AdSense 등 실전 수익 경로",
   },
+  // English aliases — keep parity with EN posts (apps/aigrit/content/posts/en/*).
+  Announcement: {
+    slug: "announcement",
+    description: "AIGrit announcements and updates",
+  },
+  "Coding Tools": {
+    slug: "coding-tools",
+    description: "Hands-on reviews of AI coding assistants — Cursor, Claude Code, and more",
+  },
 };
 
 /** Derive a URL-safe kebab slug for categories not registered in CATEGORY_META. */
