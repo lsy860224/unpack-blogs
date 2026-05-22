@@ -105,6 +105,7 @@ Craft에서 복사한 본문 전체. 최상단에 frontmatter 코드 블록 포�
     1. https://{DOMAIN}{LOCALE_PREFIX}/blog/{slug} 접속하여 확인
     2. Google Search Console에서 색인 요청 (해당 사이트 속성) — 제출 후 docs/gsc-indexing-status.md 행 추가 + Pipeline 카드 `gsc_submitted: true` 박기
     3. Obsidian에서 status: published 로 업데이트
+    4. **SNS 자산 생성** — `/sns-build {APP} {slug}` 실행 (IG 캐러셀 5 × ≥5장 + X 5장 + Threads/X/IG 캡션 3종). 자동 누락 방지 게이트.
     ```
 
 11.1. **GSC 추적 자동 갱신 (B-9 신규):**
