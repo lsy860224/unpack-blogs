@@ -251,6 +251,7 @@ AG_SUBTITLES = {
     "ai-side-income-100man-roadmap": "직장인 가능 6가지 경로 비교",
     "make-automation-guide": "Slack·Notion·Gmail 30분 컷 자동화",
     "sell-ai-prompts-promptbase": "6개월 누적 $612 실전 매출 공개",
+    "ai-ebook-kindle-kdp": "3개월 3권 누적 $214 공개",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -269,6 +270,7 @@ AG_TITLE_OVERRIDES = {
     "ai-side-income-100man-roadmap": "AI로 월 100만원 만들기 — 2026 직장인 로드맵",
     "make-automation-guide": "Make 자동화 사용법 — Slack·Notion·Gmail 30분 컷",
     "sell-ai-prompts-promptbase": "AI 프롬프트 판매 — PromptBase 실전 6개월",
+    "ai-ebook-kindle-kdp": "AI 전자책 Kindle KDP 출판 실전",
 }
 
 # babipanote: shorten overly long titles for OG if needed
