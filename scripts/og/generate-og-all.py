@@ -253,6 +253,7 @@ AG_SUBTITLES = {
     "sell-ai-prompts-promptbase": "6개월 누적 $612 실전 매출 공개",
     "ai-ebook-kindle-kdp": "3개월 3권 누적 $214 공개",
     "chatgpt-coupang-partners-automation": "3개월 30글 ₩76,400 실전기",
+    "prompt-engineering-freelance": "3개월 11건 ₩1.2M 실전기",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -273,6 +274,7 @@ AG_TITLE_OVERRIDES = {
     "sell-ai-prompts-promptbase": "AI 프롬프트 판매 — PromptBase 실전 6개월",
     "ai-ebook-kindle-kdp": "AI 전자책 Kindle KDP 출판 실전",
     "chatgpt-coupang-partners-automation": "ChatGPT 쿠팡파트너스 자동화",
+    "prompt-engineering-freelance": "프롬프트 엔지니어 프리랜싱",
 }
 
 # babipanote: shorten overly long titles for OG if needed
