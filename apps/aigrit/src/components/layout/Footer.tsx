@@ -22,6 +22,8 @@ const FOOTER_UI = {
     seeDisclaimer: "자세한 내용은",
     disclaimerLink: "고지사항",
     seeDisclaimerSuffix: "을 참고하세요.",
+    privacyLink: "개인정보 처리방침",
+    termsLink: "이용약관",
   },
   en: {
     site: "Pages",
@@ -32,6 +34,8 @@ const FOOTER_UI = {
     seeDisclaimer: "See our",
     disclaimerLink: "disclaimer",
     seeDisclaimerSuffix: "for details.",
+    privacyLink: "Privacy",
+    termsLink: "Terms",
   },
 } as const;
 
@@ -134,6 +138,28 @@ export function Footer({ locale }: { locale: string }) {
         </div>
       </div>
       <div className="mx-auto max-w-5xl px-6 pb-8 text-xs text-[color-mix(in_oklab,var(--foreground)_45%,transparent)] flex flex-col gap-1">
+        <span className="flex flex-wrap gap-x-3 gap-y-1">
+          <Link
+            href={withLocale("/privacy")}
+            className="hover:text-[var(--color-brand-primary)] hover:underline"
+          >
+            {ui.privacyLink}
+          </Link>
+          <span aria-hidden>·</span>
+          <Link
+            href={withLocale("/disclaimer")}
+            className="hover:text-[var(--color-brand-primary)] hover:underline"
+          >
+            {ui.disclaimerLink}
+          </Link>
+          <span aria-hidden>·</span>
+          <Link
+            href={withLocale("/terms")}
+            className="hover:text-[var(--color-brand-primary)] hover:underline"
+          >
+            {ui.termsLink}
+          </Link>
+        </span>
         <span>
           © {year} {brand.name}. {ui.copyrightTail}
         </span>
