@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     template: `%s | ${brandConfig.name}`,
   },
   verification: {
+    google: "uk5ksEvSXkKGT-VZ2WpmSYwoz88iFNPRy3Wulxr231I",
     other: {
       "naver-site-verification": "78f71a01861469f5cc95c4b7add94e4ebf9258da",
     },
