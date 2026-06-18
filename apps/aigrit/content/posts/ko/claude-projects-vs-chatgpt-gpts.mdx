@@ -1,0 +1,140 @@
+---
+title: "Claude Projects vs ChatGPT GPTs 비교: 맞춤 AI 작업공간, 어느 쪽을 쓸까"
+date: "2026-06-18 13:26"
+updated: "2026-06-18 13:26"
+slug: "claude-projects-vs-chatgpt-gpts"
+description: "Claude Projects와 ChatGPT GPTs를 2주간 같은 작업에 교차 투입했습니다. 지식 주입, 맞춤 지시, 공유·배포, 비용까지 데이터로 비교하고 용도별 선택 기준을 정리합니다."
+tags: ["Claude Projects", "ChatGPT GPTs", "맞춤 AI", "GPT Store", "AI 작업공간", "AI 도구 비교"]
+thumbnail: "/images/claude-projects-vs-chatgpt-gpts/og.png"
+featured: false
+category: "AI 도구 비교"
+topic_cluster: "AI 도구 비교"
+cluster_role: cluster
+---
+
+## 한 줄 요약
+
+내 자료와 규칙을 미리 넣어 두고 반복해서 쓰는 **맞춤 AI 작업공간** — **[Claude Projects](https://claude.ai)** 는 *비공개 작업*에 강하고, **[ChatGPT GPTs](https://chatgpt.com)** 는 *공유·배포*에 강하다. 2주간 같은 업무에 교차 투입한 결과, 둘은 경쟁 도구가 아니라 *용도가 갈리는* 도구였다.
+
+<Callout type="info" title="테스트 환경">
+  기간: 2026년 6월 1일 – 6월 14일 (14일) · 작업: 블로그 글 교정, 코드 리뷰 보조, 고객 문의 응답 템플릿 3종 · 플랜: Claude Pro($20) + ChatGPT Plus($20) · 자료: 약 40개 문서(브랜드 가이드·과거 글·FAQ) 주입
+</Callout>
+
+두 도구 모두 "한 번 설정해 두고 매번 다시 설명하지 않는다"가 핵심이다. 그러나 *무엇을 위해 설정하느냐*가 다르다. 두 서비스에 들어가는 기본 모델 성능 차이는 <Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">Claude 4 Sonnet vs GPT-4o 비교</Link>에서 따로 다뤘으니, 이 글은 *작업공간 기능 자체*에 집중한다.
+
+## Claude Projects vs ChatGPT GPTs — 핵심 비교 테이블
+
+| 항목 | Claude Projects | ChatGPT GPTs |
+|------|----------------|--------------|
+| **형태** | 대화 묶음 + 공유 지식 | 패키징된 맞춤 어시스턴트 |
+| **주 용도** | 비공개 반복 작업 | 공유·배포·재사용 |
+| **지식 주입** | Project knowledge (문서 업로드) | Knowledge 파일 + 지시문 |
+| **맞춤 지시** | Custom instructions (프로젝트별) | Instructions (GPT별) |
+| **외부 연동** | MCP·연결된 앱 | Actions(API 호출)·내장 도구 |
+| **공유** | 팀 워크스페이스 내 공유 | 링크 공개 / GPT Store 등록 |
+| **배포·수익화** | 없음 (내부용) | GPT Store 등록 가능 |
+| **요금** | $20/월 (Pro) | $20/월 (Plus) |
+
+지식 주입과 맞춤 지시는 둘 다 된다. 결정적 차이는 마지막 세 줄 — **공유·배포·수익화**다. Projects는 *내가 쓰려고* 만들고, GPTs는 *남이 쓰게* 만든다.
+
+![Claude Projects와 ChatGPT GPTs의 구조 비교 — 비공개 작업공간 vs 공유 어시스턴트](/images/claude-projects-vs-chatgpt-gpts/01-structure-comparison.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  같은 "맞춤 AI"지만 향하는 방향이 반대 — 안으로(작업) vs 밖으로(배포)
+</figcaption>
+
+## 지식 주입은 어느 쪽이 정확한가?
+
+같은 40개 문서(브랜드 가이드·과거 글 20편·FAQ)를 양쪽에 넣고, "이 브랜드 톤으로 신제품 안내문 초안"을 요청했다.
+
+| 측정 | Claude Projects | ChatGPT GPTs |
+|------|----------------|--------------|
+| 주입 문서 수 한도 | 프로젝트 용량 기준(넉넉) | 파일 20개 권장 |
+| 긴 문서 참조 정확도 | 높음 (원문 인용 잦음) | 중간 (요약 후 인용) |
+| 톤 재현 | 과거 글 문체 근접 | 일반적 "정중한" 톤으로 수렴 |
+| 출처 표시 | 어떤 문서를 봤는지 명시 | 명시 약함 |
+
+Claude Projects는 주입한 *원문을 길게 인용*하며 답했고, 어떤 문서를 근거로 삼았는지 비교적 분명했다. GPTs는 업로드 파일을 *내부 요약*해 참조하는 경향이 있어, 긴 문서의 세부 표현을 놓치는 경우가 있었다. 자료를 *그대로 따르게* 하려면 Projects, *대략의 지식*을 깔아 두는 거라면 GPTs로 충분했다. 자료 기반 답변을 더 끌어올리는 방법은 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 활용법</Link>에서 다룬 외부 연결과 함께 쓰면 효과가 커진다.
+
+## 공유와 배포 — GPTs의 영역
+
+여기서 둘이 완전히 갈린다.
+
+- **Claude Projects**: 같은 팀 워크스페이스 안에서 공유한다. *외부에 링크로 뿌리는* 기능은 없다. 철저히 *작업용*이다.
+- **ChatGPT GPTs**: 링크 하나로 누구에게나 공개할 수 있고, **GPT Store**에 등록하면 검색·노출된다.
+
+남이 쓸 도구를 만들고 배포까지 염두에 둔다면 GPTs가 유일한 선택지다. GPT를 만들어 *수익까지* 연결하는 흐름은 <Link href="/ko/blog/gpt-store-monetization-2026">GPT Store 수익화 2026 실전</Link>에서 단계별로 정리했다. 반대로 *내 자료가 밖으로 새면 안 되는* 작업(미공개 원고·내부 문서)이라면 Projects의 폐쇄성이 오히려 장점이다.
+
+![결정 흐름도 — 공유가 필요하면 GPTs, 비공개 반복 작업이면 Projects](/images/claude-projects-vs-chatgpt-gpts/02-decision-flow.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  "남이 쓰는가"를 첫 갈림길로 두면 선택이 단순해진다
+</figcaption>
+
+## 외부 연동 — MCP vs Actions
+
+반복 작업을 자동화하려면 외부 도구와 연결해야 한다. 접근 방식이 다르다.
+
+| 항목 | Claude Projects (MCP) | ChatGPT GPTs (Actions) |
+|------|----------------------|------------------------|
+| 연결 방식 | MCP 서버 등록 | OpenAPI 스키마로 API 연결 |
+| 설정 난이도 | 중간 (서버 준비 필요) | 중간 (API·인증 설정) |
+| 대표 사례 | 파일시스템·노트앱·DB 읽기/쓰기 | 외부 API 호출·검색 |
+| 양방향 작업 | 읽기+쓰기 폭넓음 | 호출 위주 |
+
+MCP는 로컬 파일·노트앱·데이터베이스에 *읽고 쓰는* 작업에 강하고, Actions는 외부 *API를 호출*하는 데 직관적이다. 실제로 노트앱을 AI가 직접 편집하게 만든 사례는 babipanote의 <Link href="https://babipanote.com/blog/claude-mcp-obsidian-live">Claude MCP + Obsidian 연동 기록</Link>에 정리돼 있다 — Projects + MCP 조합의 대표적인 쓰임이다.
+
+## 누가 어느 쪽을 써야 하나
+
+### Claude Projects가 맞는 사람
+
+- **비공개 자료를 반복 참조**하는 사람: 미공개 원고·브랜드 문서·내부 위키
+- **원문을 정확히 따르게** 하고 싶은 사람: 요약이 아니라 인용 기반 답변이 필요한 경우
+- **MCP로 로컬 도구를 붙이려는** 사람: 파일·노트·DB를 읽고 쓰는 워크플로우
+
+### ChatGPT GPTs가 맞는 사람
+
+- **남이 쓸 도구를 만드는** 사람: 고객·팀·구독자에게 배포할 어시스턴트
+- **GPT Store에 등록해 노출**을 노리는 사람: 검색 유입·수익화 가능성
+- **API 호출 중심 자동화**를 원하는 사람: Actions로 외부 서비스 연결
+
+맞춤 AI를 *판매 상품*으로 보는 관점은 <Link href="/ko/blog/sell-ai-prompts-promptbase">AI 프롬프트 판매 — PromptBase 실전</Link>과도 이어진다. 프롬프트를 GPT로 패키징해 배포하는 흐름이 자연스럽기 때문이다.
+
+## 결론 — 경쟁이 아니라 분담
+
+<ProCon>
+  <Pros>
+    - Claude Projects: 비공개 작업 보안, 원문 인용 정확도, MCP 양방향 연동
+    - ChatGPT GPTs: 링크·스토어 배포, 수익화 경로, Actions API 연결
+  </Pros>
+  <Cons>
+    - Claude Projects: 외부 배포·공개 기능 없음
+    - ChatGPT GPTs: 긴 문서 세부 표현 손실, 출처 표시 약함
+  </Cons>
+</ProCon>
+
+**개인적인 선택**: 나는 *글을 쓰는 작업*은 Claude Projects에, *남에게 줄 도구*는 ChatGPT GPTs에 둔다. 브랜드 자료 40개를 넣은 Projects는 교정·초안용으로 매일 쓰고, 독자에게 배포할 "AI 도구 추천 봇"은 GPT로 만들어 링크로 공유한다. 둘 중 하나만 고른다면 *목적*으로 결정하면 된다 — 안으로 쓸 것인가, 밖으로 뿌릴 것인가. 더 넓은 도구 지형은 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 완벽 가이드</Link>에서 한눈에 정리했다.
+
+## 자주 묻는 질문 (FAQ)
+
+### Claude Projects와 ChatGPT GPTs를 둘 다 구독해야 하나요?
+
+반드시 둘 다일 필요는 없다. 비공개 자료 기반 작업이 중심이면 Claude Pro 하나로 충분하고, 남에게 배포할 어시스턴트를 만드는 게 목적이면 ChatGPT Plus 하나로 족하다. 나는 용도를 나눠 병행하지만, 시작 단계라면 *지금 당장 필요한 목적* 하나로 먼저 정하길 권한다.
+
+### GPTs처럼 Claude Projects도 외부에 공개할 수 있나요?
+
+2026년 6월 기준 Claude Projects에는 외부 링크 공개나 스토어 등록 기능이 없다. 공유는 같은 팀 워크스페이스 안으로 제한된다. 누구나 접근할 수 있는 링크 배포가 필요하면 ChatGPT GPTs를 써야 한다.
+
+### 둘 다 내 업로드 자료가 학습에 쓰이나요?
+
+플랜·설정에 따라 다르다. 두 서비스 모두 비즈니스·팀 등급에서는 업로드 데이터를 모델 학습에 쓰지 않는 정책을 두고 있고, 개인 등급은 설정에서 학습 사용 여부를 끌 수 있다. 민감 자료를 다룬다면 가입 전 각 서비스의 데이터 정책과 설정을 반드시 확인하길 권한다.
+
+### 맞춤 지시(custom instructions)는 어디까지 따르나요?
+
+두 도구 모두 톤·형식·금지어 같은 규칙을 비교적 잘 따른다. 다만 긴 대화가 이어지면 초반 지시를 일부 흘리는 경향은 양쪽 다 있다. 중요한 규칙은 지시문 상단에 짧고 명확하게 두고, 자료로도 한 번 더 보강하는 방식이 안정적이었다.
+
+### 코딩 작업에도 쓸 만한가요?
+
+가벼운 코드 리뷰·스니펫 작성에는 둘 다 쓸 만하지만, 본격적인 다중 파일 작업은 별도 코딩 전용 도구가 낫다. 코딩 워크플로우 비교는 <Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">모델 비교 글</Link>과 함께 보면 도움이 된다.
+
+## 마무리
+
+"맞춤 AI 작업공간"이라는 같은 이름표를 달고 있지만, Claude Projects와 ChatGPT GPTs는 향하는 방향이 반대다. *안으로 쓰는* 비공개 작업이면 Projects, *밖으로 뿌리는* 배포라면 GPTs. 둘을 경쟁시키지 말고 *목적으로 분담*하는 게 2주 실측 끝에 내린 결론이다. 전체 AI 도구 선택의 큰 그림은 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 완벽 가이드</Link> Pillar에서 이어서 확인할 수 있다.
