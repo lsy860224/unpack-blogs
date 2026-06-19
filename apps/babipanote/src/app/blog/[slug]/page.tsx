@@ -1,5 +1,6 @@
 import path from "node:path";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import type { Metadata } from "next";
 import {
   Comments,
@@ -20,6 +21,9 @@ import { brandConfig } from "../../../../brand.config";
 
 const CONTENT_DIR = path.join(process.cwd(), "content/posts");
 
+/** ISR: 예약 발행글이 발행 시각 이후 자동 노출되도록 10분마다 재생성. */
+export const revalidate = 600;
+
 interface Params {
   slug: string;
 }
@@ -36,7 +40,11 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(CONTENT_DIR, slug, { brand: "babipanote" });
+  const { isEnabled: preview } = await draftMode();
+  const post = getPostBySlug(CONTENT_DIR, slug, {
+    brand: "babipanote",
+    includeFuture: preview,
+  });
   if (!post) return {};
   return buildMetadata({
     title: post.frontmatter.title,
@@ -57,7 +65,11 @@ export default async function PostPage({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const post = getPostBySlug(CONTENT_DIR, slug, { brand: "babipanote" });
+  const { isEnabled: preview } = await draftMode();
+  const post = getPostBySlug(CONTENT_DIR, slug, {
+    brand: "babipanote",
+    includeFuture: preview,
+  });
   if (!post) notFound();
 
   const allPosts = getAllPostSummaries(CONTENT_DIR, { brand: "babipanote" });

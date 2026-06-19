@@ -17,6 +17,9 @@ import {
 } from "../../../../lib/categories";
 import { CategorySidebar } from "../../../../components/layout/CategorySidebar";
 
+/** ISR: 예약 발행글이 발행 시각 이후 자동 노출되도록 10분마다 재생성. */
+export const revalidate = 600;
+
 const CATEGORY_UI = {
   ko: {
     kicker: "CATEGORY",

@@ -1,5 +1,6 @@
 import path from "node:path";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import type { Metadata } from "next";
 import {
   PostHeader,
@@ -34,6 +35,9 @@ interface Params {
   slug: string;
 }
 
+/** ISR: 예약 발행글이 발행 시각 이후 자동 노출되도록 10분마다 재생성. */
+export const revalidate = 600;
+
 export function generateStaticParams(): Params[] {
   const params: Params[] = [];
   for (const locale of SUPPORTED_LOCALES) {
@@ -52,7 +56,11 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = getPostBySlug(contentDirFor(locale), slug, { brand: "aigrit" });
+  const { isEnabled: preview } = await draftMode();
+  const post = getPostBySlug(contentDirFor(locale), slug, {
+    brand: "aigrit",
+    includeFuture: preview,
+  });
   if (!post) return {};
   const localized = getLocalizedBrand(locale);
 
@@ -86,8 +94,12 @@ export default async function PostPage({
   params: Promise<Params>;
 }) {
   const { locale, slug } = await params;
+  const { isEnabled: preview } = await draftMode();
   const dir = contentDirFor(locale);
-  const post = getPostBySlug(dir, slug, { brand: "aigrit" });
+  const post = getPostBySlug(dir, slug, {
+    brand: "aigrit",
+    includeFuture: preview,
+  });
   if (!post) notFound();
 
   const allPosts = getAllPostSummaries(dir, { brand: "aigrit" });
