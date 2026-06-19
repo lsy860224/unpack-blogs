@@ -1,0 +1,145 @@
+---
+title: "GitHub Copilot vs Claude Code 비교: 같은 기능을 두 도구로 만들어 본 결과"
+date: "2026-08-03 09:00"
+updated: "2026-08-03 09:00"
+slug: "github-copilot-vs-claude-code"
+description: "GitHub Copilot과 Claude Code로 같은 기능을 구현해 코드 품질, 다파일 작업, 맥락 이해, 가격을 데이터로 비교했다. IDE 자동완성과 터미널 에이전트, 용도로 갈린다."
+tags: ["GitHub Copilot", "Claude Code", "AI 코딩 도구 비교", "Copilot 후기", "Claude Code 후기", "AI 코딩"]
+thumbnail: "/images/github-copilot-vs-claude-code/og.png"
+featured: false
+category: "AI 코딩"
+topic_cluster: "AI 코딩"
+cluster_role: cluster
+---
+
+## 한 줄 요약
+
+IDE 안에서 자동완성과 에이전트로 돕는 **[GitHub Copilot](https://github.com/features/copilot)**, 터미널에서 프로젝트 전체를 다루는 **[Claude Code](https://www.claude.com/product/claude-code)**. 같은 기능을 양쪽으로 구현한 결과, **타이핑을 돕는 도구와 작업을 위임하는 도구로 역할이 갈린다**.
+
+<Callout type="info" title="테스트 환경">
+  기간: 2026년 6월 4일 – 6월 16일 (약 2주) · 과제: Next.js 블로그에 "글 검색 + 태그 필터" 기능 신규 구현(8개 파일) + 기존 버그 2건 수정 · 도구: GitHub Copilot(VS Code 확장, 자동완성·Edits·Agent 모드) + Claude Code(터미널 에이전트, Sonnet) · 테스터: 비개발자 1인 · macOS, Apple Silicon
+</Callout>
+
+같은 과제를 두 도구로 각각 처음부터 만들었다. 모델 자체의 성능 차이가 아니라 *도구의 작동 방식*이 결과를 가른다. IDE 통합 자동완성 진영의 또 다른 선택지인 Cursor와의 비교는 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor 비교</Link>에서 별도로 다뤘으니, 이 글은 Copilot과 Claude Code의 *작동 방식 차이*에 집중한다.
+
+## GitHub Copilot vs Claude Code — 핵심 비교 테이블
+
+| 항목 | GitHub Copilot | Claude Code |
+|------|---------------|-------------|
+| **형태** | IDE 확장 (VS Code·JetBrains 등) | CLI (터미널 에이전트) |
+| **주 강점** | 인라인 자동완성·코드 제안 | 다파일 변경·프로젝트 맥락 |
+| **AI 모델** | GPT·Claude 등 선택 | Claude 계열 |
+| **맥락 수집** | 열린 파일 + 워크스페이스 인덱싱 | 프로젝트 전체 + 규칙 파일 |
+| **다파일 작업** | Agent 모드로 가능(중간) | 한 번에 여러 파일 동시(강) |
+| **개입 방식** | 제안 → 수락(Tab)/검토 | 직접 수행(권한 승인) |
+| **기본 요금** | $10/월(Pro) | $20/월(Pro 플랜 포함) |
+| **학습 곡선** | 낮음(IDE 그대로) | 낮음(자연어 대화) |
+
+자동완성은 Copilot, 큰 변경은 Claude Code. 표 한 장으로 정리되지만, 실제 작업에서 얼마나 갈리는지는 직접 시켜 봐야 드러난다.
+
+![GitHub Copilot의 IDE 자동완성과 Claude Code의 터미널 에이전트 작동 방식 비교](/images/github-copilot-vs-claude-code/01-workflow-comparison.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  같은 코딩 보조지만 개입 지점이 다르다 — 커서 옆 vs 프로젝트 전체
+</figcaption>
+
+## 다파일 작업과 맥락 이해는 어느 쪽이 나은가?
+
+"글 검색 + 태그 필터" 기능은 컴포넌트·유틸·페이지·타입까지 8개 파일에 걸쳐 있었다. 한 기능이 여러 파일로 퍼질 때 두 도구의 차이가 가장 크게 났다.
+
+| 측정 | GitHub Copilot | Claude Code |
+|------|---------------|-------------|
+| 완료 시간 | 약 50분 | 약 30분 |
+| 동시 수정 파일 | Agent 모드 4~5개 | 8개 한 번에 |
+| 첫 빌드 성공 | X (import 2건 누락) | O |
+| 수정 횟수 | 3회 | 1회 |
+| 규칙 파일 반영 | 부분 | 전체(프로젝트 규칙 인식) |
+
+Claude Code는 프로젝트 규칙 파일을 읽고 8개 파일을 한 번에 만들었고, 첫 빌드가 통과했다. Copilot은 Agent 모드로 다파일 변경이 되긴 했지만 일부 파일의 import 경로를 놓쳐 두 번 손봐야 했다. 이 "프로젝트 전체 인식" 패턴은 <Link href="/ko/blog/claude-code-flutter-app-guide">Claude Code로 Flutter 앱 만든 과정</Link>에서도 같은 결정 요인이었다. 반면 *한 줄짜리 자동완성*은 Copilot이 압도적으로 빨랐다 — 함수 이름만 쳐도 본문을 채웠다.
+
+## 코드 품질과 버그 수정 — 점수표
+
+기존 버그 2건(필터 상태 초기화 누락, 빈 검색어 처리)을 양쪽에 맡겼다. 5점 척도로 채점했다.
+
+| 항목 | GitHub Copilot | Claude Code |
+|------|---------------|-------------|
+| 원인 진단 정확도 | 4 | 5 |
+| 수정 코드 품질 | 4 | 4 |
+| 관련 파일 자동 탐색 | 3 | 5 |
+| 인라인 제안 속도 | 5 | 3 |
+| 설명·근거 제시 | 3 | 5 |
+
+수정 코드의 품질 자체는 둘 다 준수했다. 차이는 *주변 맥락*이다. Claude Code는 버그와 연결된 다른 파일까지 grep해 찾아냈고 "왜 이 수정인지"를 설명했다. Copilot은 열린 파일 안에서는 빠르고 정확했지만, 다른 파일을 직접 알려줘야 했다. 외부 도구를 붙여 맥락을 더 넓히는 방법은 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 활용법</Link>에서 다뤘다.
+
+![다파일 작업과 버그 수정 시나리오별 두 도구의 점수 비교 매트릭스](/images/github-copilot-vs-claude-code/02-score-matrix.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  자동완성은 Copilot, 다파일·맥락은 Claude Code로 갈린다
+</figcaption>
+
+## 가격 비교 — 무엇에 돈을 내는가
+
+| 항목 | GitHub Copilot | Claude Code |
+|------|---------------|-------------|
+| 진입 요금 | $10/월(Pro) | $20/월(Pro 플랜에 포함) |
+| 상위 플랜 | $19/월(Pro+) | $100~/월(Max) |
+| 과금 방식 | 정액(요청 한도 내) | 사용량 기반(플랜별 한도) |
+| 무료 옵션 | 제한적 무료 티어 | 없음 |
+
+Copilot은 진입 가격이 낮고 정액이라 비용이 예측된다. Claude Code는 Claude 구독에 포함되는 대신 사용량이 많으면 한도에 닿는다. *자주 쓰는 자동완성*에 돈을 낼지, *큰 작업 위임*에 돈을 낼지의 문제다. 2026년 6월 기준 가격이며 플랜·정책은 바뀔 수 있다.
+
+## 용도별 추천 — 누가 어느 쪽을 쓰나
+
+![작업 유형에 따라 GitHub Copilot과 Claude Code 중 어느 쪽을 선택할지 정리한 결정 흐름도](/images/github-copilot-vs-claude-code/03-decision-flow.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  "자동완성인가, 작업 위임인가"를 첫 갈림길로 두면 선택이 단순해진다
+</figcaption>
+
+### GitHub Copilot이 맞는 사람
+
+- **IDE 환경을 유지**하고 싶은 사람: VS Code·JetBrains를 그대로 쓰며 AI만 더한다
+- **자동완성이 핵심**인 사람: 타이핑하면서 즉시 제안받는 흐름이 중요한 경우
+- **비용을 낮게 시작**하려는 사람: $10/월 진입, 정액 예측
+
+### Claude Code가 맞는 사람
+
+- **다파일 변경이 잦은 사람**: 한 기능이 5개 이상 파일에 걸치는 프로젝트
+- **작업을 통째로 위임**하고 싶은 사람: "이 기능 만들어줘" 식의 자연어 지시
+- **터미널·자동화 친화적인 사람**: 슬래시 커맨드·스크립트와 엮어 쓰는 경우 — <Link href="/ko/blog/claude-code-website-automation">Claude Code 웹사이트 자동화</Link>가 대표 사례다
+
+코드를 거의 만지지 않고 화면부터 만드는 AI 웹빌더는 또 다른 결의 도구로, 이 둘과는 쓰임이 갈린다.
+
+## 결론 — 경쟁이 아니라 분담
+
+<ProCon>
+  <Pros>
+    - GitHub Copilot: IDE 통합, 빠른 인라인 자동완성, 낮은 진입 가격, 정액 예측
+    - Claude Code: 프로젝트 전체 맥락, 다파일 동시 수정, 작업 위임형 워크플로우
+  </Pros>
+  <Cons>
+    - GitHub Copilot: 다파일 변경 시 누락 가능, 프로젝트 맥락 수집 한계
+    - Claude Code: IDE 없음(터미널), 사용량 많으면 비용·한도 부담
+  </Cons>
+</ProCon>
+
+두 도구는 경쟁 관계가 아니라 *역할이 다른* 도구다. 코드를 타이핑하는 동안 옆에서 거드는 건 Copilot, 기능 하나를 통째로 맡기는 건 Claude Code. 실제로는 둘을 같이 쓰는 조합이 가장 효율적이었다 — Copilot으로 평소 코드를 빠르게 쓰고, 큰 변경이 필요할 때 Claude Code에 위임하는 식이다.
+
+## 자주 묻는 질문 (FAQ)
+
+### GitHub Copilot과 Claude Code를 둘 다 써야 하나요?
+
+반드시 둘 다일 필요는 없다. 기존 IDE에서 자동완성 중심으로 쓴다면 Copilot 하나로 충분하고, 다파일 변경·작업 위임이 중심이면 Claude Code 하나로 족하다. 다만 가격대가 겹치지 않아(각 $10·$20대) 병행하는 비용 부담이 크지 않다. 시작 단계라면 지금 가장 자주 하는 작업 하나에 맞춰 먼저 고르길 권한다.
+
+### 둘 중 코드 품질이 더 좋은 쪽은 어디인가요?
+
+생성된 코드 자체의 품질은 이번 테스트에서 큰 차이가 없었다. 5점 척도에서 수정 코드 품질은 양쪽 다 4점이었다. 차이는 코드가 아니라 *맥락 처리*에서 났다 — Claude Code는 관련 파일을 스스로 찾고 근거를 설명했고, Copilot은 열린 파일 안에서 빠르고 정확했다. 단일 파일이면 비슷하고, 여러 파일에 걸치면 Claude Code가 앞선다.
+
+### Copilot도 에이전트처럼 다파일 작업이 되지 않나요?
+
+된다. Copilot의 Agent 모드는 여러 파일을 수정할 수 있다. 다만 이번 8개 파일 과제에서는 일부 import 경로를 놓쳐 추가 수정이 필요했고, 완료 시간도 더 걸렸다. 프로젝트 규칙 파일을 전체에 일관 적용하는 점에서는 Claude Code가 더 안정적이었다. 규모가 작은 다파일 변경이면 Copilot Agent로도 충분하다.
+
+### 비개발자도 쓸 수 있나요?
+
+둘 다 가능하지만 결이 다르다. Claude Code는 터미널 기본 명령만 알면 자연어로 전체 프로젝트를 다룰 수 있어 비개발자·기획 직군에 접근성이 좋다. Copilot은 VS Code 같은 IDE 사용 경험이 있으면 학습 곡선이 완만하다. 코드를 거의 안 만지고 결과만 받고 싶다면 Claude Code 쪽이 더 편했다.
+
+## 마무리
+
+GitHub Copilot과 Claude Code는 같은 "AI 코딩 도구"라는 이름표를 달았지만 작동 지점이 다르다. *커서 옆에서 타이핑을 돕는* Copilot, *프로젝트 전체를 위임받는* Claude Code. 자동완성·IDE 중심이면 Copilot, 다파일·작업 위임 중심이면 Claude Code다. 둘을 경쟁시키기보다 용도로 분담하는 게 2주 실측 끝에 내린 결론이다. 더 넓은 도구 지형은 <Link href="/ko/blog/ai-coding-complete-guide-2026">AI 코딩 완벽 가이드 2026</Link> Pillar에서 이어서 확인할 수 있다.
