@@ -8,6 +8,9 @@ import {
 } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 
+/** ISR: 예약 발행글이 발행 시각 이후 자동 노출되도록 10분마다 재생성. */
+export const revalidate = 600;
+
 const CONTENT_DIR = path.join(process.cwd(), "content/posts");
 
 export default function HomePage() {

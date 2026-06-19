@@ -79,3 +79,13 @@ export function formatPostDateShort(input: string, opts: FormatPostDateOptions =
 export function toIsoDatetime(input: string): string {
   return parsePostDate(input).toISOString();
 }
+
+/**
+ * True when a post's publish `date` is at or before `now`.
+ * Timezone-aware via {@link parsePostDate} (bare dates → KST midnight, ISO
+ * offsets respected). Used as the single source of truth for scheduled
+ * publishing: future-dated posts return `false` until their moment passes.
+ */
+export function isPublished(input: string, now: number = Date.now()): boolean {
+  return parsePostDate(input).getTime() <= now;
+}

@@ -9,6 +9,9 @@ import {
 import { getLocalizedBrand } from "../../../brand.config";
 import { getCategorySlug } from "../../lib/categories";
 
+/** ISR: 예약 발행글이 발행 시각 이후 자동 노출되도록 10분마다 재생성. */
+export const revalidate = 600;
+
 const HOME_UI = {
   ko: {
     kicker: "AI TOOL REVIEW",

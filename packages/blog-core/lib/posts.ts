@@ -1,12 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
 import { parseMdxFile, type Brand } from "./mdx";
+import { isPublished } from "./date";
 import type { Post, PostSummary } from "../types/post";
 
 const MDX_EXT = /\.mdx?$/i;
 
 export interface PostQueryOptions {
   includeDrafts?: boolean;
+  /**
+   * 미래 발행일(date > now) 글을 포함할지. 기본 false → 예약 발행 게이팅.
+   * Draft Mode 미리보기에서만 true 로 전달한다.
+   */
+  includeFuture?: boolean;
   /** 앱별 스키마 검증 강제 (babipanote는 category 금지 등) */
   brand?: Brand;
 }
@@ -23,7 +29,10 @@ export function getAllPosts(
 
   const posts = files
     .map((filePath) => parseMdxFile(filePath, { brand: opts.brand }))
-    .filter((post) => opts.includeDrafts || !post.frontmatter.draft);
+    .filter((post) => opts.includeDrafts || !post.frontmatter.draft)
+    .filter(
+      (post) => opts.includeFuture || isPublished(post.frontmatter.date),
+    );
 
   return posts.sort((a, b) =>
     b.frontmatter.date.localeCompare(a.frontmatter.date),
@@ -54,7 +63,10 @@ export function getPostBySlug(
   ];
   const hit = candidates.find((p) => fs.existsSync(p));
   if (!hit) return null;
-  return parseMdxFile(hit, { brand: opts.brand });
+  const post = parseMdxFile(hit, { brand: opts.brand });
+  // 예약 발행 게이팅: 미래글은 직접 URL 접근 시에도 숨긴다 (Draft Mode 제외).
+  if (!opts.includeFuture && !isPublished(post.frontmatter.date)) return null;
+  return post;
 }
 
 export function getAllPostSlugs(

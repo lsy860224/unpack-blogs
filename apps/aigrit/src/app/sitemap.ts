@@ -4,6 +4,9 @@ import { getAllPostSummaries, SUPPORTED_LOCALES } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 import { getAllCategorySlugs } from "../lib/categories";
 
+/** ISR: 예약 발행글이 발행 시각 이후 sitemap에 자동 반영되도록 10분마다 재생성. */
+export const revalidate = 600;
+
 type ChangeFreq = NonNullable<MetadataRoute.Sitemap[number]["changeFrequency"]>;
 
 const STATIC_PATHS: {
