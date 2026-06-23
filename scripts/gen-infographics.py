@@ -118,6 +118,12 @@ def header(d, T, title, subtitle, W):
 
 # ---------- templates ----------
 def comparison_table(spec, T):
+    # defensive: accept dict-rows [{label,..}] without explicit columns
+    if "columns" not in spec and spec.get("rows") and isinstance(spec["rows"][0], dict):
+        keys = list(spec["rows"][0].keys())
+        spec["columns"] = ["항목"] + [k.title() for k in keys if k != "label"]
+        datakeys = [k for k in keys if k != "label"]
+        spec["rows"] = [[r.get("label","")] + [r.get(k,"") for k in datakeys] for r in spec["rows"]]
     cols = spec["columns"]; rows = spec["rows"]
     ncol = len(cols)
     W = 1200; top = 168
@@ -174,7 +180,10 @@ def score_bars(spec, T):
         d.text((lx+26, top+16), s["name"], font=font("ps", 20), fill=T["head"])
         lx += 40 + d.textlength(s["name"], font=font("ps",20)) + 26
     label_w = 150; bx0 = 60+label_w; bx1 = W-90; bw = bx1-bx0
-    maxv = 5
+    # auto-detect scale: 5 or 10 (or higher), so 1-10 specs render correctly
+    allvals = [v for s in series for v in s["scores"]]
+    peak = max(allvals) if allvals else 5
+    maxv = 5 if peak <= 5 else (10 if peak <= 10 else peak)
     for ri, c in enumerate(crit):
         ry = bar_area_y + ri*rowgap
         d.text((60, ry+ (len(series)*22)//2 - 6), c, font=font("ps", 20), fill=T["head"])
@@ -235,9 +244,12 @@ def pipeline(spec, T):
         d.text((x+bw//2, y+24), str(i+1), font=font("pb", 22),
                fill=T["accent"] if i==n-1 else T["bgTop"], anchor="ma")
         tc = T["bgTop"] if i==n-1 else T["head"]
-        # step may be a string, or {"label":..,"desc":..}
-        label = st["label"] if isinstance(st, dict) else st
-        desc = st.get("desc") if isinstance(st, dict) else None
+        # step may be a string, or a dict with varied keys
+        if isinstance(st, dict):
+            label = next((st[k] for k in ("label","name","title","step") if k in st), "")
+            desc = next((st[k] for k in ("desc","detail","description","sub") if k in st), None)
+        else:
+            label, desc = st, None
         lab_lines = wrap(d, label, font("pb", 19), bw-20)[:2]
         ly = y+64
         for li, ln in enumerate(lab_lines):
