@@ -1,0 +1,182 @@
+---
+title: "Claude Code로 크롬 확장 프로그램 만들기 — 아이디어부터 스토어 등록까지"
+date: "2027-06-01 09:00"
+updated: "2027-06-01 09:00"
+slug: "claude-code-chrome-extension"
+description: "Claude Code로 크롬 확장 만들기를 아이디어 정의부터 manifest 작성·기능 구현·디버깅·웹 스토어 등록까지 실제 코드블록과 함께 단계별로 따라간다. 비개발자도 따라 할 수 있는 실전 가이드다."
+tags: ["크롬 확장 만들기", "Claude Code", "크롬 익스텐션 개발", "AI 코딩", "Manifest V3", "웹 스토어 등록"]
+thumbnail: "/images/claude-code-chrome-extension/og.png"
+featured: false
+category: "AI 코딩"
+topic_cluster: "AI 코딩"
+cluster_role: cluster
+---
+
+## 한 줄 요약
+
+크롬 확장은 코드 양이 작고 구조가 단순해서, **[Claude Code](https://www.claude.com/product/claude-code)** 같은 터미널 에이전트로 *아이디어 정의 → manifest 작성 → 기능 구현 → 디버깅 → 스토어 등록*까지 한 흐름에 끝낼 수 있는 가장 좋은 입문 프로젝트다. 이 글은 "현재 탭의 글자 수를 세주는 확장"을 실제로 만들어 [Chrome 웹 스토어](https://chromewebstore.google.com)에 올리기까지를, 막힌 지점까지 포함해 코드와 함께 따라간다.
+
+<Callout type="info" title="실습 환경">
+  도구: Claude Code(터미널) · 브라우저: Chrome(Manifest V3) · 결과물: "탭 글자 수 카운터" 확장 1개 · 사전 지식: HTML·JS 기초만(프레임워크 불필요) · 소요: 실작업 약 2시간(스토어 검수 대기 별도)
+</Callout>
+
+크롬 확장은 별도 빌드 도구 없이 폴더 하나에 파일 몇 개만 있으면 동작한다. 그래서 AI 에이전트에게 *전체 구조를 한 번에 맡기기*에 부담이 없다. 자연어 프롬프트로 사이트를 통째로 빌드한 경험은 <Link href="/ko/blog/claude-code-website-automation">Claude Code로 블로그 만들기</Link>에 정리했는데, 확장은 그보다 규모가 훨씬 작아 *첫 AI 코딩 프로젝트*로 더 적합하다.
+
+## 만들 결과물 — "탭 글자 수 카운터"
+
+목표를 먼저 못박는다. AI 에이전트는 *모호한 지시*에서 길을 잃는다.
+
+![탭 글자 수 카운터 확장의 파일·권한 구성 요약 — 최소 권한 원칙](/images/claude-code-chrome-extension/02-permissions.png)
+
+| 항목 | 내용 |
+|------|------|
+| **기능** | 현재 탭 본문의 글자 수·단어 수를 팝업에 표시 |
+| **구성** | manifest.json · popup.html · popup.js · content.js |
+| **권한** | `activeTab`, `scripting` (최소 권한) |
+| **Manifest** | V3 (2027년 기준 필수) |
+| **외부 의존성** | 없음 (순수 바닐라 JS) |
+
+기능을 한 문장으로 정의해 두면 프롬프트가 명확해지고, Claude Code가 만드는 파일 구조도 예측 가능해진다. 도구를 IDE에서 쓸지 터미널에서 쓸지 고민된다면 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor</Link> 비교가 선택에 도움이 된다.
+
+## 전체 파이프라인 — 5단계
+
+![Claude Code로 크롬 확장 만드는 5단계 파이프라인 — 정의·스캐폴드·구현·디버깅·등록](/images/claude-code-chrome-extension/01-pipeline.png)
+
+아이디어에서 스토어 등록까지의 흐름은 다섯 단계로 끊어진다. 각 단계가 *하나의 프롬프트 묶음*에 대응한다.
+
+| 단계 | 하는 일 | Claude Code 역할 |
+|------|--------|------------------|
+| 1. 정의 | 기능·권한·파일 구조 확정 | 구조 제안·검토 |
+| 2. 스캐폴드 | manifest·빈 파일 생성 | 폴더·파일 일괄 생성 |
+| 3. 구현 | 본문 로직·팝업 UI 작성 | 코드 작성·연결 |
+| 4. 디버깅 | 로드·콘솔 오류 수정 | 에러 읽고 수정 |
+| 5. 등록 | 압축·스토어 제출 | 매니페스트 검증·zip |
+
+## 1단계 — 프로젝트 정의와 스캐폴드
+
+빈 폴더에서 Claude Code를 실행하고, 만들 것을 *구체적으로* 지시한다. 다음과 같은 프롬프트가 출발점이다.
+
+```
+크롬 확장(Manifest V3)을 만들 거야. 기능은 "현재 탭 본문의
+글자 수와 단어 수를 팝업에 표시". 권한은 activeTab과 scripting만.
+manifest.json, popup.html, popup.js, content.js 구조로
+폴더를 스캐폴드해줘. 외부 라이브러리는 쓰지 마.
+```
+
+Claude Code가 만들어 주는 `manifest.json`의 핵심은 이렇다. **Manifest V3**에서는 `action`(팝업)과 `permissions`를 명시해야 한다.
+
+```json
+{
+  "manifest_version": 3,
+  "name": "탭 글자 수 카운터",
+  "version": "1.0.0",
+  "description": "현재 탭 본문의 글자 수와 단어 수를 표시합니다.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "글자 수 세기"
+  }
+}
+```
+
+권한은 *최소한*으로 두는 게 중요하다. 스토어 검수는 과도한 권한 요청을 거절 사유로 본다. `activeTab`과 `scripting`만으로 "사용자가 클릭한 그 탭"에만 접근하므로 안전하다.
+
+## 2단계 — 기능 구현
+
+팝업 버튼을 누르면 현재 탭에 스크립트를 주입해 본문 텍스트를 읽어 오는 구조다. `popup.js`에서 `chrome.scripting.executeScript`로 함수를 주입한다.
+
+```js
+// popup.js
+document.getElementById("count").addEventListener("click", async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const [{ result }] = await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: () => {
+      const text = document.body.innerText || "";
+      const chars = text.replace(/\s/g, "").length;
+      const words = text.trim().split(/\s+/).filter(Boolean).length;
+      return { chars, words };
+    },
+  });
+  document.getElementById("out").textContent =
+    `글자 ${result.chars}자 · 단어 ${result.words}개`;
+});
+```
+
+`popup.html`은 버튼 하나와 결과를 보여줄 영역만 있으면 된다. 여기서 Claude Code에게 *"버튼 클릭 시 결과가 안 보이면 콘솔 로그를 찍어 원인을 찾아줘"* 처럼 디버깅까지 미리 부탁해 두면 다음 단계가 매끄럽다.
+
+```html
+<!-- popup.html -->
+<body style="width:220px;padding:12px;font-family:sans-serif">
+  <button id="count">현재 탭 글자 수 세기</button>
+  <p id="out">버튼을 눌러주세요</p>
+  <script src="popup.js"></script>
+</body>
+```
+
+## 3단계 — 로컬 로드와 디버깅
+
+코드가 준비되면 Chrome에서 직접 로드해 본다. 주소창에 `chrome://extensions`를 열고 우상단 **개발자 모드**를 켠 뒤 **압축해제된 확장 프로그램을 로드**로 폴더를 선택한다.
+
+여기서 막히는 지점이 두 가지였다. 첫째, 일부 사이트(`chrome://`, 웹 스토어 등)는 보안상 스크립트 주입이 막혀 결과가 비어 나온다 — 이건 정상이고, 일반 웹페이지에서 테스트하면 된다. 둘째, 권한을 빠뜨리면 `scripting` 호출이 조용히 실패한다. 이럴 때 Claude Code에게 콘솔 오류 메시지를 그대로 붙여 주면 원인을 짚어 수정해 준다.
+
+```
+확장을 로드했는데 버튼을 눌러도 결과가 안 나와. 콘솔에
+"Cannot access contents of the page" 오류가 떠. 원인과
+manifest·코드 수정안을 알려줘.
+```
+
+에이전트에게 *오류 메시지·재현 절차·기대 동작*을 함께 주는 것이 디버깅 속도를 가른다. 같은 디버깅 흐름을 VS Code 안의 에이전트로 가져가는 비교는 <Link href="/ko/blog/cline-vs-roo-code">Cline vs Roo Code</Link>에서, IDE냐 터미널이냐의 선택은 <Link href="/ko/blog/github-copilot-vs-claude-code">GitHub Copilot vs Claude Code</Link>에서 다룬 승인·실행 방식과도 통한다.
+
+## 4단계 — 웹 스토어 등록
+
+동작이 확인되면 폴더를 zip으로 압축해 제출한다. Claude Code에게 *"manifest 필수 필드를 검증하고 스토어 제출용 zip을 만들어줘"* 라고 하면 누락 필드까지 점검해 준다.
+
+![크롬 웹 스토어 등록 점검 흐름 — 권한·개인정보·Manifest 필드 분기](/images/claude-code-chrome-extension/03-flow.png)
+
+| 등록 단계 | 내용 |
+|------|------|
+| 개발자 등록 | Chrome 웹 스토어 개발자 계정(1회 등록비) |
+| 패키지 | 확장 폴더를 zip으로 압축(상위 폴더 제외) |
+| 스토어 정보 | 이름·설명·아이콘(128px)·스크린샷 |
+| 개인정보 | 권한 사용 사유·데이터 처리 방침 명시 |
+| 검수 | 제출 후 보통 수일 내 결과 통보 |
+
+검수에서 가장 흔한 반려는 **권한 과다**와 **개인정보 처리방침 누락**이다. 이 확장은 데이터를 외부로 보내지 않으므로 "수집·전송 없음"을 명확히 적으면 통과가 수월하다. 확장 만들기까지 익혔다면, AI 코딩 도구·모델·워크플로우 전체 지형은 <Link href="/ko/blog/ai-coding-complete-guide-2026">2026 AI 코딩 완벽 가이드</Link>에서 한눈에 정리해 두었다.
+
+## 결론 — 확장은 AI 코딩 입문의 최적 크기
+
+<ProCon>
+  <Pros>
+    - 코드 양이 작아 에이전트가 전체 구조를 한 번에 다루기 좋음
+    - 빌드 도구·프레임워크 불필요 — 바닐라 JS로 충분
+    - 로컬 로드로 즉시 테스트, 피드백 루프가 짧음
+    - 결과물을 실제 스토어에 올려 *완성 경험*까지 얻음
+  </Pros>
+  <Cons>
+    - Manifest V3 권한·보안 규칙은 직접 이해해 둬야 안전
+    - 스토어 검수는 권한·개인정보에서 반려가 잦음
+    - 복잡한 확장(백그라운드 서비스 워커 등)은 별도 학습 필요
+  </Cons>
+</ProCon>
+
+크롬 확장은 *작고, 독립적이고, 결과가 눈에 보이는* 프로젝트라 Claude Code로 처음부터 끝까지 만들어 보기에 더없이 좋다. 핵심은 **기능을 한 문장으로 정의**하고, **권한을 최소로** 두고, **오류 메시지를 그대로 에이전트에 넘기는** 세 가지다. 이 흐름에 익숙해지면 같은 방식으로 더 큰 단위를 맡길 수 있다 — Claude Code로 모바일 앱을 통째로 빌드한 사례는 <Link href="/ko/blog/claude-code-flutter-app-guide">Claude Code로 Flutter 앱 만들기</Link>에서 이어 볼 수 있다.
+
+## 자주 묻는 질문 (FAQ)
+
+### 크롬 확장 만들기는 비개발자도 할 수 있나요?
+
+가능하다. 크롬 확장은 빌드 도구나 프레임워크 없이 폴더 하나에 manifest.json·HTML·JS 파일 몇 개만 있으면 동작하는 단순한 구조다. Claude Code 같은 AI 에이전트에 기능을 한 문장으로 정의해 지시하면 파일 구조부터 코드, 디버깅까지 함께 만들어 준다. HTML·JS 기초만 알면 이 글의 "탭 글자 수 카운터" 정도는 실작업 2시간 안에 완성할 수 있다.
+
+### Manifest V3는 꼭 써야 하나요?
+
+써야 한다. 2027년 기준 Chrome 웹 스토어는 Manifest V3를 필수로 요구하며, 구버전(V2)은 신규 등록이 막혀 있다. V3에서는 백그라운드 스크립트가 서비스 워커로 바뀌고, 권한 모델과 스크립트 주입 방식(`chrome.scripting`)이 달라진다. Claude Code에 "Manifest V3로 만들어줘"라고 명시하면 최신 규격에 맞는 manifest와 코드를 생성한다.
+
+### 스토어 등록은 무료인가요?
+
+확장 자체는 무료로 배포할 수 있지만, Chrome 웹 스토어 개발자 계정 등록 시 1회성 등록비가 있다. 등록 후에는 추가 비용 없이 여러 확장을 올릴 수 있다. 검수는 보통 제출 후 수일 내에 결과가 나오며, 권한 과다 요청이나 개인정보 처리방침 누락이 가장 흔한 반려 사유다. 데이터를 외부로 보내지 않는 확장이라면 "수집·전송 없음"을 명확히 적는 것만으로 통과가 수월하다.
+
+### AI가 만든 확장 코드를 그대로 믿어도 되나요?
+
+전적으로 믿기보다 핵심은 직접 확인하는 게 안전하다. 특히 요청하는 권한(permissions)이 기능에 비해 과한지, 외부로 데이터를 보내는 코드가 없는지는 manifest와 JS를 눈으로 점검해야 한다. Claude Code는 정확한 구조를 빠르게 만들어 주지만, 보안·개인정보 책임은 등록자에게 있다. 권한은 최소로 좁히고, 오류가 나면 메시지를 그대로 에이전트에 넘겨 원인을 함께 짚는 방식이 가장 안정적이다.
+</content>
