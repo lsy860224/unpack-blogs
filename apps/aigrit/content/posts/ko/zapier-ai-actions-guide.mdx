@@ -1,0 +1,135 @@
+---
+title: "Zapier AI Actions 실전 — 자연어로 업무 자동화"
+date: "2027-06-15 09:00"
+updated: "2027-06-15 09:00"
+slug: "zapier-ai-actions-guide"
+description: "Zapier AI 기능(AI Actions·자연어 Zap 생성·AI by Zapier)으로 멀티 앱 워크플로우를 자연어 한 문장으로 구축하는 실전 가이드. 셋업 단계·비용·한계까지 데이터로 정리했다."
+tags: ["Zapier AI", "AI Actions", "업무 자동화", "노코드 자동화", "워크플로우 자동화"]
+thumbnail: "/images/zapier-ai-actions-guide/og.png"
+featured: false
+category: "자동화"
+topic_cluster: "생산성 자동화"
+cluster_role: cluster
+---
+
+## 한 줄 요약
+
+**[Zapier](https://zapier.com)** AI는 이제 "트리거·액션을 직접 고르는" 도구에서 *"하고 싶은 일을 한 문장으로 말하면 Zap을 짜 주는"* 도구로 넘어갔다. 핵심은 세 가지다 — **자연어 Zap 빌더**(말로 워크플로우 생성), **AI by Zapier**(흐름 중간에서 분류·요약·추출), **AI Actions**(ChatGPT·Claude 같은 외부 어시스턴트가 Zapier의 7,000+ 앱을 도구로 호출). 코드 없이 멀티 앱 자동화를 만드는 가장 짧은 경로다.
+
+<Callout type="info" title="테스트 환경">
+  기간: 2027년 6월 6일 – 6월 13일 (8일) · 시나리오: "Gmail에 문의 라벨 메일 도착 → 본문에서 의도·우선순위 추출 → Notion DB 저장 → 긴급이면 Slack 알림" · 플랜: Zapier Free → Pro 트라이얼 · 측정: 자연어 빌더가 만든 초안의 정확도, AI 단계 추가 시간, 월 task 소모량
+</Callout>
+
+자동화 도구를 처음 잡으면 늘 같은 벽에 부딪힌다 — *어떤 트리거를 고르고 어떤 필터를 걸어야 하는지*. **Zapier AI**의 자연어 빌더는 이 벽을 한 문장으로 넘는다. "Gmail 문의 메일을 Notion에 저장하고 긴급한 건 Slack으로 알려 줘"라고 입력하면, Zapier가 트리거·필터·액션을 갖춘 Zap 초안을 만들어 준다. 도구 자체의 전체 비교는 <Link href="/ko/blog/zapier-vs-make-vs-n8n">Zapier vs Make vs n8n 비교</Link>에서 다뤘으니, 이 글은 *Zapier의 AI 기능만 떼어내 실전으로 쓰는 법*에 집중한다.
+
+## Zapier AI 3대 기능 — 무엇이 무엇인가
+
+![Zapier AI 3대 기능 개요 — 자연어 빌더·AI by Zapier·AI Actions 역할 비교](/images/zapier-ai-actions-guide/01-overview.png)
+
+| 기능 | 하는 일 | 어디서 쓰나 | 비용 성격 |
+|------|--------|------------|----------|
+| **자연어 Zap 빌더** | 문장 → Zap 초안 생성 | Zap 만들기 첫 화면 | 무료(생성), task는 실행 시 |
+| **AI by Zapier** | 흐름 중간 분류·요약·추출 | Zap 단계 안 | 무료 한도 내 자체 AI |
+| **AI Actions** | 외부 LLM이 Zapier 앱 호출 | ChatGPT·Claude·커스텀 | task 소모 |
+| **Copilot 디버깅** | 오류 원인·수정 제안 | Zap 편집 중 | 무료(플랜 따라) |
+| **AI 데이터 변환** | 포맷·필드 자동 매핑 | 액션 필드 설정 | task 내 포함 |
+
+세 기능은 역할이 다르다. **자연어 빌더**는 *입구*(Zap을 빠르게 만든다), **AI by Zapier**는 *흐름 중간의 두뇌*(메일을 분류하고 요약한다), **AI Actions**는 *반대 방향*(ChatGPT가 Zapier를 손발처럼 쓴다)이다. 이 셋을 헷갈리면 "AI로 자동화한다"는 말이 흐릿해진다. 외부 LLM을 직접 트리거에 붙이는 더 깊은 패턴은 <Link href="/ko/blog/make-ai-automation-recipes">Make AI 자동화 레시피</Link>의 모듈 설계와 같은 사고방식을 공유한다.
+
+## 자연어로 Zap 만들기 — 첫 동작까지 5단계
+
+![자연어 Zap 생성 파이프라인 — 문장 입력에서 라이브 자동화까지 5단계](/images/zapier-ai-actions-guide/02-pipeline.png)
+
+테스트 시나리오를 자연어 빌더로 만들 때 실제로 거친 단계다. 전부 코드 없이 진행했다.
+
+1. **문장 입력** — "Gmail에 '문의' 라벨 메일이 오면 본문에서 의도와 우선순위를 뽑아 Notion DB에 저장하고, 긴급하면 Slack #support에 알려 줘"
+2. **초안 검수** — Zapier가 Gmail 트리거 + AI by Zapier(추출) + Notion 액션 + Filter + Slack 액션을 자동 배치. 앱 연결(인증)만 사람이 한다
+3. **AI 단계 다듬기** — AI by Zapier 단계에서 추출 프롬프트를 *"의도(문의/환불/버그), 우선순위(긴급/보통)를 JSON으로"*로 구체화
+4. **필터 확인** — "긴급일 때만 Slack" 분기를 Filter가 맡는지 점검. 자연어 빌더가 대개 맞게 잡지만, 조건 값은 직접 확인해야 한다
+5. **테스트·켜기** — 샘플 메일로 실행 → Notion 행 생성·Slack 알림 확인 → Zap ON
+
+8일 측정에서 **초안 정확도는 약 80%**였다. 트리거·앱 선택은 거의 정확했고, 사람이 손대야 했던 부분은 *AI 추출 프롬프트의 구체화*와 *필터 조건 값*이었다. 즉 자연어 빌더는 "완성"이 아니라 "정확한 출발점"을 준다. 가벼운 개인용 자동화라면 모바일에서 끝내는 <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple 단축어 AI 자동화</Link>가 더 짧지만, 멀티 앱·분기가 들어가면 Zapier AI 쪽이 확장성에서 앞선다.
+
+## AI by Zapier — 흐름 중간의 분류·요약·추출
+
+자동화가 단순 전달을 넘어서면, 흐름 *중간*에서 판단이 필요해진다. "이 메일이 환불 요청인가 버그 신고인가", "긴 본문을 3줄로", "주문번호만 뽑아내기" 같은 작업이다. **AI by Zapier**는 이 자리를 별도 외부 키 없이 채운다.
+
+| 작업 유형 | AI by Zapier 액션 | 입력 예 | 출력 예 |
+|----------|------------------|--------|--------|
+| 분류 | Analyze/Categorize | 문의 본문 | "환불 / 긴급" |
+| 추출 | Extract Data | 영수증 텍스트 | 금액·날짜·항목 |
+| 요약 | Summarize | 긴 메일 스레드 | 3줄 요약 |
+| 생성 | Create with AI | 키워드·맥락 | 답장 초안 |
+| 포맷 변환 | Format/Transform | 자유 텍스트 | 구조화 JSON |
+
+실전 팁은 두 가지다. 첫째, **출력을 JSON으로 강제**하면 다음 액션에서 필드 매핑이 깔끔하다("의도·우선순위를 JSON 키로"). 둘째, **분기 판단은 AI에게 맡기되 실행은 Filter에게** 넘긴다 — AI가 "긴급"이라는 라벨만 만들고, Slack 알림 여부는 Filter가 그 값으로 결정하게 하면 비용도 줄고 디버깅도 쉽다. 이런 분류·요약·생성 패턴은 도구가 달라도 골격이 같아서, <Link href="/ko/blog/ai-marketing-automation-guide-2026">AI 마케팅 자동화 가이드</Link>에서 다룬 콘텐츠 자동화 시나리오와 그대로 호환된다.
+
+## AI Actions — ChatGPT·Claude가 Zapier를 손발로 쓰기
+
+방향이 반대인 기능이 **AI Actions**다. 여기서는 [ChatGPT](https://chatgpt.com)·[Claude](https://claude.ai) 같은 외부 어시스턴트가 *Zapier의 7,000+ 앱을 도구(tool)로* 호출한다. 예를 들어 ChatGPT에게 "이 회의록을 Notion에 저장하고 담당자에게 Slack DM 보내"라고 말하면, AI Actions가 그 의도를 실제 Notion·Slack 동작으로 실행한다.
+
+| 항목 | AI by Zapier | AI Actions |
+|------|-------------|-----------|
+| 주체 | Zapier Zap이 호출 | 외부 LLM(ChatGPT·Claude)이 호출 |
+| 트리거 | 앱 이벤트(메일 등) | 사람의 대화·어시스턴트 요청 |
+| 강점 | 정형 반복 자동화 | 비정형·즉흥 작업 위임 |
+| 한계 | 대화형 입력 약함 | 예측 가능성·재현성 낮음 |
+
+![어느 Zapier AI 기능을 쓸까 — 작업 성격으로 고르는 의사결정 흐름](/images/zapier-ai-actions-guide/03-flow.png)
+
+이 구조는 사실상 **에이전트가 도구를 쓰는** 패턴이다. LLM이 "무엇을 할지" 정하고 Zapier가 "어떻게 실행할지"를 맡는다. 같은 사고를 코드 수준에서 다루는 흐름은 <Link href="/ko/blog/claude-agent-sdk-getting-started">Claude Agent SDK 시작하기</Link>에서 도구 호출(tool use) 구조로 정리했다. 정형 반복은 자연어 빌더로 Zap을 굳히고, 비정형·즉흥 작업만 AI Actions로 위임하는 분담이 현실적이다.
+
+## 비용·한계 — task와 AI 사용량을 같이 본다
+
+Zapier 과금의 핵심 단위는 **task**(액션 1회 실행)다. AI 기능을 쓰면 task에 더해 AI 사용량도 고려해야 한다.
+
+| 항목 | Free | Pro(유료) |
+|------|:----:|:--------:|
+| 월 task | 100 | 750~(플랜별) |
+| 자연어 빌더 | 사용 가능 | 사용 가능 |
+| AI by Zapier | 제한적 | 더 넉넉 |
+| 멀티 스텝 Zap | 제한 | 풀 지원 |
+| Filter·Paths | 일부 | 풀 지원 |
+
+8일 테스트에서 위 4단계 Zap 1회 실행은 약 **3~4 task**를 소모했다(트리거 제외 액션 수 기준). 월 100건 처리 시 Free 한도를 빠르게 넘기 때문에, *실행량이 100건을 넘거나 분기가 잦으면 Pro가 사실상 필수*다. 무료 한도가 더 큰 대안이 필요하면 노코드 자동화 도구들의 한도를 비교한 <Link href="/ko/blog/n8n-ai-agent-workflows">n8n AI 에이전트 워크플로우</Link>에서 셀프호스트 실행 무제한 쪽을 함께 검토하는 편이 낫다. AI 자동화를 1인 운영 스택의 어느 칸에 끼울지는 <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택</Link>에서 전체 지형으로 정리했다.
+
+## 결론 — 입구는 자연어, 두뇌는 AI by Zapier, 위임은 AI Actions
+
+<ProCon>
+  <Pros>
+    - 자연어 빌더: 코드 없이 한 문장으로 멀티 앱 Zap 초안 생성
+    - AI by Zapier: 외부 API 키 없이 흐름 중간에서 분류·요약·추출
+    - AI Actions: ChatGPT·Claude가 7,000+ 앱을 도구로 호출
+    - 압도적 연동 앱 수로 "무엇이든 붙는다"
+  </Pros>
+  <Cons>
+    - 자연어 초안 정확도 약 80% — 필터·프롬프트는 사람이 검수 필수
+    - AI 단계가 task·AI 사용량을 동시에 소모해 비용이 빨리 는다
+    - Free 한도(100 task)로는 분기 많은 실전 자동화가 금세 막힘
+    - AI Actions는 재현성·예측 가능성이 낮아 정형 업무엔 부적합
+  </Cons>
+</ProCon>
+
+8일 동안 같은 시나리오를 Zapier AI로 만들어 본 결론은 단순하다. **자연어 빌더로 정확한 출발점을 빠르게 잡고, AI by Zapier로 흐름 중간의 판단을 채우고, 즉흥적 위임만 AI Actions에 맡긴다.** 세 기능을 역할로 나누면 "AI 자동화"가 흐릿한 구호가 아니라 손에 잡히는 워크플로우가 된다. 더 넓은 도구 지형은 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 완벽 가이드</Link>에서 한눈에 정리했다.
+
+## 자주 묻는 질문 (FAQ)
+
+### Zapier AI 자연어 빌더로 만든 Zap을 바로 켜도 되나요?
+
+권장하지 않는다. 8일 테스트에서 자연어 빌더 초안의 정확도는 약 80%였다. 트리거·앱 선택은 대체로 정확하지만, AI 추출 프롬프트의 구체화와 Filter 조건 값은 사람이 직접 검수해야 한다. 샘플 데이터로 1회 테스트 실행해 Notion 저장·Slack 알림이 의도대로 동작하는지 확인한 뒤 켜는 순서를 권한다.
+
+### AI by Zapier와 AI Actions는 어떻게 다른가요?
+
+호출 방향이 반대다. AI by Zapier는 Zapier의 Zap이 흐름 중간에서 분류·요약·추출을 수행하는 정형 자동화용이고, AI Actions는 ChatGPT·Claude 같은 외부 어시스턴트가 Zapier의 7,000+ 앱을 도구로 호출하는 비정형 위임용이다. 정형 반복은 AI by Zapier, 즉흥적이고 대화형인 작업은 AI Actions로 나눠 쓰는 편이 효율적이다.
+
+### Zapier AI 기능을 쓰면 비용이 얼마나 늘어나나요?
+
+AI 단계는 기본 단위인 task에 더해 AI 사용량도 소모한다. 테스트한 4단계 Zap 1회 실행이 약 3~4 task였고, 월 100건 처리 시 Free 한도(100 task)를 빠르게 넘겼다. 실행량이 월 100건을 넘거나 분기·필터가 잦으면 Pro 플랜이 사실상 필수다. 무료 한도가 더 큰 자동화가 필요하면 Make나 셀프호스트 n8n을 함께 검토하는 편이 낫다.
+
+### 비전공자도 Zapier AI로 멀티 앱 자동화를 만들 수 있나요?
+
+가능하다. 자연어 빌더는 "하고 싶은 일"을 한 문장으로 입력하면 트리거·액션·필터를 갖춘 Zap 초안을 만들어 주므로, 코드나 API 지식 없이 시작할 수 있다. 사람이 하는 일은 앱 연결(인증)과 AI 프롬프트·필터 조건 검수 정도다. 다만 분기가 복잡해지면 Filter·Paths 개념은 익혀 두는 편이 안정적이다.
+
+## 마무리
+
+**Zapier AI**의 진짜 변화는 "자동화를 짜는 법을 몰라도 된다"는 점이다. 자연어 빌더가 출발점을 만들고, AI by Zapier가 흐름 중간의 판단을 채우고, AI Actions가 즉흥적 위임을 받는다. 세 기능을 역할로 분담하면 코드 없이도 멀티 앱 워크플로우가 손에 잡힌다. 같은 자동화를 시각 노드로 풀어내는 접근은 <Link href="/ko/blog/make-automation-guide">Make 자동화 사용법</Link>과 비교해 보면 자신에게 맞는 손맛을 고를 수 있다.
