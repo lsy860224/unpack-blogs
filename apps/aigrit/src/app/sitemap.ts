@@ -1,6 +1,10 @@
 import path from "node:path";
 import type { MetadataRoute } from "next";
-import { getAllPostSummaries, SUPPORTED_LOCALES } from "@unpack/blog-core";
+import {
+  getAllPostSummaries,
+  parsePostDate,
+  SUPPORTED_LOCALES,
+} from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 import { getAllCategorySlugs } from "../lib/categories";
 
@@ -76,7 +80,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }
       entries.push({
         url: `${base}/${locale}/blog/${p.frontmatter.slug}`,
-        lastModified: new Date(p.frontmatter.updated ?? p.frontmatter.date),
+        lastModified: parsePostDate(p.frontmatter.updated ?? p.frontmatter.date),
         changeFrequency: "monthly",
         priority: 0.8,
         alternates: { languages },
