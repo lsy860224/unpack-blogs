@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { MetadataRoute } from "next";
-import { getAllPostSummaries } from "@unpack/blog-core";
+import { getAllPostSummaries, parsePostDate } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
 
 /** ISR: 예약 발행글이 발행 시각 이후 sitemap에 자동 반영되도록 10분마다 재생성. */
@@ -33,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPostSummaries(CONTENT_DIR, { brand: "babipanote" });
   const postEntries: MetadataRoute.Sitemap = posts.map((p) => ({
     url: `${base}/blog/${p.frontmatter.slug}`,
-    lastModified: new Date(p.frontmatter.updated ?? p.frontmatter.date),
+    lastModified: parsePostDate(p.frontmatter.updated ?? p.frontmatter.date),
     changeFrequency: "monthly",
     priority: 0.8,
   }));
