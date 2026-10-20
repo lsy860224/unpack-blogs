@@ -184,6 +184,7 @@ export default async function PostPage({
         enabled={adsEnabled}
         publisherId={adsPubId}
         slot={process.env.NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT}
+        label={locale === "en" ? "Advertisements" : "광고"}
       />
 
       <RelatedPosts

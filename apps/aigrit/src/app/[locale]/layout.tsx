@@ -13,6 +13,7 @@ import {
 } from "@unpack/blog-core";
 import { brandConfig, getLocalizedBrand } from "../../../brand.config";
 import { Header } from "../../components/layout/Header";
+import { buildLocaleIndex } from "../../lib/locale-index";
 import { Footer } from "../../components/layout/Footer";
 import "../globals.css";
 
@@ -38,6 +39,10 @@ const jetbrains = JetBrains_Mono({
 export function generateStaticParams() {
   return SUPPORTED_LOCALES.map((locale) => ({ locale }));
 }
+
+const adsenseClientId = brandConfig.monetization.adsense
+  ? brandConfig.monetization.adsensePublisherId
+  : undefined;
 
 export async function generateMetadata({
   params,
@@ -70,6 +75,10 @@ export async function generateMetadata({
         "naver-site-verification": "58fbc5aa649e7772ee090c6fe2cee3296cf34870",
       },
     },
+    // AdSense 사이트 소유권 확인용 메타 태그 (광고 스크립트·ads.txt 와 함께 3중 확인)
+    ...(adsenseClientId
+      ? { other: { "google-adsense-account": adsenseClientId } }
+      : {}),
   };
 }
 
@@ -123,16 +132,12 @@ export default async function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <BrandProvider config={runtimeConfig}>
-          <Header locale={locale} />
+          <Header locale={locale} localeIndex={buildLocaleIndex()} />
           <main className="flex-1">{children}</main>
           <Footer locale={locale} />
         </BrandProvider>
         <GoogleAnalytics gaId={brandConfig.analytics.gaId} />
-        {brandConfig.monetization.adsense && (
-          <AdSenseScript
-            publisherId={brandConfig.monetization.adsensePublisherId}
-          />
-        )}
+        <AdSenseScript publisherId={adsenseClientId} />
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ import {
   toBcp47,
 } from "@unpack/blog-core";
 import { getLocalizedBrand } from "../../../brand.config";
-import { getCategorySlug } from "../../lib/categories";
+import { resolveCategory } from "../../lib/categories";
 
 /** ISR: 예약 발행글이 발행 시각 이후 자동 노출되도록 10분마다 재생성. */
 export const revalidate = 600;
@@ -48,7 +48,7 @@ export default async function HomePage({
   const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
   const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" });
   const latest = posts.slice(0, 6);
-  const byCategory = groupByCategory(posts, ui.other);
+  const byCategory = groupByCategory(posts, locale, ui.other);
   const jsonLd = buildWebSiteJsonLd({
     siteName: localized.name,
     siteUrl: localized.url,
@@ -129,17 +129,23 @@ export default async function HomePage({
             {ui.byCategory}
           </h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {byCategory.map(([cat, catPosts]) => {
-              const catHref = `/${locale}/category/${getCategorySlug(cat)}`;
+            {byCategory.map(({ slug: catSlug, name: cat, posts: catPosts }) => {
+              const catHref = catSlug ? `/${locale}/category/${catSlug}` : null;
               return (
-                <div key={cat}>
+                <div key={catSlug ?? cat}>
                   <h3 className="mb-3 text-lg font-bold">
-                    <Link
-                      href={catHref}
-                      className="text-[var(--color-brand-primary)] transition hover:text-[var(--color-brand-secondary)]"
-                    >
-                      {cat}
-                    </Link>
+                    {catHref ? (
+                      <Link
+                        href={catHref}
+                        className="text-[var(--color-brand-primary)] transition hover:text-[var(--color-brand-secondary)]"
+                      >
+                        {cat}
+                      </Link>
+                    ) : (
+                      <span className="text-[var(--color-brand-primary)]">
+                        {cat}
+                      </span>
+                    )}
                     <span className="ml-2 text-xs tabular-nums font-mono text-[color-mix(in_oklab,var(--foreground)_45%,transparent)]">
                       {catPosts.length}
                     </span>
@@ -156,7 +162,7 @@ export default async function HomePage({
                       </li>
                     ))}
                   </ul>
-                  {catPosts.length > 4 && (
+                  {catHref && catPosts.length > 4 && (
                     <Link
                       href={catHref}
                       className="mt-2 inline-block text-xs font-mono text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
@@ -184,16 +190,33 @@ export default async function HomePage({
 
 type Summary = ReturnType<typeof getAllPostSummaries>[number];
 
+interface CategoryGroup {
+  /** null = 카테고리 미지정 글 묶음 (카테고리 페이지 없음) */
+  slug: string | null;
+  name: string;
+  posts: Summary[];
+}
+
+/** 별칭("AI 도구"·"LLM" 등)까지 같은 slug 로 묶어 대표명으로 표시한다. */
 function groupByCategory(
   posts: Summary[],
+  locale: string,
   otherLabel: string,
-): [string, Summary[]][] {
-  const map = new Map<string, Summary[]>();
+): CategoryGroup[] {
+  const map = new Map<string, CategoryGroup>();
   for (const p of posts) {
-    const cat = p.frontmatter.category ?? otherLabel;
-    const bucket = map.get(cat) ?? [];
-    bucket.push(p);
-    map.set(cat, bucket);
+    const raw = p.frontmatter.category;
+    const resolved = raw ? resolveCategory(raw, locale) : null;
+    const key = resolved?.slug ?? "__uncategorized__";
+    const group = map.get(key) ?? {
+      slug: resolved?.slug ?? null,
+      name: resolved?.name ?? otherLabel,
+      posts: [],
+    };
+    group.posts.push(p);
+    map.set(key, group);
   }
-  return Array.from(map.entries()).sort((a, b) => b[1].length - a[1].length);
+  return Array.from(map.values()).sort(
+    (a, b) => b.posts.length - a.posts.length,
+  );
 }
