@@ -248,13 +248,13 @@ AG_SUBTITLES = {
     "perplexity-ai-guide": "구글을 완전히 대체할까",
     "solo-developer-automation-stack": "월 6.5만원 자동화 스택",
     "claude-code-flutter-app-guide": "비개발자 2주 App Store 출시기",
-    "ai-side-income-100man-roadmap": "직장인 가능 6가지 경로 비교",
+    "ai-side-income-100man-roadmap": "9가지 경로 · 한국 거주자 체크포인트",
     "make-automation-guide": "Slack·Notion·Gmail 30분 컷 자동화",
-    "sell-ai-prompts-promptbase": "6개월 누적 $612 실전 매출 공개",
-    "ai-ebook-kindle-kdp": "3개월 3권 누적 $214 공개",
-    "chatgpt-coupang-partners-automation": "3개월 30글 ₩76,400 실전기",
-    "prompt-engineering-freelance": "3개월 11건 ₩1.2M 실전기",
-    "ai-newsletter-substack-growth": "6개월 구독자 1,020명 · 월 $380",
+    "sell-ai-prompts-promptbase": "팔리는 조건 · 정산 체크포인트",
+    "ai-ebook-kindle-kdp": "로열티 · AI 공개 규정 · 파이프라인",
+    "chatgpt-coupang-partners-automation": "자동화 범위 · 대가성 표시",
+    "prompt-engineering-freelance": "패키지 · 가격 · 수주 프로세스",
+    "ai-newsletter-substack-growth": "니치 · 첫 구독자 · 한국 정산 현실",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -270,13 +270,13 @@ AG_TITLE_OVERRIDES = {
     "ai-tools-2026-guide": "2026 AI 도구 완벽 가이드",
     "hello-world": "AIGrit — 리뷰 원칙과 첫 글",
     "claude-code-flutter-app-guide": "Claude Code + Flutter로 앱 만들기 실전 가이드",
-    "ai-side-income-100man-roadmap": "AI로 월 100만원 만들기 — 2026 직장인 로드맵",
+    "ai-side-income-100man-roadmap": "AI 부업 로드맵 2026",
     "make-automation-guide": "Make 자동화 사용법 — Slack·Notion·Gmail 30분 컷",
-    "sell-ai-prompts-promptbase": "AI 프롬프트 판매 — PromptBase 실전 6개월",
-    "ai-ebook-kindle-kdp": "AI 전자책 Kindle KDP 출판 실전",
-    "chatgpt-coupang-partners-automation": "ChatGPT 쿠팡파트너스 자동화",
-    "prompt-engineering-freelance": "프롬프트 엔지니어 프리랜싱",
-    "ai-newsletter-substack-growth": "Substack AI 뉴스레터 6개월 실전",
+    "sell-ai-prompts-promptbase": "AI 프롬프트 판매 시작 가이드",
+    "ai-ebook-kindle-kdp": "AI 전자책 Kindle KDP 출판 가이드",
+    "chatgpt-coupang-partners-automation": "ChatGPT 쿠팡파트너스 글쓰기 가이드",
+    "prompt-engineering-freelance": "프롬프트 엔지니어 프리랜싱 가이드",
+    "ai-newsletter-substack-growth": "Substack AI 뉴스레터 시작 가이드",
 }
 
 # babipanote: shorten overly long titles for OG if needed

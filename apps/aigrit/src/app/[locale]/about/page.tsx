@@ -101,8 +101,10 @@ function AboutKo({ postCount }: { postCount: number }) {
           데이터로 확보한 뒤 글로 옮깁니다.
         </p>
         <p>
-          <strong>리뷰 신뢰도 근거</strong> — 본 사이트의 모든 글은 작성자가
-          직접 사용한 결과를 기반으로 합니다. 스폰서 리뷰는 받지 않고, 제휴
+          <strong>리뷰 신뢰도 근거</strong> — 도구 리뷰는 작성자가 직접 사용한
+          결과를 기반으로 하고, 수익화·플랫폼 정책 가이드는 공식 문서와 공개
+          자료를 근거로 작성하며 글 첫머리에 그 사실을 밝힙니다. 검증할 수
+          없는 수익 인증은 싣지 않습니다. 스폰서 리뷰는 받지 않고, 제휴
           링크가 들어가는 글에는 본문 안 명시적 라벨과 글 상단 1줄 고지를
           동시에 표기합니다. 데이터·수치는 측정 환경과 표본 크기를 함께
           공개하며, 분기마다 도구 변화에 맞춰 Pillar 글을 갱신합니다.
@@ -220,15 +222,19 @@ function AboutEn({ postCount }: { postCount: number }) {
           2026 and shipped three Flutter iOS apps (GentleDo, GentleFast,
           GentleStudy) to the App Store. The blog monorepo is built on Next.js
           16 App Router, Turborepo, and MDX, designed and operated end-to-end
-          by the same single person. Since launching in {LAUNCHED_EN}, it has
-          published {`${postCount} posts`} in this language. Every tool review starts with the
+          by the same single person.{" "}
+          {`Since launching in ${LAUNCHED_EN}, it has published ${postCount} posts in this language.`}{" "}
+          Every tool review starts with the
           question &ldquo;what got faster or broke when I pushed this tool
           into a real project for several days,&rdquo; then becomes a writeup
           only after the first-party data exists.
         </p>
         <p>
-          <strong>Review credibility</strong> — Every post on this site is
-          based on hands-on use by the author. We do not accept sponsored
+          <strong>Review credibility</strong> — Tool reviews are based on
+          hands-on use by the author. Monetization and platform-policy guides
+          are based on official documentation and public sources, and say so
+          at the top of the article. We don&apos;t publish income claims we
+          can&apos;t verify. We do not accept sponsored
           reviews. Affiliate links carry both an inline label inside the
           paragraph and a one-line disclosure at the top of the article. Data
           and numbers are published with the measurement setup and sample
