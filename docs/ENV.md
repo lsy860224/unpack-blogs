@@ -7,7 +7,8 @@
 | 변수 | 용도 | 발급처 |
 |---|---|---|
 | `NEXT_PUBLIC_GA_ID` | GA4 측정 ID | analytics.google.com |
-| `NEXT_PUBLIC_ADSENSE_ID` | 애드센스 Publisher ID | adsense.google.com |
+| `NEXT_PUBLIC_ADSENSE_ID` | 애드센스 게시자 ID (`ca-pub-` + 숫자 16자리, `pub-…`도 허용) — 이 값 하나로 광고 스크립트·`google-adsense-account` 메타·`/ads.txt`가 함께 생성됨 | adsense.google.com → 계정 → 계정 정보 |
+| `NEXT_PUBLIC_ADSENSE_IN_ARTICLE_SLOT` | 글 내 광고 슬롯 ID (선택, 승인 후) | adsense.google.com → 광고 → 광고 단위 |
 | `NEXT_PUBLIC_GISCUS_REPO` | 댓글 GitHub 저장소 | giscus.app |
 | `NEXT_PUBLIC_GISCUS_REPO_ID` | Giscus 저장소 ID | giscus.app |
 | `NEXT_PUBLIC_GISCUS_CATEGORY` | Giscus 카테고리명 | giscus.app |

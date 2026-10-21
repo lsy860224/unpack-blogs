@@ -53,14 +53,14 @@ function Header({ subtitle }: { subtitle: string }) {
 function DisclaimerKo() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <Header subtitle="광고·제휴 고지사항 · 최종 업데이트 2026-04-15" />
+      <Header subtitle="광고·제휴 고지사항 · 최종 업데이트 2026-10-20" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <h2>1. 사이트의 수익 구조</h2>
         <p>{brandConfig.name}은 다음 두 가지로 운영비·원고료를 충당합니다.</p>
         <ul>
           <li>
             <strong>Google AdSense 디스플레이 광고</strong> — 본문 상·하단, 본문
-            중간에 삽입됩니다. 광고 영역은 <code>광고 · Sponsored</code>로 명시
+            중간에 삽입됩니다. 광고 영역은 <code>광고</code>로 명시
             됩니다.
           </li>
           <li>
@@ -138,14 +138,14 @@ function DisclaimerKo() {
 function DisclaimerEn() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <Header subtitle="Advertising & Affiliate Disclosure · Last updated 2026-04-15" />
+      <Header subtitle="Advertising & Affiliate Disclosure · Last updated 2026-10-20" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <h2>1. How we&apos;re funded</h2>
         <p>{brandConfig.name} is supported by two revenue streams:</p>
         <ul>
           <li>
             <strong>Google AdSense display ads</strong> — inserted above, below,
-            and within articles. Ad slots are labeled <code>Ad · Sponsored</code>.
+            and within articles. Ad slots are labeled <code>Advertisements</code>.
           </li>
           <li>
             <strong>Affiliate links</strong> — we link to the official sign-up

@@ -4,52 +4,95 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useBrand } from "@unpack/blog-core/contexts/brand-context";
+import type { LocaleIndexMap } from "../../lib/locale-index";
 
 const LOCALES = ["ko", "en"] as const;
 
-export function Header({ locale }: { locale: string }) {
+/** 번역이 없을 때 토글에 띄우는 안내 (target locale 언어로) */
+const FALLBACK_TITLE: Record<string, string> = {
+  ko: "이 페이지의 한국어판이 없어 한국어 블로그 목록으로 이동합니다",
+  en: "No English version of this page yet — opens the English blog index",
+};
+
+interface HeaderProps {
+  locale: string;
+  /** locale 별 실제 존재하는 글·카테고리 slug. 없으면 기존처럼 경로만 치환한다. */
+  localeIndex?: LocaleIndexMap;
+}
+
+interface LocaleTarget {
+  href: string;
+  /** 같은 페이지의 번역본이 없어 목록으로 대체했는지 */
+  fallback: boolean;
+}
+
+export function Header({ locale, localeIndex }: HeaderProps) {
   const brand = useBrand();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  const swapLocale = (target: string) => {
-    if (!pathname) return `/${target}`;
+  const swapLocale = (target: string): LocaleTarget => {
+    if (!pathname) return { href: `/${target}`, fallback: false };
     const segments = pathname.split("/");
     if (
-      segments.length >= 2 &&
-      (LOCALES as readonly string[]).includes(segments[1])
+      segments.length < 2 ||
+      !(LOCALES as readonly string[]).includes(segments[1])
     ) {
-      segments[1] = target;
-      return segments.join("/") || `/${target}`;
+      return {
+        href: `/${target}${pathname === "/" ? "" : pathname}`,
+        fallback: false,
+      };
     }
-    return `/${target}${pathname === "/" ? "" : pathname}`;
+
+    // /{locale}/blog/{slug} · /{locale}/category/{slug} 는 대상 언어에
+    // 같은 slug 가 실제로 있을 때만 그대로 보내고, 없으면 그 언어의 블로그 목록으로 보낸다.
+    const [, , section, rawSlug] = segments;
+    const available = localeIndex?.[target];
+    if (available && rawSlug && target !== segments[1]) {
+      const slug = decodeURIComponent(rawSlug);
+      const exists =
+        section === "blog"
+          ? available.posts.includes(slug)
+          : section === "category"
+            ? available.categories.includes(slug)
+            : true;
+      if (!exists) return { href: `/${target}/blog`, fallback: true };
+    }
+
+    segments[1] = target;
+    return { href: segments.join("/") || `/${target}`, fallback: false };
   };
 
   const withLocale = (href: string) => `/${locale}${href === "/" ? "" : href}`;
 
   const localeSwitcher = (
     <div className="flex items-center gap-1 text-xs font-mono">
-      {LOCALES.map((l, i) => (
-        <span key={l} className="flex items-center gap-1">
-          {i > 0 && (
-            <span className="text-[color-mix(in_oklab,var(--foreground)_35%,transparent)]">
-              /
-            </span>
-          )}
-          <Link
-            href={swapLocale(l)}
-            className={
-              l === locale
-                ? "font-bold text-[var(--color-brand-primary)]"
-                : "text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
-            }
-            aria-current={l === locale ? "page" : undefined}
-            onClick={() => setOpen(false)}
-          >
-            {l.toUpperCase()}
-          </Link>
-        </span>
-      ))}
+      {LOCALES.map((l, i) => {
+        const target = swapLocale(l);
+        return (
+          <span key={l} className="flex items-center gap-1">
+            {i > 0 && (
+              <span className="text-[color-mix(in_oklab,var(--foreground)_35%,transparent)]">
+                /
+              </span>
+            )}
+            <Link
+              href={target.href}
+              hrefLang={l}
+              title={target.fallback ? FALLBACK_TITLE[l] : undefined}
+              className={
+                l === locale
+                  ? "font-bold text-[var(--color-brand-primary)]"
+                  : "text-[color-mix(in_oklab,var(--foreground)_55%,transparent)] hover:text-[var(--color-brand-primary)]"
+              }
+              aria-current={l === locale ? "page" : undefined}
+              onClick={() => setOpen(false)}
+            >
+              {l.toUpperCase()}
+            </Link>
+          </span>
+        );
+      })}
     </div>
   );
 

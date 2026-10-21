@@ -1,6 +1,11 @@
 import Link from "next/link";
+import path from "node:path";
 import type { Metadata } from "next";
-import { buildMetadata, toOgLocale } from "@unpack/blog-core";
+import {
+  buildMetadata,
+  getAllPostSummaries,
+  toOgLocale,
+} from "@unpack/blog-core";
 import { brandConfig, getLocalizedBrand } from "../../../../brand.config";
 
 export async function generateMetadata({
@@ -35,8 +40,21 @@ export default async function AboutPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return locale === "en" ? <AboutEn /> : <AboutKo />;
+  // 글 수는 하드코딩하지 않고 발행된 글에서 계산 (예약 글 제외) — "6주·20편" 같은 낡은 숫자 방지
+  const postCount = getAllPostSummaries(
+    path.join(process.cwd(), "content/posts", locale),
+    { brand: "aigrit" },
+  ).length;
+  return locale === "en" ? (
+    <AboutEn postCount={postCount} />
+  ) : (
+    <AboutKo postCount={postCount} />
+  );
 }
+
+/** 사이트 오픈일 (첫 글 hello-world 발행일) */
+const LAUNCHED_KO = "2026년 4월";
+const LAUNCHED_EN = "April 2026";
 
 function PageHeader({ subtitle }: { subtitle: string }) {
   return (
@@ -51,7 +69,7 @@ function PageHeader({ subtitle }: { subtitle: string }) {
   );
 }
 
-function AboutKo() {
+function AboutKo({ postCount }: { postCount: number }) {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <PageHeader subtitle={`${brandConfig.name} · ${brandConfig.url.replace(/^https?:\/\//, "")}`} />
@@ -77,14 +95,16 @@ function AboutKo() {
           Claude Code·Cursor·MCP 4종 도구 스택을 1인 빌더 워크플로우에 도입해
           Flutter iOS 앱 3종(GentleDo·GentleFast·GentleStudy)을 App Store에
           출시했습니다. 블로그 모노레포는 Next.js 16 App Router + Turborepo +
-          MDX 기반으로 직접 설계·운영 중이고, 6주 운영하며 글 20편을 누적
-          발행했습니다. AI 도구를 평가할 때 항상 &ldquo;이 도구를 내 실제
+          MDX 기반으로 직접 설계·운영 중이고, {LAUNCHED_KO} 오픈 이후 글{" "}
+          {postCount}편을 발행했습니다. AI 도구를 평가할 때 항상 &ldquo;이 도구를 내 실제
           프로젝트에 며칠 넣었을 때 무엇이 빨라지거나 막혔는가&rdquo;를 1차
           데이터로 확보한 뒤 글로 옮깁니다.
         </p>
         <p>
-          <strong>리뷰 신뢰도 근거</strong> — 본 사이트의 모든 글은 작성자가
-          직접 사용한 결과를 기반으로 합니다. 스폰서 리뷰는 받지 않고, 제휴
+          <strong>리뷰 신뢰도 근거</strong> — 도구 리뷰는 작성자가 직접 사용한
+          결과를 기반으로 하고, 수익화·플랫폼 정책 가이드는 공식 문서와 공개
+          자료를 근거로 작성하며 글 첫머리에 그 사실을 밝힙니다. 검증할 수
+          없는 수익 인증은 싣지 않습니다. 스폰서 리뷰는 받지 않고, 제휴
           링크가 들어가는 글에는 본문 안 명시적 라벨과 글 상단 1줄 고지를
           동시에 표기합니다. 데이터·수치는 측정 환경과 표본 크기를 함께
           공개하며, 분기마다 도구 변화에 맞춰 Pillar 글을 갱신합니다.
@@ -105,7 +125,7 @@ function AboutKo() {
           </li>
           <li>
             <strong>수치 (Numbers)</strong> — 속도·비용·정확도를 숫자로 표기.
-            테스트 방법과 표본 크기(n=??)를 본문에 명시합니다.
+            테스트 방법과 표본 크기를 본문에 명시합니다.
           </li>
           <li>
             <strong>비교 (Comparison)</strong> — 단독 리뷰보다 1:1 또는 N:N 비교를
@@ -122,10 +142,7 @@ function AboutKo() {
         <ul>
           <li>5분 만에 만져본 도구 — 최소 3일 사용 원칙 위반</li>
           <li>공식 데모 영상만 본 상태 — 실사용 대체 불가</li>
-          <li>
-            공개 스포너 제안을 거절하지 못한 리뷰 — 우리는 스폰서 리뷰를 받지
-            않습니다.
-          </li>
+          <li>스폰서 제안을 받고 쓰는 리뷰 — 우리는 스폰서 리뷰를 받지 않습니다.</li>
         </ul>
 
         <h2>수익 구조</h2>
@@ -176,7 +193,7 @@ function AboutKo() {
   );
 }
 
-function AboutEn() {
+function AboutEn({ postCount }: { postCount: number }) {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <PageHeader subtitle={`${brandConfig.name} · ${brandConfig.url.replace(/^https?:\/\//, "")}`} />
@@ -205,15 +222,19 @@ function AboutEn() {
           2026 and shipped three Flutter iOS apps (GentleDo, GentleFast,
           GentleStudy) to the App Store. The blog monorepo is built on Next.js
           16 App Router, Turborepo, and MDX, designed and operated end-to-end
-          by the same single person, and has accumulated 20+ published posts
-          over six weeks of active use. Every tool review starts with the
+          by the same single person.{" "}
+          {`Since launching in ${LAUNCHED_EN}, it has published ${postCount} posts in this language.`}{" "}
+          Every tool review starts with the
           question &ldquo;what got faster or broke when I pushed this tool
           into a real project for several days,&rdquo; then becomes a writeup
           only after the first-party data exists.
         </p>
         <p>
-          <strong>Review credibility</strong> — Every post on this site is
-          based on hands-on use by the author. We do not accept sponsored
+          <strong>Review credibility</strong> — Tool reviews are based on
+          hands-on use by the author. Monetization and platform-policy guides
+          are based on official documentation and public sources, and say so
+          at the top of the article. We don&apos;t publish income claims we
+          can&apos;t verify. We do not accept sponsored
           reviews. Affiliate links carry both an inline label inside the
           paragraph and a one-line disclosure at the top of the article. Data
           and numbers are published with the measurement setup and sample
@@ -237,7 +258,7 @@ function AboutEn() {
           </li>
           <li>
             <strong>Numbers</strong> — speed, cost, and accuracy expressed as
-            numbers. We disclose the test setup and sample size (n=??).
+            numbers. We disclose the test setup and sample size.
           </li>
           <li>
             <strong>Comparison</strong> — 1:1 or N:N comparisons over solo

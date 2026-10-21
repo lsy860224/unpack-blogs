@@ -1,11 +1,9 @@
 import Link from "next/link";
-import path from "node:path";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
   PostCard,
   buildMetadata,
-  getAllPostSummaries,
   SUPPORTED_LOCALES,
   toOgLocale,
 } from "@unpack/blog-core";
@@ -14,6 +12,8 @@ import {
   getAllCategorySlugs,
   getCategoryBySlug,
   getCategoryNav,
+  getCategorySlugsWithPosts,
+  getPostsInCategory,
 } from "../../../../lib/categories";
 import { CategorySidebar } from "../../../../components/layout/CategorySidebar";
 
@@ -25,7 +25,6 @@ const CATEGORY_UI = {
     kicker: "CATEGORY",
     countSuffix: "편 · 최신순 정렬",
     countPrefix: "총 ",
-    empty: "아직 이 카테고리의 리뷰가 없습니다.",
     sidebarHeading: "카테고리",
     allLabel: "전체 보기",
   },
@@ -33,7 +32,6 @@ const CATEGORY_UI = {
     kicker: "CATEGORY",
     countSuffix: " posts · latest first",
     countPrefix: "Total ",
-    empty: "No reviews in this category yet.",
     sidebarHeading: "CATEGORY",
     allLabel: "All",
   },
@@ -54,9 +52,20 @@ export async function generateMetadata({
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const cat = getCategoryBySlug(slug);
+  const cat = getCategoryBySlug(slug, locale);
   if (!cat) return {};
   const localized = getLocalizedBrand(locale);
+
+  // 글이 있는 locale 만 hreflang 으로 노출 (빈 카테고리 페이지를 가리키지 않도록)
+  const hrefLangs: Record<string, string> = {};
+  for (const l of SUPPORTED_LOCALES) {
+    if (getCategorySlugsWithPosts(l).has(slug)) {
+      hrefLangs[l] = `/${l}/category/${slug}`;
+    }
+  }
+  const xDefault = hrefLangs.ko ?? hrefLangs[locale];
+  if (xDefault) hrefLangs["x-default"] = xDefault;
+
   return buildMetadata({
     title: `${cat.name} — ${localized.name}`,
     description: cat.description,
@@ -64,12 +73,7 @@ export async function generateMetadata({
     siteUrl: localized.url,
     path: `/${locale}/category/${slug}`,
     locale: toOgLocale(locale),
-    hrefLangs: {
-      ...Object.fromEntries(
-        SUPPORTED_LOCALES.map((l) => [l, `/${l}/category/${slug}`]),
-      ),
-      "x-default": `/ko/category/${slug}`,
-    },
+    hrefLangs,
   });
 }
 
@@ -79,14 +83,14 @@ export default async function CategoryPage({
   params: Promise<Params>;
 }) {
   const { locale, slug } = await params;
-  const cat = getCategoryBySlug(slug);
+  const cat = getCategoryBySlug(slug, locale);
   if (!cat) notFound();
 
   const ui = CATEGORY_UI[locale as keyof typeof CATEGORY_UI] ?? CATEGORY_UI.ko;
-  const CONTENT_DIR = path.join(process.cwd(), "content/posts", locale);
-  const posts = getAllPostSummaries(CONTENT_DIR, { brand: "aigrit" }).filter(
-    (p) => p.frontmatter.category === cat.name,
-  );
+  const posts = getPostsInCategory(locale, slug);
+  // 글이 없는 카테고리는 200 빈 페이지(soft 404) 대신 404 로 응답한다.
+  // AdSense·GSC 모두 빈 목록 페이지를 "가치 낮은 콘텐츠"로 본다.
+  if (posts.length === 0) notFound();
   const hrefBase = `/${locale}/blog`;
   const navEntries = getCategoryNav(locale, ui.allLabel);
 
@@ -126,19 +130,13 @@ export default async function CategoryPage({
           </p>
         </header>
 
-        {posts.length === 0 ? (
-          <p className="text-sm text-[color-mix(in_oklab,var(--foreground)_55%,transparent)]">
-            {ui.empty}
-          </p>
-        ) : (
-          <ul className="grid gap-3 sm:grid-cols-2">
-            {posts.map((post) => (
-              <li key={post.frontmatter.slug}>
-                <PostCard post={post} hrefBase={hrefBase} locale={locale} />
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {posts.map((post) => (
+            <li key={post.frontmatter.slug}>
+              <PostCard post={post} hrefBase={hrefBase} locale={locale} />
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

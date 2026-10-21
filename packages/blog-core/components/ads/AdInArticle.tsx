@@ -13,6 +13,11 @@ export interface AdInArticleProps {
   enabled?: boolean;
   publisherId?: string;
   slot?: string;
+  /**
+   * 광고 영역 라벨. AdSense 정책상 허용되는 라벨은 "Advertisements" / "Sponsored Links"
+   * (한국어 페이지는 "광고") 뿐이다 — "Sponsored" 단독 등 다른 문구는 쓰지 않는다.
+   */
+  label?: string;
   className?: string;
 }
 
@@ -24,6 +29,7 @@ export function AdInArticle({
   enabled = true,
   publisherId,
   slot,
+  label = "Advertisements",
   className,
 }: AdInArticleProps) {
   useEffect(() => {
@@ -44,7 +50,7 @@ export function AdInArticle({
         className,
       )}
     >
-      <p className="mb-1 uppercase tracking-widest font-mono">Sponsored</p>
+      <p className="mb-1 uppercase tracking-widest font-mono">{label}</p>
       <ins
         className="adsbygoogle"
         style={{ display: "block", textAlign: "center" }}

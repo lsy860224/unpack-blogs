@@ -1,4 +1,5 @@
 import type { BrandConfig, BrandLocaleStrings } from "@unpack/blog-core";
+import { normalizeAdsenseClientId } from "@unpack/blog-core/lib/adsense";
 
 export const brandConfig: BrandConfig = {
   name: "AIGrit",
@@ -74,7 +75,8 @@ export const brandConfig: BrandConfig = {
   monetization: {
     adsense: true,
     affiliateLinks: true,
-    adsensePublisherId: process.env.NEXT_PUBLIC_ADSENSE_ID,
+    // "ca-pub-…" 또는 "pub-…" 둘 다 허용 → 항상 "ca-pub-…" 로 정규화. 형식 오류면 undefined.
+    adsensePublisherId: normalizeAdsenseClientId(process.env.NEXT_PUBLIC_ADSENSE_ID),
   },
   layout: {
     style: "category",

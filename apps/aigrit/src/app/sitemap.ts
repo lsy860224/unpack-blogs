@@ -6,7 +6,7 @@ import {
   SUPPORTED_LOCALES,
 } from "@unpack/blog-core";
 import { brandConfig } from "../../brand.config";
-import { getAllCategorySlugs } from "../lib/categories";
+import { getCategorySlugsWithPosts } from "../lib/categories";
 
 /** ISR: 예약 발행글이 발행 시각 이후 sitemap에 자동 반영되도록 10분마다 재생성. */
 export const revalidate = 600;
@@ -88,17 +88,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  const categorySlugs = getAllCategorySlugs();
+  // 카테고리: 해당 locale 에 발행 글이 있는 것만 노출한다.
+  // (빈 카테고리 = 404, 통합된 옛 slug = redirect → 둘 다 sitemap 에 넣으면 GSC 오류)
+  const categoriesByLocale = new Map<string, Set<string>>(
+    SUPPORTED_LOCALES.map((l) => [l, getCategorySlugsWithPosts(l)]),
+  );
   for (const locale of SUPPORTED_LOCALES) {
-    for (const catSlug of categorySlugs) {
+    for (const catSlug of categoriesByLocale.get(locale) ?? []) {
+      const languages: Record<string, string> = {};
+      for (const l of SUPPORTED_LOCALES) {
+        if (categoriesByLocale.get(l)?.has(catSlug)) {
+          languages[l] = `${base}/${l}/category/${catSlug}`;
+        }
+      }
       entries.push({
         url: `${base}/${locale}/category/${catSlug}`,
         lastModified: now,
         changeFrequency: "weekly",
         priority: 0.7,
-        alternates: {
-          languages: buildLanguageMap(base, `/category/${catSlug}`),
-        },
+        alternates: { languages },
       });
     }
   }

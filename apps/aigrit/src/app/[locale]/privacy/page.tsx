@@ -37,6 +37,8 @@ export default async function PrivacyPage({
   return locale === "en" ? <PrivacyEn /> : <PrivacyKo />;
 }
 
+const CONTACT_EMAIL = "contact@aigrit.dev";
+
 function Header({ subtitle }: { subtitle: string }) {
   return (
     <header className="mb-10 border-b border-[color-mix(in_oklab,var(--foreground)_8%,transparent)] pb-6">
@@ -53,7 +55,7 @@ function Header({ subtitle }: { subtitle: string }) {
 function PrivacyKo() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <Header subtitle="개인정보 처리방침 · 최종 업데이트 2026-04-15" />
+      <Header subtitle="개인정보 처리방침 · 최종 업데이트 2026-10-20" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <p>
           {brandConfig.name}({brandConfig.url})은 방문자의 개인정보를 소중히
@@ -71,16 +73,12 @@ function PrivacyKo() {
             집계하기 위해 쿠키를 설정합니다. IP 익명화 옵션이 적용됩니다.
           </li>
           <li>
-            <strong>광고 쿠키</strong> — Google AdSense가 관련 광고 송출을 위해
-            쿠키를 사용합니다. 광고 맞춤 설정은{" "}
-            <a
-              href="https://adssettings.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Google 광고 설정
-            </a>
-            에서 관리할 수 있습니다.
+            <strong>광고 쿠키</strong> — 본 사이트는 Google AdSense 광고를
+            게재합니다. Google을 비롯한 제3자 공급업체는 쿠키를 사용해 사용자가
+            본 사이트나 다른 웹사이트를 이전에 방문한 기록을 바탕으로 광고를
+            게재합니다. Google은 광고 쿠키를 사용해 Google과 파트너가 본 사이트
+            및 인터넷의 다른 사이트 방문 기록을 바탕으로 광고를 게재할 수 있게
+            합니다.
           </li>
           <li>
             <strong>댓글 로그인</strong> — Giscus 댓글은 GitHub 계정 인증을
@@ -110,18 +108,51 @@ function PrivacyKo() {
           <li>GitHub, Inc. (Giscus 댓글)</li>
         </ul>
 
-        <h2>5. 쿠키 거부</h2>
-        <p>
-          브라우저 설정에서 쿠키를 차단할 수 있습니다. 차단 시 일부 기능(댓글,
-          테마 저장 등)이 제한될 수 있습니다.
-        </p>
+        <h2>5. 맞춤 광고 해제 · 쿠키 거부</h2>
+        <ul>
+          <li>
+            <a
+              href="https://adssettings.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google 광고 설정
+            </a>
+            에서 맞춤 광고를 해제할 수 있습니다. 제3자 공급업체의 맞춤 광고
+            쿠키는{" "}
+            <a
+              href="https://www.aboutads.info/choices/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              aboutads.info
+            </a>
+            에서 해제할 수 있습니다.
+          </li>
+          <li>
+            Google이 파트너 사이트에서 수집한 정보를 사용하는 방식은{" "}
+            <a
+              href="https://policies.google.com/technologies/partner-sites"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google 정책 페이지
+            </a>
+            에서 확인할 수 있습니다.
+          </li>
+          <li>
+            브라우저 설정에서 쿠키를 차단할 수 있습니다. 차단 시 일부
+            기능(댓글, 테마 저장 등)이 제한될 수 있습니다.
+          </li>
+        </ul>
 
         <h2>6. 권리 행사</h2>
         <p>
-          개인정보 열람·정정·삭제를 원하실 경우{" "}
+          개인정보 열람·정정·삭제를 원하실 경우 이메일(
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>)
           {brandConfig.social.x && (
             <>
-              X(
+              {" "}또는 X(
               <a
                 href={`https://x.com/${brandConfig.social.x.replace(/^@/, "")}`}
                 target="_blank"
@@ -131,8 +162,8 @@ function PrivacyKo() {
               </a>
               )
             </>
-          )}{" "}
-          으로 문의해주세요.
+          )}
+          로 문의해주세요.
         </p>
 
         <h2>7. 방침 변경</h2>
@@ -148,7 +179,7 @@ function PrivacyKo() {
 function PrivacyEn() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <Header subtitle="Privacy Policy · Last updated 2026-04-15" />
+      <Header subtitle="Privacy Policy · Last updated 2026-10-20" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <p>
           {brandConfig.name} ({brandConfig.url}) respects visitor privacy. This
@@ -167,16 +198,12 @@ function PrivacyEn() {
             cookies to aggregate visit patterns. IP anonymization is enabled.
           </li>
           <li>
-            <strong>Ad cookies</strong> — Google AdSense uses cookies to serve
-            relevant ads. You can manage ad personalization at{" "}
-            <a
-              href="https://adssettings.google.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Google Ad Settings
-            </a>
-            .
+            <strong>Ad cookies</strong> — This site shows Google AdSense ads.
+            Third-party vendors, including Google, use cookies to serve ads
+            based on your prior visits to this website or other websites.
+            Google&apos;s use of advertising cookies enables it and its partners
+            to serve ads based on your visits to this site and/or other sites on
+            the Internet.
           </li>
           <li>
             <strong>Comment sign-in</strong> — Giscus comments use GitHub
@@ -206,18 +233,52 @@ function PrivacyEn() {
           <li>GitHub, Inc. (Giscus comments)</li>
         </ul>
 
-        <h2>5. Opting out of cookies</h2>
-        <p>
-          You can block cookies in your browser settings. Some features (comments,
-          theme preference) may be limited when cookies are disabled.
-        </p>
+        <h2>5. Opting out of personalized ads and cookies</h2>
+        <ul>
+          <li>
+            You can opt out of personalized advertising in{" "}
+            <a
+              href="https://adssettings.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Google Ads Settings
+            </a>
+            , and out of third-party vendors&apos; personalized-ad cookies at{" "}
+            <a
+              href="https://www.aboutads.info/choices/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              aboutads.info
+            </a>
+            .
+          </li>
+          <li>
+            See{" "}
+            <a
+              href="https://policies.google.com/technologies/partner-sites"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              how Google uses information from sites that use its services
+            </a>
+            .
+          </li>
+          <li>
+            You can block cookies in your browser settings. Some features
+            (comments, theme preference) may be limited when cookies are
+            disabled.
+          </li>
+        </ul>
 
         <h2>6. Your rights</h2>
         <p>
-          To access, correct, or delete your personal data, please contact us via{" "}
+          To access, correct, or delete your personal data, email{" "}
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           {brandConfig.social.x && (
             <>
-              X (
+              {" "}or reach us on X (
               <a
                 href={`https://x.com/${brandConfig.social.x.replace(/^@/, "")}`}
                 target="_blank"
