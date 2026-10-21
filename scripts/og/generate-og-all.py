@@ -308,6 +308,20 @@ AG_SUBTITLES = {
     "ai-ebook-kmong-talent-market": "제작 5단계 · 판매처 · 가격 역산",
     "make-ai-automation-recipes": "트리거 → AI → 분기 → 출력 레시피",
     "ai-voice-cloning-guide": "내 목소리 복제 절차와 넘으면 안 되는 선",
+    "korean-ai-chatbot-comparison": "클로바X 종료 이후 ChatGPT · Gemini · Claude · 뤼튼",
+    "ai-coupang-product-content": "카피 · 리뷰 요약 · 이미지 분담과 등록 전 검수",
+    "claude-code-chrome-extension": "Manifest V3 작성부터 웹 스토어 등록까지",
+    "ai-thumbnail-generation-workflow": "배경 · 글자 분리, 변형 제작, 유튜브 A/B 테스트",
+    "zapier-ai-actions-guide": "Copilot · AI by Zapier · Zapier MCP",
+    "ai-agent-research-automation": "수집 · 검증 · 요약 · 합성 파이프라인 설계",
+    "notion-ai-vs-chatgpt-docs": "업무 문서 작성, 어디서 할까",
+    "ai-online-course-creation": "커리큘럼 · 슬라이드 · 대본 초안과 플랫폼 고르기",
+    "obsidian-ai-second-brain": "캡처 · 정리 · 연결 · 회수 워크플로우",
+    "ai-resume-job-tools-comparison": "자소서 · 이력서 · 면접 — 범용 챗봇과 이력서 전용 도구",
+    "stable-diffusion-local-guide": "ComfyUI · ControlNet · LoRA · 라이선스 확인",
+    "ai-subtitle-translation-youtube": "YouTube 자동 더빙과 다국어 오디오 트랙",
+    "build-rag-chatbot-saas": "pgvector 스키마 · 테넌트 분리 · 비용 구조",
+    "ai-prompt-management-tools": "PromptLayer · Langfuse · Helicone",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -383,6 +397,20 @@ AG_TITLE_OVERRIDES = {
     "ai-ebook-kmong-talent-market": "AI 전자책 크몽·탈잉 판매",
     "make-ai-automation-recipes": "Make로 AI 자동화 시나리오 10선",
     "ai-voice-cloning-guide": "AI 음성 클로닝 가이드",
+    "korean-ai-chatbot-comparison": "한국어 AI 챗봇 고르기 2026",
+    "ai-coupang-product-content": "AI로 쿠팡 상세페이지 만들기",
+    "claude-code-chrome-extension": "Claude Code로 크롬 확장 만들기",
+    "ai-thumbnail-generation-workflow": "AI 썸네일 제작 워크플로우",
+    "zapier-ai-actions-guide": "Zapier AI 기능 정리",
+    "ai-agent-research-automation": "AI 에이전트로 리서치 자동화",
+    "notion-ai-vs-chatgpt-docs": "Notion AI vs ChatGPT",
+    "ai-online-course-creation": "AI로 온라인 강의 만들기",
+    "obsidian-ai-second-brain": "Obsidian + AI 제2의 뇌",
+    "ai-resume-job-tools-comparison": "AI 취업 준비 도구 비교",
+    "stable-diffusion-local-guide": "Stable Diffusion 로컬 가이드",
+    "ai-subtitle-translation-youtube": "AI 자막·번역·더빙으로 유튜브 다국어 확장",
+    "build-rag-chatbot-saas": "RAG 챗봇 SaaS 직접 만들기",
+    "ai-prompt-management-tools": "AI 프롬프트 관리 도구 비교",
 }
 
 # babipanote: shorten overly long titles for OG if needed
