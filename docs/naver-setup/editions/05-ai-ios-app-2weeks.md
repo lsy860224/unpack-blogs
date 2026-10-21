@@ -2,6 +2,8 @@
 
 > **네이버 복붙용 초안.** "── 제목 ──" 이하만 네이버 스마트에디터에 복사하세요.
 > GentleDo 시리즈 **2/3** — #4 네이밍 → **#5 개발기(이 글)** → #6 심사 통과기.
+>
+> ⚠️ **2026-10-21 점검 — 이미 발행된 글(blog.naver.com/aigrit/224269781667)도 수정 필요.** Claude Code는 월 $20인 **Claude Pro**에 포함되며, Max는 그보다 비싼 요금제다. 본문의 "Claude Code Max — 월 $20" 표기를 아래 초안처럼 "Claude Pro(Claude Code 포함) — 월 $20"으로 고쳤으니 네이버 글에도 같은 수정을 반영한다. "Flutter 외주 최소 300만원, 75배 차이"는 근거 자료가 없어 초안에서 수치를 뺐다.
 
 ---
 
@@ -86,7 +88,7 @@ open /Users/seung-yeoblee/dev/unpack-blogs/docs/naver-setup/editions/images/05-g
 - **언어 / 프레임워크** — Flutter + Dart
 - **상태관리** — Riverpod
 - **로컬 DB** — Drift (SQLite 래퍼)
-- **AI 페어** — Claude Code Max 구독
+- **AI 페어** — Claude Pro 구독 (Claude Code 포함)
 
 Flutter를 고른 이유는 단순합니다. **iOS·Android·macOS를 한 코드베이스로 만들 수 있고**, Dart는 정적 타입이라 AI랑 페어 프로그래밍할 때 실수가 적었어요.
 
@@ -98,11 +100,11 @@ Flutter를 고른 이유는 단순합니다. **iOS·Android·macOS를 한 코드
 
 2주간 실제 결제 내역입니다.
 
-- **Claude Code Max** — 월 $20 (≈ ₩28,000)
+- **Claude Pro (Claude Code 포함)** — 월 $20 (≈ ₩28,000)
 - **Apple Developer Program** — 연 $99 (월 환산 ≈ $8.25)
 - **합계 — 월 $28.25 ≈ ₩40,000**
 
-Flutter 외주 견적 받으면 **최소 300만원부터** 시작합니다. 75배 차이예요. 부업으로 시작하기에 이만한 가성비가 없습니다.
+같은 앱을 외주로 맡기면 비용이 훨씬 커집니다. 부업으로 시작하기에 이만한 가성비가 없습니다.
 
 ---
 
@@ -195,7 +197,7 @@ TestFlight 암호화 선언, iPad 타깃 제거, provisioning profile 설정. **
 처음 쓰시는 분께 추천 순서입니다.
 
 - **무료 ChatGPT** — 개념 질문·디버깅 시작점
-- **Claude Code Max $20** — 본격 개발 시작 (가성비 최강)
+- **Claude Pro $20 (Claude Code 포함)** — 본격 개발 시작
 - **Cursor Pro $20** — IDE 안에서 작업하고 싶으면
 
 처음엔 무료로 감 잡고, **프로젝트 시작할 때 Claude Code 전환**이 현실적이에요.
