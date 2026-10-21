@@ -264,6 +264,20 @@ AG_SUBTITLES = {
     "obsidian-mcp-plugins-best-5": "Claude와 vault를 연결하는 방법",
     "claude-blog-workflow-seo": "1인 운영자의 자동화 SOP",
     "obsidian-claude-code-mcp": "노트와 코드를 한 워크플로우로",
+    # 예약 글 (2026-10 정비)
+    "elevenlabs-vs-resemble-ai": "음성 합성 vs 딥페이크 탐지, 두 회사의 길",
+    "ai-search-engines-comparison": "Perplexity vs ChatGPT Search vs Gemini",
+    "ai-presentation-tools-2026": "Gamma vs Canva AI vs PowerPoint Copilot",
+    "zapier-vs-make-vs-n8n": "쉬움 · 분기 · 셀프호스팅으로 고르기",
+    "v0-vs-bolt-vs-lovable": "AI 웹 빌더, 결과물 성격으로 고르기",
+    "github-copilot-vs-claude-code": "IDE 자동완성 vs 터미널 에이전트",
+    "ai-writing-tools-comparison": "Jasper vs Copy.ai vs Claude",
+    "ai-video-tools-complete-guide-2026": "생성 · 편집 · 아바타 · 음성, 역할로 고르기",
+    "ai-design-tools-complete-guide-2026": "이미지 · 로고 · UI · 라이선스 확인",
+    "nocode-vibe-coding-saas-guide-2026": "도구 역할 · 출시 스택 · 결제 체크",
+    "ai-agent-complete-guide-2026": "MCP · 도입 순서 · 도구 비교",
+    "heygen-vs-synthesia-vrew": "글로벌 · 기업 교육 · 한국어 자막으로 고르기",
+    "canva-ai-vs-firefly-vs-recraft": "콘텐츠 · 상업 이용 · 벡터로 고르기",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -295,6 +309,20 @@ AG_TITLE_OVERRIDES = {
     "obsidian-mcp-plugins-best-5": "Obsidian MCP 플러그인 BEST 5",
     "claude-blog-workflow-seo": "Claude로 블로그 글쓰기·발행·SEO 추적",
     "obsidian-claude-code-mcp": "Obsidian × Claude Code MCP 연결",
+    # 예약 글 (2026-10 정비)
+    "elevenlabs-vs-resemble-ai": "ElevenLabs vs Resemble AI",
+    "ai-search-engines-comparison": "AI 검색 엔진 비교",
+    "ai-presentation-tools-2026": "AI PPT 도구 비교",
+    "zapier-vs-make-vs-n8n": "Zapier vs Make vs n8n 비교",
+    "v0-vs-bolt-vs-lovable": "v0 vs Bolt vs Lovable",
+    "github-copilot-vs-claude-code": "GitHub Copilot vs Claude Code",
+    "ai-writing-tools-comparison": "AI 글쓰기 도구 비교",
+    "ai-video-tools-complete-guide-2026": "AI 영상 제작 도구 완벽 가이드 2026",
+    "ai-design-tools-complete-guide-2026": "AI 디자인 도구 완벽 가이드 2026",
+    "nocode-vibe-coding-saas-guide-2026": "노코드·바이브 코딩 SaaS 가이드 2026",
+    "ai-agent-complete-guide-2026": "AI 에이전트 완벽 가이드 2026",
+    "heygen-vs-synthesia-vrew": "HeyGen vs Synthesia vs Vrew",
+    "canva-ai-vs-firefly-vs-recraft": "Canva AI vs Firefly vs Recraft",
 }
 
 # babipanote: shorten overly long titles for OG if needed
