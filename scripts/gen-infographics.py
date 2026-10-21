@@ -272,13 +272,16 @@ def stat_cards(spec, T):
     img = gradient(W, H, T["bgTop"], T["bgBot"]); d = ImageDraw.Draw(img)
     header(d, T, spec["title"], spec.get("subtitle",""), W)
     n = len(cards); x0=60; x1=W-60; tw=x1-x0; gap=24
-    cw = (tw - gap*(n-1))//n; y = top+80; ch = 180
+    cw = (tw - gap*(n-1))//n; y = top+80; ch = 200
     palette = ["cyan","indigo","green","amber"]
     for i, c in enumerate(cards):
         x = x0 + i*(cw+gap)
         col = T[COLORMAP.get(c.get("color", palette[i%4]), "cyan")]
         rounded(d, (x, y, x+cw, y+ch), 16, fill=T["card"], outline=col, width=3)
-        d.text((x+cw//2, y+34), str(c["big"]), font=font("pb", 52), fill=col, anchor="ma")
+        big = str(c["big"]); bs = 52
+        while bs > 24 and d.textlength(big, font=font("pb", bs)) > cw - 28:
+            bs -= 2  # 카드 폭을 넘지 않도록 큰 숫자 글꼴을 줄인다
+        d.text((x+cw//2, y+34+(52-bs)//2), big, font=font("pb", bs), fill=col, anchor="ma")
         for li, ln in enumerate(wrap(d, c["label"], font("ps", 20), cw-30)[:3]):
             d.text((x+cw//2, y+112+li*26), ln, font=font("ps", 20), fill=T["head"], anchor="ma")
     return img
