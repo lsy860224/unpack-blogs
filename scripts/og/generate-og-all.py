@@ -278,6 +278,21 @@ AG_SUBTITLES = {
     "ai-agent-complete-guide-2026": "MCP · 도입 순서 · 도구 비교",
     "heygen-vs-synthesia-vrew": "글로벌 · 기업 교육 · 한국어 자막으로 고르기",
     "canva-ai-vs-firefly-vs-recraft": "콘텐츠 · 상업 이용 · 벡터로 고르기",
+    "build-saas-with-lovable-14days": "2주 출시 계획과 결제·보안 점검",
+    "claude-agent-sdk-getting-started": "툴 정의 · 에이전트 루프 · 배포",
+    "chatgpt-blog-content-pipeline": "양산 대신 품질을 지키는 6단계",
+    "kling-vs-sora-vs-veo": "접근 경로와 용도로 고르는 AI 영상 생성",
+    "ai-marketing-automation-guide-2026": "콘텐츠 · SNS · 이메일 · 광고 · 세일즈",
+    "suno-vs-udio-ai-music": "음반사 합의 이후 달라진 AI 음악 조건",
+    "cursor-vs-windsurf-vs-claude-code": "AI 에디터와 터미널 에이전트, 작업 방식으로",
+    "figma-ai-design-automation": "Figma Make · 에이전트 · MCP 자동화",
+    "bubble-vs-flutterflow": "결과물과 코드 소유로 고르는 노코드 빌더",
+    "n8n-ai-agent-workflows": "메일 · 리서치 · 문의 · 콘텐츠 · 모니터링 레시피",
+    "ai-instagram-reels-automation": "얼굴 없는 채널 파이프라인과 수익화 조건",
+    "elevenlabs-audiobook-monetization": "제작 절차와 AI 낭독을 받는 판매처",
+    "ai-cold-email-sales-automation": "Clay · Instantly와 보내기 전 법규 체크",
+    "midjourney-pod-print-on-demand": "Redbubble · 마플 판매 조건과 저작권 체크",
+    "replit-agent-vs-bolt": "운영까지 한 곳에서 vs 빠른 프로토타입",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -323,6 +338,21 @@ AG_TITLE_OVERRIDES = {
     "ai-agent-complete-guide-2026": "AI 에이전트 완벽 가이드 2026",
     "heygen-vs-synthesia-vrew": "HeyGen vs Synthesia vs Vrew",
     "canva-ai-vs-firefly-vs-recraft": "Canva AI vs Firefly vs Recraft",
+    "build-saas-with-lovable-14days": "Lovable로 SaaS 만들기",
+    "claude-agent-sdk-getting-started": "Claude Agent SDK 입문",
+    "chatgpt-blog-content-pipeline": "ChatGPT 블로그 글쓰기 파이프라인",
+    "kling-vs-sora-vs-veo": "Kling vs Sora vs Veo",
+    "ai-marketing-automation-guide-2026": "AI 마케팅 자동화 완벽 가이드 2026",
+    "suno-vs-udio-ai-music": "Suno vs Udio",
+    "cursor-vs-windsurf-vs-claude-code": "Cursor vs Windsurf vs Claude Code",
+    "figma-ai-design-automation": "Figma AI 활용법",
+    "bubble-vs-flutterflow": "Bubble vs FlutterFlow",
+    "n8n-ai-agent-workflows": "n8n AI 에이전트 워크플로우",
+    "ai-instagram-reels-automation": "AI로 인스타그램 릴스 만들기",
+    "elevenlabs-audiobook-monetization": "ElevenLabs로 오디오북 만들기",
+    "ai-cold-email-sales-automation": "AI 콜드메일·세일즈 자동화",
+    "midjourney-pod-print-on-demand": "Midjourney로 굿즈·POD 시작하기",
+    "replit-agent-vs-bolt": "Replit Agent vs Bolt",
 }
 
 # babipanote: shorten overly long titles for OG if needed
