@@ -17,8 +17,8 @@ export async function generateMetadata({
   const localized = getLocalizedBrand(locale);
   const description =
     locale === "en"
-      ? `About ${localized.name} — hands-on AI tool reviews, compared with numbers.`
-      : `${localized.name}을 소개합니다 — AI 도구를 직접 써보고 숫자로 비교하는 한국어 리뷰.`;
+      ? `About ${localized.name} — Korean AI tool guides compared by official sources and real use cases.`
+      : `${localized.name}을 소개합니다 — AI 도구를 공식 자료와 실제 쓰임새로 비교하는 한국어 가이드.`;
   return buildMetadata({
     title: "About",
     description,
@@ -78,9 +78,7 @@ function AboutKo({ postCount }: { postCount: number }) {
         <p>
           <strong>babipa</strong> — 1인 빌더로 Flutter 기반 iOS 앱(App Store
           라이브)·Next.js 블로그 모노레포(AIGrit·babipanote)·자동화 시스템을
-          직접 만들고 운영합니다. AI 도구는 마케팅 카피가 아니라 본인의 실제
-          워크플로우에 며칠씩 넣어보고, 결과만 글로 옮깁니다. 운영기는 자매
-          사이트{" "}
+          직접 만들고 운영합니다. 운영기는 자매 사이트{" "}
           <a
             href="https://babipanote.com"
             target="_blank"
@@ -96,36 +94,35 @@ function AboutKo({ postCount }: { postCount: number }) {
           Flutter iOS 앱 3종(GentleDo·GentleFast·GentleStudy)을 App Store에
           출시했습니다. 블로그 모노레포는 Next.js 16 App Router + Turborepo +
           MDX 기반으로 직접 설계·운영 중이고, {LAUNCHED_KO} 오픈 이후 글{" "}
-          {postCount}편을 발행했습니다. AI 도구를 평가할 때 항상 &ldquo;이 도구를 내 실제
-          프로젝트에 며칠 넣었을 때 무엇이 빨라지거나 막혔는가&rdquo;를 1차
-          데이터로 확보한 뒤 글로 옮깁니다.
+          {postCount}편을 발행했습니다.
         </p>
         <p>
-          <strong>리뷰 신뢰도 근거</strong> — 도구 리뷰는 작성자가 직접 사용한
-          결과를 기반으로 하고, 수익화·플랫폼 정책 가이드는 공식 문서와 공개
-          자료를 근거로 작성하며 글 첫머리에 그 사실을 밝힙니다. 검증할 수
-          없는 수익 인증은 싣지 않습니다. 스폰서 리뷰는 받지 않고, 제휴
-          링크가 들어가는 글에는 본문 안 명시적 라벨과 글 상단 1줄 고지를
-          동시에 표기합니다. 데이터·수치는 측정 환경과 표본 크기를 함께
-          공개하며, 분기마다 도구 변화에 맞춰 Pillar 글을 갱신합니다.
+          <strong>글의 근거</strong> — 기능·가격·정책은 공식 문서와 1차 출처로
+          확인하고 본문에 링크를 남깁니다. 작성자가 직접 써 본 경험은 그렇다고
+          밝힌 경우에만 싣고, 통제된 테스트를 거치지 않은 점수·측정 수치나
+          검증할 수 없는 수익 인증은 싣지 않습니다. 스폰서 리뷰는 받지 않고,
+          제휴 링크가 들어가는 글에는 글 상단 고지와 본문 라벨을 함께
+          표기합니다. 도구는 자주 바뀌므로 Pillar 글은 분기마다 갱신합니다.
         </p>
 
         <h2>우리가 하는 일</h2>
         <p>
-          {brandConfig.name}은 AI 도구를 직접 며칠간 써본 뒤, 속도·비용·정확도를
-          <strong> 숫자로 비교</strong>하는 한국어 리뷰 블로그입니다. 마케팅 카피를
-          다시 옮기지 않고, 실사용 결과만 남깁니다.
+          {brandConfig.name}은 AI 도구를 공식 문서·가격·정책과 실제 쓰임새
+          기준으로 <strong>비교</strong>하는 한국어 가이드입니다. 마케팅 카피를
+          옮기지 않고, 어떤 상황에 어떤 도구가 맞는지 판단 기준을 남깁니다.
         </p>
 
-        <h2>리뷰 원칙</h2>
+        <h2>글쓰기 원칙</h2>
         <ol>
           <li>
-            <strong>검증 (Validation)</strong> — 광고 카피가 아닌 실사용 결과. 각
-            리뷰는 최소 3일 이상 사용 후 작성합니다.
+            <strong>근거 (Sources)</strong> — 기능·가격·정책은 공식 문서와 1차
+            출처로 확인하고 링크합니다. 확인 날짜가 중요한 정보는 기준
+            시점을 함께 적습니다.
           </li>
           <li>
-            <strong>수치 (Numbers)</strong> — 속도·비용·정확도를 숫자로 표기.
-            테스트 방법과 표본 크기를 본문에 명시합니다.
+            <strong>정직 (Honesty)</strong> — 직접 측정하지 않은 속도·정확도
+            점수, 검증할 수 없는 수익 수치는 싣지 않습니다. 경험을 쓸 때는
+            경험이라고 밝힙니다.
           </li>
           <li>
             <strong>비교 (Comparison)</strong> — 단독 리뷰보다 1:1 또는 N:N 비교를
@@ -138,10 +135,10 @@ function AboutKo({ postCount }: { postCount: number }) {
           </li>
         </ol>
 
-        <h2>리뷰하지 않는 것</h2>
+        <h2>쓰지 않는 것</h2>
         <ul>
-          <li>5분 만에 만져본 도구 — 최소 3일 사용 원칙 위반</li>
-          <li>공식 데모 영상만 본 상태 — 실사용 대체 불가</li>
+          <li>출처 없이 만든 벤치마크 점수·측정 수치</li>
+          <li>검증할 수 없는 수익 인증</li>
           <li>스폰서 제안을 받고 쓰는 리뷰 — 우리는 스폰서 리뷰를 받지 않습니다.</li>
         </ul>
 
@@ -202,10 +199,8 @@ function AboutEn({ postCount }: { postCount: number }) {
         <p>
           <strong>babipa</strong> — a solo builder running a Flutter-based iOS
           app (live on App Store), a Next.js blog monorepo (AIGrit and
-          babipanote), and supporting automation systems. Every AI tool covered
-          here is used for several days in real workflows before publication;
-          marketing copy is excluded. The first-person operations log lives at
-          the sister site{" "}
+          babipanote), and supporting automation systems. The first-person
+          operations log lives at the sister site{" "}
           <a
             href="https://babipanote.com"
             target="_blank"
@@ -223,42 +218,38 @@ function AboutEn({ postCount }: { postCount: number }) {
           GentleStudy) to the App Store. The blog monorepo is built on Next.js
           16 App Router, Turborepo, and MDX, designed and operated end-to-end
           by the same single person.{" "}
-          {`Since launching in ${LAUNCHED_EN}, it has published ${postCount} posts in this language.`}{" "}
-          Every tool review starts with the
-          question &ldquo;what got faster or broke when I pushed this tool
-          into a real project for several days,&rdquo; then becomes a writeup
-          only after the first-party data exists.
+          {`Since launching in ${LAUNCHED_EN}, it has published ${postCount} posts in this language.`}
         </p>
         <p>
-          <strong>Review credibility</strong> — Tool reviews are based on
-          hands-on use by the author. Monetization and platform-policy guides
-          are based on official documentation and public sources, and say so
-          at the top of the article. We don&apos;t publish income claims we
-          can&apos;t verify. We do not accept sponsored
-          reviews. Affiliate links carry both an inline label inside the
-          paragraph and a one-line disclosure at the top of the article. Data
-          and numbers are published with the measurement setup and sample
-          size, and Pillar posts are revised quarterly to reflect tool
-          changes.
+          <strong>How posts are sourced</strong> — Features, pricing, and
+          policies are checked against official documentation and primary
+          sources, and linked in the text. The author&apos;s own experience is
+          included only when it is labeled as such. We don&apos;t publish
+          scores or measurements that didn&apos;t come from a controlled test,
+          or income claims we can&apos;t verify. We don&apos;t accept sponsored
+          reviews; affiliate links carry a disclosure at the top of the article
+          and an inline label. Pillar posts are revised quarterly.
         </p>
 
         <h2>What we do</h2>
         <p>
-          {brandConfig.name} is a hands-on AI tool review blog. We use each tool
-          for several days, then <strong>compare speed, cost, and accuracy
-          with numbers</strong>. We don&apos;t rewrite marketing copy — we report
-          what actually happened when we used the tool.
+          {brandConfig.name} publishes Korean-language AI tool guides that{" "}
+          <strong>compare tools</strong> by official documentation, pricing,
+          policy, and real use cases. We don&apos;t rewrite marketing copy — we
+          leave decision criteria for which tool fits which situation.
         </p>
 
-        <h2>Review principles</h2>
+        <h2>Editorial principles</h2>
         <ol>
           <li>
-            <strong>Validation</strong> — hands-on results over marketing copy.
-            Every review is based on at least 3 days of real usage.
+            <strong>Sources</strong> — features, pricing, and policies are
+            verified against official documentation and linked. Time-sensitive
+            facts carry the date they were checked.
           </li>
           <li>
-            <strong>Numbers</strong> — speed, cost, and accuracy expressed as
-            numbers. We disclose the test setup and sample size.
+            <strong>Honesty</strong> — no speed or accuracy scores we
+            didn&apos;t measure, no income figures we can&apos;t verify.
+            Personal experience is labeled as experience.
           </li>
           <li>
             <strong>Comparison</strong> — 1:1 or N:N comparisons over solo
@@ -271,10 +262,10 @@ function AboutEn({ postCount }: { postCount: number }) {
           </li>
         </ol>
 
-        <h2>What we don&apos;t review</h2>
+        <h2>What we don&apos;t publish</h2>
         <ul>
-          <li>Tools we only tried for 5 minutes — violates the 3-day rule.</li>
-          <li>Tools we only saw in an official demo video — no substitute for hands-on.</li>
+          <li>Benchmark scores or measurements without a source.</li>
+          <li>Income claims we can&apos;t verify.</li>
           <li>Anything written under sponsorship — we don&apos;t accept sponsored reviews.</li>
         </ul>
 

@@ -203,7 +203,7 @@ function TermsEn() {
 
         <h2>2. Description of Service</h2>
         <p>
-          {brandConfig.name} publishes reviews, comparisons, and hands-on guides
+          {brandConfig.name} publishes reviews, comparisons, and how-to guides
           related to AI tools, productivity automation, and solo-builder
           workflows. The Service is provided for informational purposes only
           and does not constitute professional advice (legal, tax, investment,

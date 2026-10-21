@@ -237,46 +237,64 @@ def render_aigrit(title, category, subtitle, lang="ko"):
 
 # === AIGrit subtitle map (1-line keyword summaries) ===
 AG_SUBTITLES = {
-    "hello-world": "리뷰 원칙 · 3일 이상 직접 사용",
-    "ai-tools-2026-guide": "20개 써보고 살아남은 10개",
-    "apple-shortcuts-ai-automation": "하루 40분 절약 레시피",
-    "claude-4-sonnet-vs-gpt-4o": "한국어·코딩·추론 실전 테스트",
-    "claude-code-vs-cursor": "실제 프로젝트 교차 테스트",
+    "hello-world": "글의 근거와 쓰지 않는 것",
+    "ai-tools-2026-guide": "챗봇 · 검색 · 코딩 · 이미지 · 자동화 10개",
+    "apple-shortcuts-ai-automation": "요약 · 캡처 · 음성 · 번역 · 일정",
+    "claude-4-sonnet-vs-gpt-4o": "공식 스펙·가격 · 직접 비교하는 5단계",
+    "claude-code-vs-cursor": "터미널 에이전트 vs AI 에디터",
     "claude-mcp-guide": "AI가 내 파일을 직접 다룬다",
-    "craft-vs-notion": "1년씩 써본 노트앱 비교",
-    "notion-ai-guide": "5가지 용도 실측 후기",
-    "perplexity-ai-guide": "구글을 완전히 대체할까",
-    "solo-developer-automation-stack": "월 6.5만원 자동화 스택",
+    "craft-vs-notion": "글쓰기 앱과 워크스페이스, 역할로 고르기",
+    "notion-ai-guide": "5가지 용도와 요금제 판단",
+    "perplexity-ai-guide": "구글 검색을 대체할 수 있을까?",
+    "solo-developer-automation-stack": "월 6만 원대 실제 구성과 도입 순서",
     "claude-code-flutter-app-guide": "비개발자 2주 App Store 출시기",
     "ai-side-income-100man-roadmap": "9가지 경로 · 한국 거주자 체크포인트",
-    "make-automation-guide": "Slack·Notion·Gmail 30분 컷 자동화",
+    "make-automation-guide": "첫 시나리오부터 Slack · Notion · Gmail",
     "sell-ai-prompts-promptbase": "팔리는 조건 · 정산 체크포인트",
     "ai-ebook-kindle-kdp": "로열티 · AI 공개 규정 · 파이프라인",
     "chatgpt-coupang-partners-automation": "자동화 범위 · 대가성 표시",
     "prompt-engineering-freelance": "패키지 · 가격 · 수주 프로세스",
     "ai-newsletter-substack-growth": "니치 · 첫 구독자 · 한국 정산 현실",
+    "ai-coding-complete-guide-2026": "Claude Code · Cursor · MCP 흐름 설계",
+    "runway-vs-sora-video-ai": "편집해서 깎을까, 문장으로 뽑을까",
+    "notion-alternatives-best-5": "Obsidian · Craft · Logseq · Anytype · Capacities",
+    "adsense-approval-prep-checklist": "공식 미승인 사유 4가지로 점검하기",
+    "ai-translation-tools-comparison": "DeepL vs ChatGPT vs Claude",
+    "claude-projects-vs-chatgpt-gpts": "비공개 작업공간 vs 배포용 어시스턴트",
+    "obsidian-mcp-plugins-best-5": "Claude와 vault를 연결하는 방법",
+    "claude-blog-workflow-seo": "1인 운영자의 자동화 SOP",
+    "obsidian-claude-code-mcp": "노트와 코드를 한 워크플로우로",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
 AG_TITLE_OVERRIDES = {
-    "claude-4-sonnet-vs-gpt-4o": "Claude 4 Sonnet vs GPT-4o 비교",
+    "claude-4-sonnet-vs-gpt-4o": "Claude Sonnet 4 vs GPT-4o 비교",
     "claude-code-vs-cursor": "Claude Code vs Cursor 비교",
     "claude-mcp-guide": "Claude MCP 활용법",
-    "craft-vs-notion": "Craft vs Notion — 2026 결정 가이드",
-    "apple-shortcuts-ai-automation": "Apple 단축어로 만드는 AI 자동화 5가지",
-    "notion-ai-guide": "Notion AI 완벽 활용법",
+    "craft-vs-notion": "Craft vs Notion 비교",
+    "apple-shortcuts-ai-automation": "Apple 단축어 AI 자동화 5가지",
+    "notion-ai-guide": "Notion AI 활용법",
     "perplexity-ai-guide": "Perplexity AI 사용법",
     "solo-developer-automation-stack": "1인 개발자 자동화 스택 10가지",
-    "ai-tools-2026-guide": "2026 AI 도구 완벽 가이드",
+    "ai-tools-2026-guide": "2026 AI 도구 가이드",
     "hello-world": "AIGrit — 리뷰 원칙과 첫 글",
     "claude-code-flutter-app-guide": "Claude Code + Flutter로 앱 만들기 실전 가이드",
     "ai-side-income-100man-roadmap": "AI 부업 로드맵 2026",
-    "make-automation-guide": "Make 자동화 사용법 — Slack·Notion·Gmail 30분 컷",
+    "make-automation-guide": "Make 자동화 사용법",
     "sell-ai-prompts-promptbase": "AI 프롬프트 판매 시작 가이드",
     "ai-ebook-kindle-kdp": "AI 전자책 Kindle KDP 출판 가이드",
     "chatgpt-coupang-partners-automation": "ChatGPT 쿠팡파트너스 글쓰기 가이드",
     "prompt-engineering-freelance": "프롬프트 엔지니어 프리랜싱 가이드",
     "ai-newsletter-substack-growth": "Substack AI 뉴스레터 시작 가이드",
+    "ai-coding-complete-guide-2026": "AI 코딩 완벽 가이드 2026",
+    "runway-vs-sora-video-ai": "Runway vs Sora — AI 영상 생성 비교",
+    "notion-alternatives-best-5": "Notion 대체 앱 BEST 5",
+    "adsense-approval-prep-checklist": "AdSense 승인 셋업 체크리스트",
+    "ai-translation-tools-comparison": "AI 번역 도구 비교",
+    "claude-projects-vs-chatgpt-gpts": "Claude Projects vs ChatGPT GPTs",
+    "obsidian-mcp-plugins-best-5": "Obsidian MCP 플러그인 BEST 5",
+    "claude-blog-workflow-seo": "Claude로 블로그 글쓰기·발행·SEO 추적",
+    "obsidian-claude-code-mcp": "Obsidian × Claude Code MCP 연결",
 }
 
 # babipanote: shorten overly long titles for OG if needed
@@ -315,7 +333,7 @@ def main():
 
     for p in posts["aigrit"]:
         title = AG_TITLE_OVERRIDES.get(p["slug"], p["title"])
-        subtitle = AG_SUBTITLES.get(p["slug"], "AI 도구 실사용 리뷰")
+        subtitle = AG_SUBTITLES.get(p["slug"], "AI 도구 가이드")
         out_dir = base / "aigrit" / "public" / "images" / p["slug"]
         out_dir.mkdir(parents=True, exist_ok=True)
         img = render_aigrit(title, p["category"], subtitle)
