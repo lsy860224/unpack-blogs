@@ -53,7 +53,7 @@ function Header({ subtitle }: { subtitle: string }) {
 function DisclaimerKo() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <Header subtitle="광고·제휴 고지사항 · 최종 업데이트 2026-10-20" />
+      <Header subtitle="광고·제휴 고지사항 · 최종 업데이트 2026-10-21" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <h2>1. 사이트의 수익 구조</h2>
         <p>{brandConfig.name}은 다음 두 가지로 운영비·원고료를 충당합니다.</p>
@@ -102,8 +102,9 @@ function DisclaimerKo() {
 
         <h2>4. 책임 한계</h2>
         <p>
-          {brandConfig.name}의 리뷰와 비교는 저자 개인의 실사용 경험·수치에 기반
-          합니다. 이를 근거로 한 구매·투자·업무 결정의 결과에 대해{" "}
+          {brandConfig.name}의 리뷰와 비교는 공식 자료와 저자의 판단에 기반한
+          정보이며, 도구의 기능·가격·정책은 수시로 바뀝니다. 이를 근거로 한
+          구매·투자·업무 결정의 결과에 대해{" "}
           {brandConfig.name}은 법적 책임을 지지 않습니다.
         </p>
 
@@ -138,7 +139,7 @@ function DisclaimerKo() {
 function DisclaimerEn() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <Header subtitle="Advertising & Affiliate Disclosure · Last updated 2026-10-20" />
+      <Header subtitle="Advertising & Affiliate Disclosure · Last updated 2026-10-21" />
       <section className="prose prose-neutral max-w-none dark:prose-invert prose-headings:tracking-tight prose-a:text-[var(--color-brand-primary)]">
         <h2>1. How we&apos;re funded</h2>
         <p>{brandConfig.name} is supported by two revenue streams:</p>
@@ -186,8 +187,9 @@ function DisclaimerEn() {
 
         <h2>4. Liability</h2>
         <p>
-          {brandConfig.name}&apos;s reviews and comparisons are based on the
-          author&apos;s hands-on experience and measurements. {brandConfig.name}{" "}
+          {brandConfig.name}&apos;s reviews and comparisons are informational,
+          based on official sources and the author&apos;s judgment; tool
+          features, pricing, and policies change frequently. {brandConfig.name}{" "}
           assumes no legal liability for purchase, investment, or business
           decisions made on the basis of these reviews.
         </p>

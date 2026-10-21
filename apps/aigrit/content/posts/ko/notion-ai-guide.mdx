@@ -1,8 +1,9 @@
 ---
-title: "Notion AI 완벽 활용법 — 회의록·DB 쿼리·번역 5가지 용도 실측"
+title: "Notion AI 활용법 — 회의록·DB·요약·번역·아이디어 5가지 용도와 요금제 판단"
 date: "2026-04-22 02:20"
+updated: "2026-10-21 12:37"
 slug: "notion-ai-guide"
-description: "Notion AI를 한 달 실제 업무에 써본 후기. 회의록 자동 정리부터 DB 자연어 쿼리, 긴 문서 요약, 번역, 아이디어 확장까지 5가지 활용법과 월 $10이 정말 값어치 있는지 팀·1인 각각의 관점에서 판단."
+description: "Notion AI를 회의록 정리, 데이터베이스 작업, 긴 문서 요약, 번역, 아이디어 확장 5가지 용도별로 쓰는 방법과 프롬프트 예시를 정리했다. 2026년 10월 기준 어떤 요금제에 포함되는지, 팀과 1인 사용자가 각각 어떻게 판단하면 좋은지도 다룬다."
 tags: ["Notion AI", "Notion", "생산성", "AI 도구 비교", "회의록 자동화", "팀 협업"]
 thumbnail: "/images/notion-ai-guide/og.png"
 featured: false
@@ -11,136 +12,128 @@ topic_cluster: "생산성 자동화"
 cluster_role: cluster
 ---
 
-**결론부터: Notion AI는 회의록·DB 쿼리·요약에 강하다. 팀이면 월 $10이 값어치 있고, 1인이면 ChatGPT $20 쪽이 더 다재다능하다.** 공식 사이트: [notion.so](https://www.notion.so).
+<Callout type="note" title="이 글에 대하여">
+  2026-10-21 개정: 이전 판의 "한 달 실사용", 용도별 절약 시간, "한국어 80% 수준" 같은 수치는 측정 근거가 없어 삭제했습니다. 또 Notion AI 요금 구조가 바뀌어(별도 애드온 → Business 요금제 포함) 해당 내용을 고쳤습니다. 기능·요금은 Notion 공식 페이지 기준(2026년 10월 확인)입니다.
+</Callout>
 
-Notion AI를 한 달간 실제 업무에 써본 후기다. 회의록 자동 정리, DB 쿼리, 긴 문서 요약, 번역, 아이디어 확장 — 5가지 활용법별로 실측 시간을 재고 $10 구독이 어느 상황에 가치 있는지 결론을 낸다.
+**결론부터: Notion AI의 강점은 성능 경쟁이 아니라 "내 워크스페이스 안에서 바로 쓴다"는 점이다. 2026년 10월 기준 Notion AI 전체 기능은 Business 요금제 이상에 포함되므로, 팀이 이미 Notion을 핵심 도구로 쓴다면 검토할 가치가 크고, 1인 사용자는 범용 챗봇과 비교해 판단하는 편이 낫다.**
 
-## Notion AI가 ChatGPT보다 나은 점은?
+공식 사이트: [notion.com](https://www.notion.com)
 
-Notion AI의 강점은 "**내 데이터 안에서 작동한다**"는 것이다. ChatGPT는 외부 대화창이지만, Notion AI는 내 워크스페이스의 페이지·DB를 직접 읽고 요약한다. 복붙 왕복이 사라지는 차이는 생각보다 크다.
+## Notion AI는 범용 챗봇과 무엇이 다른가?
 
-| 항목 | Notion AI | ChatGPT |
+![Notion AI와 범용 챗봇의 작동 위치 — 워크스페이스 안 vs 별도 대화창](/images/notion-ai-guide/01-where-it-works.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  성능보다 "어디서 작동하는가"가 차이를 만든다
+</figcaption>
+
+| 항목 | Notion AI | 범용 챗봇 (ChatGPT·Claude 등) |
 |---|---|---|
-| 내 데이터 접근 | ✅ 워크스페이스 전체 | ❌ 복붙 필요 |
-| 인라인 편집 | ✅ 페이지 안에서 | ❌ 별도 탭 |
-| DB 쿼리 | ✅ "이번 달 완료된 태스크" | ❌ 불가 |
-| 가격 | $10/월 (추가) | $20/월 |
+| 작동 위치 | Notion 페이지·DB 안 | 별도 앱·대화창 |
+| 내 자료 접근 | 워크스페이스 페이지를 찾아 답변 | 붙여 넣거나 커넥터로 연결 |
+| 결과 위치 | 같은 페이지에 바로 삽입 | 복사해서 옮겨야 함 |
+| 강한 영역 | 회의록·문서 정리·워크스페이스 검색 | 범용 글쓰기·분석·코딩·이미지 |
+| 요금 (2026-10) | Business 멤버당 월 $20부터에 포함 | 개인 유료 월 $20 선 |
 
-![Notion AI와 ChatGPT 사용 환경 비교](/images/notion-ai-guide/01-notion-ai-vs-chatgpt.png)
-<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  Notion AI는 내 데이터 컨텍스트 안에서 끊김 없이 작동한다
-</figcaption>
+[Notion 도움말](https://www.notion.com/help/notion-ai-faqs)에 따르면 Notion AI는 워크스페이스 곳곳의 정보를 찾아 질문에 답하고, 회의를 받아 적어 요약하는 AI 회의록(베타), 데이터베이스 생성과 수식 작성 보조 기능을 제공한다. 범용 챗봇의 모델 차이는 <Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">Claude Sonnet 4 vs GPT-4o 비교</Link>에서 따로 다뤘다.
 
-<Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">Claude 4 Sonnet vs GPT-4o 비교</Link>에서 다룬 범용 챗봇과는 포지션이 다르다. Notion AI는 "LLM 성능 경쟁"이 아니라 "워크스페이스 통합 경쟁"을 한다.
+## 활용법 1 — 회의록 정리
 
-## 활용법 #1 — 회의록 5분 정리
+회의 내용을 Notion 페이지에 받아 적거나 AI 회의록 기능으로 기록한 뒤, 결정 사항과 할 일을 뽑아낸다. 결과가 같은 페이지에 들어가므로 공유가 단순하다.
 
-1시간 회의 → 음성 녹음 → Notion AI "요약" → 5분 만에 액션 아이템 추출. 이전에는 30분 걸리던 작업이다.
-
-**실제 프롬프트 예시:**
+**프롬프트 예시:**
 
 ```
-이 회의록에서 다음을 추출해줘:
-- 결정 사항 (bullet)
-- 액션 아이템 (담당자·마감일 포함)
-- 미해결 이슈
+이 회의록에서 다음을 정리해줘:
+- 결정 사항 (불릿)
+- 할 일 (담당자·마감일 포함)
+- 아직 결론 나지 않은 이슈
 ```
 
-회의록 5페이지를 통째로 선택하고 AI 메뉴 → "Custom prompt" 에 위 템플릿을 붙여넣으면 끝. 결과가 같은 페이지에 인라인으로 들어가니까 공유도 단순하다.
+주의할 점은 녹음·전사 단계다. 참석자에게 기록 사실을 알리고, 고유명사·숫자는 원문과 대조해 고친 뒤 공유하자.
 
-실측: 평균 1시간 회의 → 자동 요약·액션 아이템 추출까지 **5분**. 이전엔 손 정리 30분. 주 2회 회의 기준 월 4시간 절약.
+## 활용법 2 — 데이터베이스 작업
 
-## 활용법 #2 — DB 자연어 쿼리
+Notion AI는 데이터베이스를 새로 만들거나 채우고, 수식 작성을 도와준다. 필터 조합을 직접 만들기 어려운 팀원에게 특히 유용하다.
 
-"이번 주 마감인 태스크 보여줘" — Notion AI가 DB 필터를 자동 적용한다. 복잡한 필터 조합을 자연어로 대체하는 게 핵심.
+**요청 예시:**
 
-**실전 쿼리 5개:**
+1. "이번 달 완료된 태스크를 담당자별로 정리해줘"
+2. "우선순위가 High이고 마감이 지난 항목을 찾아줘"
+3. "마감일까지 남은 일수를 계산하는 수식을 만들어줘"
+4. "담당자가 비어 있는 태스크를 보여줘"
+5. "회의록 페이지에서 할 일을 뽑아 태스크 DB에 추가해줘"
 
-1. "이번 달 완료된 태스크를 담당자별로 그룹핑"
-2. "우선순위 High 중 마감 지난 항목"
-3. "지난 주 대비 이번 주 완료 건수 증감"
-4. "담당자가 지정되지 않은 태스크"
-5. "태그 '블로그' 중 상태가 'In Progress' 인 것"
+결과가 기대와 다를 수 있으니, 중요한 집계는 DB 필터나 수식으로 한 번 더 확인하는 습관이 좋다.
 
-복잡한 필터 UI를 안 만져도 되니까 "DB 구조 모르는 팀원"에게 특히 유용하다.
+## 활용법 3 — 긴 문서 요약
 
-## 활용법 #3 — 긴 문서 요약
+긴 기획서나 보고서를 몇 줄로 요약해 페이지 상단에 TL;DR로 붙인다. <Link href="/ko/blog/perplexity-ai-guide">Perplexity AI 사용법</Link>이 외부 웹 자료를 요약하는 도구라면, Notion AI는 **내 워크스페이스 자료**를 요약하는 도구다. 용도가 겹치지 않는다.
 
-10페이지 기획서를 3줄로 요약. 팀원에게 공유할 때 "TL;DR" 자동 생성. <Link href="/ko/blog/perplexity-ai-guide">Perplexity AI 사용법</Link>에서 다룬 "리서치 요약" 과 비슷하지만, **차이는 내 페이지 안에서 한다는 것**. Perplexity는 외부 검색 결과를 요약하고, Notion AI는 내 자료를 요약한다. 용도가 다르다.
+## 활용법 4 — 번역
 
-## 활용법 #4 — 번역
+페이지 내용을 한↔영으로 번역할 수 있고, 결과가 Notion 페이지 안에 그대로 들어가 헤딩·목록 같은 구조를 다시 만드는 수고가 줄어든다. 번역 품질 자체는 전용 번역 도구나 범용 챗봇과 비교해 보는 것이 좋다. 도구별 차이는 <Link href="/ko/blog/ai-translation-tools-comparison">AI 번역 도구 비교</Link>에 정리했다. 외부에 공개할 문서라면 사람이 최종 검토하자.
 
-페이지 전체를 한↔영 번역. DeepL 대비 장점은 "**Notion 스타일·포맷 유지**". 헤딩, 리스트, 테이블이 그대로 보존된다. DeepL 은 복사·번역·재포맷 3단계가 필요하다.
+## 활용법 5 — 아이디어 확장
 
-한국어→영어 번역 품질은 DeepL 이 여전히 조금 더 자연스럽지만, 포맷 유지 시간을 합산하면 Notion AI 가 총 시간에서 이긴다.
+키워드 몇 개를 주고 브레인스토밍 목록을 만든 뒤, 마음에 드는 항목만 남겨 기획 페이지로 발전시킨다. 결과가 일반적인 목록으로 흐르기 쉬우니, 타깃 독자·제약 조건·원하는 형식을 프롬프트에 구체적으로 넣으면 쓸 만한 결과가 나올 확률이 높아진다.
 
-## 활용법 #5 — 아이디어 확장
-
-빈 페이지에 키워드 3개 입력 → 브레인스토밍 결과 10개 생성. 기획 초기 단계에 유용하다. 다만 **한국어 표현이 어색한 경우**가 자주 나와서, 영어로 먼저 확장한 뒤 수동 번역하는 게 품질이 더 낫다.
-
-## 월 $10은 정말 값이 있을까?
-
-![Notion AI 1인 vs 팀 vs 무료 체험 시나리오 비교](/images/notion-ai-guide/04-pricing-scenarios.png)
+![Notion AI 5가지 용도 — 사용 방법과 주의할 점](/images/notion-ai-guide/02-use-cases.png)
 <figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  월 $10은 팀 환경에서 가장 명확한 ROI — 1인이면 무료 20회로 먼저 테스트
+  어떤 용도든 결과를 원문과 대조하는 단계는 남겨 두자
 </figcaption>
 
-**1인 사용자:** 솔직히 ChatGPT $20으로 더 많은 걸 할 수 있다. Notion AI의 가치는 "Notion 안에서 끊김 없이"에 있다. 이걸 중요하게 여기면 값어치 있고, 아니면 ChatGPT가 낫다.
+## 어떤 요금제에 들어 있나?
 
-**팀 사용자:** 확실히 가치 있다. 팀원 모두가 같은 워크스페이스에서 AI를 쓸 수 있는 건 큰 장점. 회의록·DB 쿼리·공유 문서 요약이 일상화되면 인당 $10은 회수된다.
+[Notion 요금 페이지](https://www.notion.com/pricing) 기준(2026년 10월):
 
-<Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택</Link>에서 정리한 도구 포트폴리오 기준으로 보면, Notion AI는 "이미 Notion을 핵심 도구로 쓰는 경우" 에만 추가 가치가 생긴다. Notion 을 거의 안 쓰면서 Notion AI 만 쓰려는 건 의미가 없다.
+- **Free·Plus** — Notion AI 체험(제한된 무료 응답)만 제공
+- **Business** — 멤버당 월 20달러부터, Notion AI 기능(에이전트, AI 회의록, 통합 검색 등) 포함
+- **Enterprise** — Business 기능 + LLM 제공사와의 데이터 무보관(zero data retention) 등
+
+예전처럼 Plus 요금제에 AI만 따로 붙이는 구조가 아니므로, "AI를 쓰려면 Business로 올려야 하는가"가 실제 판단 지점이다.
+
+![Notion AI 요금제 판단 흐름 — 팀이 Notion을 핵심 도구로 쓰는가](/images/notion-ai-guide/03-plan-decision.png)
+<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
+  무료 응답으로 내 워크플로우에 맞는지 먼저 확인
+</figcaption>
+
+**팀 사용자:** 팀 문서·회의록·태스크가 이미 Notion에 모여 있다면, 팀원 모두가 같은 자료를 AI로 검색·요약할 수 있다는 점이 가장 큰 가치다. Business 요금제의 다른 기능(권한 관리 등)도 함께 필요한지 같이 따져 보자.
+
+**1인 사용자:** Notion AI만을 위해 Business로 올리기보다는, 범용 챗봇 하나와 비교해 보는 편이 합리적이다. Notion을 거의 쓰지 않는다면 의미가 적다. 도구 조합의 큰 그림은 <Link href="/ko/blog/solo-developer-automation-stack">1인 개발자 자동화 스택</Link>을 참고하자.
 
 ## 한계와 보완
 
-**Notion AI가 약한 영역:**
+Notion AI가 주력이 아닌 영역도 분명하다.
 
-- 코딩 보조 (<Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor</Link> 쪽이 압도적)
-- 최신 웹 정보 검색 (Perplexity 또는 ChatGPT Browsing)
-- 이미지 생성 (Midjourney·DALL-E)
-- 음성 인식 정확도 (Whisper 직접 호출이 더 정확)
+- **코딩** — 전용 도구가 낫다. <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor</Link> 참고
+- **최신 웹 정보 조사** — AI 검색 도구나 범용 챗봇의 웹 검색
+- **모바일에서 시작하는 자동화** — <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple 단축어 AI 자동화</Link>처럼 다른 앱과 엮는 방식
 
-즉 Notion AI 하나로 모든 AI 니즈를 해결할 수는 없다. "Notion 내부 작업 전용" 포지션으로 쓰고, 다른 용도는 <Link href="/ko/blog/apple-shortcuts-ai-automation">Apple 단축어</Link> 기반 API 호출 루틴으로 채우는 조합이 효율적이다.
-
-## 총정리
-
-![Notion AI 5가지 활용법 추천도 인포그래픽](/images/notion-ai-guide/03-use-cases-infographic.png)
-<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  회의록·DB 쿼리가 가장 ROI 높음 · 아이디어 확장은 한국어 보완 필요
-</figcaption>
-
-| 활용법 | 시간 절약 | 추천도 |
-|---|---|---|
-| 회의록 정리 | 25분/회 | ⭐⭐⭐ |
-| DB 쿼리 | 5분/건 | ⭐⭐⭐ |
-| 문서 요약 | 10분/건 | ⭐⭐ |
-| 번역 | 15분/건 | ⭐⭐ |
-| 아이디어 확장 | 20분/건 | ⭐ |
-
-**한 줄 평가:** "Notion 헤비 유저 + 팀 환경" 이면 즉시 구독, "1인 + 가끔 Notion" 이면 무료 20회로 충분, "그 사이 어딘가" 면 ChatGPT 또는 Claude 정기 구독이 더 범용적.
+Notion 대신 다른 노트앱을 검토 중이라면 <Link href="/ko/blog/notion-alternatives-best-5">Notion 대체 앱 BEST 5</Link>도 함께 보자.
 
 ## 자주 묻는 질문 (FAQ)
 
-### Notion AI 무료 체험이 있나요?
+### Notion AI를 무료로 써 볼 수 있나요?
 
-있다. 무료 20회 AI 사용 후 유료 전환. 충분히 테스트해보고 결정할 수 있다.
+Free와 Plus 요금제 사용자는 제한된 수의 무료 AI 응답을 받을 수 있습니다. 정확한 횟수는 공식 페이지에 숫자로 나와 있지 않으니, 실제 업무 몇 건을 맡겨 보며 내 워크플로우에 맞는지 확인하고 요금제 변경을 결정하세요.
 
-### Notion Plus 플랜에 포함되나요?
+### Plus 요금제에 Notion AI를 추가할 수 있나요?
 
-별도 애드온이다. Plus/Business 구독과 별개로 인당 $10 추가.
+2026년 10월 Notion 공식 안내 기준 Notion AI는 Business와 Enterprise 요금제에서 제공됩니다. 예전처럼 Plus에 AI만 애드온으로 붙이는 방식은 현재 요금 페이지에 나와 있지 않습니다. 기존 구독자는 조건이 다를 수 있으니 결제 설정에서 확인하세요.
 
-### 한국어 잘 되나요?
+### 한국어로도 잘 작동하나요?
 
-영문 대비 약 80% 수준. 특히 요약과 번역은 양호하지만, 아이디어 확장에서 한국어 표현이 어색한 경우가 있다.
+한국어 입력과 출력 모두 가능합니다. 다만 공개된 한국어 품질 지표는 없으므로, 회의록 요약이나 번역처럼 자주 하는 작업 몇 건으로 직접 확인하는 것이 좋습니다. 고유명사와 숫자는 원문과 대조해 고치는 단계를 두세요.
 
-### 데이터 프라이버시는 괜찮나요?
+### 내 데이터가 AI 학습에 쓰이나요?
 
-Notion AI는 OpenAI를 사용하지만 학습에 사용되지 않는다고 명시한다. 엔터프라이즈 플랜은 추가 보안 옵션 제공.
+Notion은 피드백이 Notion AI 학습에 쓰이지 않는다고 안내하며, 워크스페이스 소유자가 개선용 데이터 공유를 켜고 끌 수 있습니다. Enterprise 요금제는 LLM 제공사와의 데이터 무보관을 제공합니다. 민감한 자료를 다룬다면 Notion 보안 문서를 먼저 확인하세요.
 
-### ChatGPT와 병행해야 하나요?
+### 범용 챗봇과 같이 써야 하나요?
 
-병행이 현실적이다. Notion AI=워크스페이스 내부, ChatGPT=범용·창작·리서치. 둘의 용도가 겹치지 않아서 중복이 아니다.
+용도가 겹치지 않는다면 함께 쓰는 것이 현실적입니다. Notion AI는 워크스페이스 안의 자료 정리, 범용 챗봇은 글쓰기·분석·코딩처럼 넓은 작업을 맡기면 됩니다. 비용이 부담이라면 어느 쪽 사용 빈도가 높은지 한 달 정도 지켜본 뒤 하나로 정리하세요.
 
 ## 마무리
 
-Notion AI는 범용 LLM 경쟁에서 이기려 하지 않는다. "**Notion 안에서 AI**" 라는 좁고 명확한 포지션을 고수한다. 그래서 Notion을 이미 깊게 쓰는 팀에겐 강력하고, 그렇지 않은 사용자에겐 ChatGPT 가 더 범용적이다. 무료 20회로 내 워크플로우에 맞는지 먼저 테스트하는 게 가장 현실적이다.
+Notion AI는 "Notion 안의 AI"라는 좁고 분명한 자리를 지킨다. 팀 자료가 이미 Notion에 모여 있다면 강력하고, 그렇지 않다면 범용 챗봇이 더 넓게 쓰인다. 무료 응답으로 내 워크플로우에 맞는지 먼저 확인하는 것이 가장 현실적인 출발점이다.

@@ -1,9 +1,9 @@
 ---
-title: "1인 개발자 자동화 스택 10가지 — 월 6.5만원으로 반복 작업 90% 줄이기"
+title: "1인 개발자 자동화 스택 10가지 — 월 6만 원대로 꾸린 실제 구성과 도입 순서"
 date: "2026-04-22 01:25"
-updated: "2026-04-29 23:55"
+updated: "2026-10-21 12:37"
 slug: "solo-developer-automation-stack"
-description: "본업·가족·사이드를 동시에 돌리는 1인 개발자의 실제 자동화 스택 10가지와 월 ₩65,000 비용 구조 전부 공개. Apple 단축어부터 Claude Code, Make, Obsidian, Vercel까지 도구별 도입 순서·난이도·절약 시간 정리."
+description: "본업·가족·사이드를 동시에 돌리는 1인 개발자가 실제로 쓰는 자동화 스택 10가지와 월 6만 원대 비용 구조. Apple 단축어부터 Claude Code, Make, Obsidian, Vercel까지 도구별 역할·난이도·도입 순서를 정리했다."
 tags:
   [
     "1인개발자",
@@ -24,9 +24,13 @@ topic_cluster: "생산성 자동화"
 cluster_role: pillar
 ---
 
-**결론부터: 1인 개발자의 핵심은 자동화 스택이다. 10가지 도구로 반복 작업을 90% 줄일 수 있고 월 유지비는 ₩65,000 선에서 해결된다.**
+<Callout type="note" title="이 글에 대하여">
+  작성자가 실제로 쓰는 도구 구성입니다. 2026-10-21 개정: 근거 없이 적었던 "반복 작업 90% 감소", 도구별 절약 시간·ROI 수치를 삭제하고, Claude Code 요금 표기("Max $20" → Pro $20)를 바로잡았습니다. 비용 표는 작성자의 2026년 4월 지출 기준입니다.
+</Callout>
 
-본업, 가족, 사이드 프로젝트를 동시에 돌리는 방법은 하나뿐이다 — 자동화. 반복되는 모든 것을 도구에 맡기고 나는 "생각해야 하는 일"만 한다. 실제로 쓰는 10가지 도구와 월 ₩65,000 비용 구조를 전부 공개한다.
+**결론부터: 1인 개발자에게 필요한 것은 도구 개수가 아니라 반복 작업을 맡길 자리다. 작성자는 10가지 도구로 그 자리를 채웠고, 월 유지비는 6만 원대다.**
+
+본업, 가족, 사이드 프로젝트를 동시에 돌리는 방법은 하나뿐이다 — 자동화. 반복되는 일을 도구에 맡기고 "생각해야 하는 일"에 시간을 쓴다. 실제로 쓰는 10가지 도구와 비용 구조를 공개한다.
 
 ## 1인 개발자가 가장 먼저 자동화해야 할 것은?
 
@@ -39,7 +43,7 @@ cluster_role: pillar
 - 코드 반복 수정 → Claude Code
 - Slack·이메일 확인 → Make 시나리오
 
-1주일 동안 매일 하는 일을 단순히 메모장에 적어봤다. 3번 이상 반복되는 항목이 12개 나왔고, 그중 자동화 가능한 게 8개였다. 그 8개를 하나씩 자동화한 결과가 이 스택이다.
+1주일 동안 매일 하는 일을 메모장에 적어 보고, 3번 이상 반복되는 항목 중 자동화할 수 있는 것부터 하나씩 도구에 맡겼다. 그 결과가 이 스택이다.
 
 ## 스택 #1~3 — 일상 업무 자동화
 
@@ -51,9 +55,8 @@ cluster_role: pillar
 |---|---|
 | 자동화 범위 | 캡처·번역·요약·캘린더 |
 | 난이도 | 낮음 |
-| 절약 시간 | 일 40분 |
 
-iPhone·Mac·iPad 전부 동일하게 돌아가고, Siri 연동까지 되니 "Hey Siri, 블로그캡처" 한마디로 끝난다. **무료 진입 장벽이 이 스택에서 가장 낮은 도구.**
+iPhone·Mac·iPad에서 같은 단축어를 쓰고, Siri로도 실행할 수 있다. **무료 진입 장벽이 이 스택에서 가장 낮은 도구.**
 
 ### #2 Make (구 Integromat)
 
@@ -65,15 +68,14 @@ Slack·Notion·Gmail·Google Sheets를 연결하는 "접착제" 역할. REST·We
 2. Gmail 특정 라벨 → Notion DB 자동 저장
 3. Google Sheets 업데이트 → 주간 리포트 메일
 
-| 비용 | 무료 ~ $9/월 (Core) |
+| 비용 | 무료 (월 1,000 크레딧) ~ 유료 Core |
 |---|---|
 | 자동화 범위 | 앱 간 연결 무제한 |
 | 난이도 | 중간 |
-| 절약 시간 | 주 2시간 |
 
 ### #3 Zapier (대안)
 
-[zapier.com](https://zapier.com). Make보다 비싸지만 연결 가능한 앱이 더 많다. 한국 서비스(카카오, 네이버)와 연결하려면 Zapier가 유리한 경우도 있다. 둘 중 하나만 쓰면 충분.
+[zapier.com](https://zapier.com). 무료 한도는 Make보다 작지만 공식 연동 앱 수가 더 많다. 쓰려는 서비스가 Make에 없다면 Zapier를 확인하자. 둘 중 하나만 쓰면 충분하다.
 
 ![자동화 스택 4개 카테고리 구성](/images/solo-developer-automation-stack/03-tool-categories.png)
 <figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
@@ -86,7 +88,7 @@ Slack·Notion·Gmail·Google Sheets를 연결하는 "접착제" 역할. REST·We
 
 <Link href="/ko/blog/claude-code-vs-cursor">Claude Code vs Cursor 비교</Link>에서 다뤘듯이, 터미널에서 대화하듯 코드를 작성하는 CLI 도구. CLAUDE.md를 읽고 프로젝트 전체 맥락을 파악한 상태에서 작업한다.
 
-**나의 사용 패턴:** `/publish-post` 커맨드로 Craft → MDX 변환 → git push까지 자동화. <Link href="https://babipanote.com/blog/building-app-with-claude-code">Flutter 앱 3개 만든 과정</Link>과 GentleDo App Store 출시까지 이어진 <Link href="https://babipanote.com/blog/building-gentledo-with-claude-code">2주 비개발자 개발기</Link>가 Claude Code 단독 활용의 실측 사례다.
+**작성자의 사용 패턴:** `/publish-post` 커맨드로 Craft 초안 → MDX 변환 → git push까지 자동화했다. <Link href="https://babipanote.com/blog/building-app-with-claude-code">Flutter 앱을 만든 과정</Link>과 GentleDo App Store 출시까지 이어진 <Link href="https://babipanote.com/blog/building-gentledo-with-claude-code">비개발자 개발기</Link>가 실제 사례다. 도구 전체 흐름은 <Link href="/ko/blog/ai-coding-complete-guide-2026">AI 코딩 완벽 가이드 2026</Link>에 정리했다.
 
 ### #5 Cursor
 
@@ -96,7 +98,7 @@ IDE 안에서 AI와 함께 코드 작성. 파일 단위 작업에 강하다. Cla
 
 CI/CD 자동화. `git push`만 하면 린트·빌드·테스트·배포까지 자동. Vercel과 조합하면 배포 파이프라인이 완성된다.
 
-| 비용 | 무료 (퍼블릭 레포) |
+| 비용 | 퍼블릭 레포 무료, 프라이빗은 월 무료 사용량 제공 |
 |---|---|
 | 자동화 범위 | 모든 Git 이벤트 |
 | 난이도 | 중간 |
@@ -105,65 +107,62 @@ CI/CD 자동화. `git push`만 하면 린트·빌드·테스트·배포까지 �
 
 ### #7 Obsidian
 
-SEO 기획·키워드 DB·발행 추적·Dataview 대시보드. 로컬 마크다운이라 속도가 빠르고 Git으로 버전 관리까지 된다. 실제로 어떻게 대시보드를 짰는지는 <Link href="https://babipanote.com/blog/obsidian-seo-dashboard">Obsidian SEO 관제 시스템 만든 과정</Link>에 전부 공개했다. 30분 셋업 가이드는 <Link href="/ko/blog/obsidian-getting-started">Obsidian 시작 가이드</Link>에서, Notion 과의 상세 비교는 <Link href="/ko/blog/notion-ai-guide">Notion AI 완벽 활용법</Link> 과 <Link href="/ko/blog/craft-vs-notion">Craft vs Notion</Link> 두 글에서 다뤘다.
+SEO 기획·키워드 DB·발행 추적·Dataview 대시보드. 로컬 마크다운이라 Git으로 버전 관리까지 된다. 실제로 어떻게 대시보드를 짰는지는 <Link href="https://babipanote.com/blog/obsidian-seo-dashboard">Obsidian SEO 관제 시스템 만든 과정</Link>에 전부 공개했다. 30분 셋업 가이드는 <Link href="/ko/blog/obsidian-getting-started">Obsidian 시작 가이드</Link>에서, Notion과의 비교는 <Link href="/ko/blog/notion-ai-guide">Notion AI 활용법</Link>과 <Link href="/ko/blog/craft-vs-notion">Craft vs Notion</Link>에서 다뤘다. AI와 vault를 연결하는 방법은 <Link href="/ko/blog/obsidian-mcp-plugins-best-5">Obsidian MCP 플러그인 BEST 5</Link>에 있다.
 
 ### #8 Craft
 
-리치 텍스트 글쓰기·복붙 발행에 최적. **Obsidian=기획, Craft=글쓰기** 역할 분리가 핵심. Craft의 HTML 클립보드가 네이버 스마트에디터와 호환돼서 네이버 에디션 발행 경로가 단순해진다. 공식 사이트: [craft.do](https://www.craft.do).
+리치 텍스트 글쓰기와 다른 에디터로 옮기기에 편하다. **Obsidian=기획, Craft=글쓰기** 역할 분리가 핵심이다. 작성자의 경우 Craft에서 복사한 서식이 네이버 에디터에서도 비교적 잘 유지돼 네이버 에디션 발행이 단순해졌다. 공식 사이트: [craft.do](https://www.craft.do).
 
 ## 스택 #9~10 — 배포·모니터링
 
 ### #9 Vercel
 
-[vercel.com](https://vercel.com). `git push` 한 번으로 자동 배포. SSL, CDN, Edge Functions 포함. Next.js와 궁합 최고. <Link href="https://babipanote.com/blog/week1-sprint-two-blogs">36시간 스프린트로 블로그 2개 런칭</Link>한 실제 경험에서도 배포 레이어가 가장 편한 부분이었다.
+[vercel.com](https://vercel.com). `git push` 한 번으로 자동 배포된다. SSL과 CDN이 기본 포함되고, Next.js를 만든 회사라 궁합이 좋다. <Link href="https://babipanote.com/blog/week1-sprint-two-blogs">36시간 스프린트로 블로그 2개 런칭</Link>한 실제 경험에서도 배포 레이어가 가장 편한 부분이었다.
 
 ### #10 Google Analytics 4 + Search Console
 
-트래픽 분석 + 검색 성과 추적. 무료. GA4는 GTM 없이 Next.js에 직접 붙여도 된다. GSC 색인 요청·Sitemap 제출까지 1인 블로거 기준 이 두 도구면 충분. 네이버 이중 발행이 필요하면 <Link href="https://babipanote.com/blog/craft-naver-workflow">Craft → 네이버 복붙 워크플로우</Link> 를 추가 스택으로, AdSense 승인 경로는 <Link href="https://babipanote.com/blog/adsense-prep-checklist">AdSense 승인 준비</Link> 에 따로 정리했다.
+트래픽 분석 + 검색 성과 추적. 무료. GA4는 GTM 없이 Next.js에 직접 붙여도 된다. GSC 색인 요청·Sitemap 제출까지 1인 블로거 기준 이 두 도구면 충분. 네이버 이중 발행이 필요하면 <Link href="https://babipanote.com/blog/craft-naver-workflow">Craft → 네이버 복붙 워크플로우</Link> 를 추가 스택으로, AdSense 승인 경로는 <Link href="/ko/blog/adsense-approval-prep-checklist">AdSense 승인 셋업 체크리스트</Link>에 따로 정리했다.
 
-![도구별 시간 절약 ROI](/images/solo-developer-automation-stack/04-roi-time-saved.png)
-<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  Make 가 주 단위 절약 가장 크고 · Vercel 은 글당 효과가 누적된다
-</figcaption>
+## 월 유지비 10만 원 안에 가능할까?
 
-## 월 유지비 10만원 안에 가능할까?
+아래는 작성자의 2026년 4월 실제 지출 기준이다(환율에 따라 원화 금액은 달라진다).
 
 | 도구 | 월 비용 |
 |---|---|
 | Apple 단축어 | ₩0 |
 | Make (무료 플랜) | ₩0 |
-| Claude Code (Max) | ₩28,000 ($20) |
+| Claude Pro (Claude Code 포함) | ₩28,000 ($20) |
 | Cursor (Pro) | ₩28,000 ($20) |
-| Obsidian | ₩0 (Sync 쓰면 ₩5,600) |
-| Craft (Personal) | ₩0 |
+| Obsidian | ₩0 (Sync 쓰면 월 $4~5) |
+| Craft (무료 플랜) | ₩0 |
 | Vercel (Hobby) | ₩0 |
 | GA4 + GSC | ₩0 |
 | 도메인 2개 | ₩3,600/월 환산 |
 | GitHub | ₩0 |
 | **합계** | **₩59,600~₩65,200** |
 
-**월 7만원 안에 가능하다.** Cursor 대신 무료 Copilot을 쓰면 ₩37,000까지 줄어든다. <Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">Claude 4 Sonnet vs GPT-4o 비교</Link>에서 정리한 모델별 비용 구조를 참고하면 API 종량제로 더 줄일 수도 있다.
+**월 7만 원 안에 가능하다.** Cursor 대신 GitHub Copilot 무료 플랜을 쓰면 더 줄어든다. 사용량이 적다면 API 종량제가 더 저렴할 수도 있는데, 계산 방법은 <Link href="/ko/blog/claude-4-sonnet-vs-gpt-4o">Claude Sonnet 4 vs GPT-4o 비교</Link>에 정리했다. 도구별 최신 요금은 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 가이드</Link>에서 확인할 수 있다.
 
 ![월 유지비 도구별 비용 분포](/images/solo-developer-automation-stack/02-stack-cost-breakdown.png)
 <figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  유료 2개(Claude Code · Cursor)가 86% · 나머지 모두 무료
+  유료는 Claude Pro와 Cursor 두 개 · 나머지는 무료 플랜
 </figcaption>
 
 ## Claude Code + Cursor + ChatGPT Plus — 세 개 다 구독할 가치가 있을까?
 
-월 $60. **세 개 다 쓰는 건 과잉이다.** 중복되는 기능이 많고, 컨텍스트를 세 곳에 분산시키면 오히려 생산성이 떨어진다.
+월 $60. **세 개 다 쓰는 건 과잉이다.** 기능이 많이 겹치고, 작업 맥락이 세 곳에 흩어지면 오히려 관리가 어려워진다.
 
 **추천 조합:**
 
 - 1인 개발자: Claude Code + Cursor ($40)
-- 비개발자: ChatGPT Plus + Make ($29)
+- 비개발자: ChatGPT Plus 또는 Claude Pro + Make 무료 ($20)
 - 예산 최소: Claude Code만 ($20)
 
-리서치 비중이 큰 분이라면 ChatGPT Plus보다 <Link href="/ko/blog/perplexity-ai-guide">Perplexity Pro</Link> 가 가성비가 낫다. "생성"은 Claude Code가 다 하고, "검색·요약"은 Perplexity가 전담하는 구조.
+리서치 비중이 크다면 <Link href="/ko/blog/perplexity-ai-guide">Perplexity</Link>를 함께 보자. "생성"은 Claude, "출처가 붙는 검색"은 Perplexity로 나누는 구조다.
 
-## 실제 babipa의 하루 — 자동화 연결 흐름도
+## 작성자의 하루 — 자동화 연결 흐름도
 
-![babipa의 하루 자동화 흐름도](/images/solo-developer-automation-stack/07-daily-automation-flow.png)
+![작성자의 하루 자동화 흐름도](/images/solo-developer-automation-stack/07-daily-automation-flow.png)
 <figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
   아침 출근 → 퇴근 → 23:00 작업 → git push 후 자동 배포
 </figcaption>
@@ -172,7 +171,7 @@ Sprint 1주차를 돌려보고 깨달은 게 하나 있다. 자동화의 목적�
 
 ## 자동화 도입 순서 (우선순위)
 
-처음부터 10개를 전부 세팅하면 배보다 배꼽이 크다. 다음 순서 추천:
+처음부터 10개를 전부 세팅하면 배보다 배꼽이 크다. 다음 순서를 권한다:
 
 1. Apple 단축어 (0원, 즉시)
 2. Obsidian (0원, 30분 셋업)
@@ -194,52 +193,52 @@ Sprint 1주차를 돌려보고 깨달은 게 하나 있다. 자동화의 목적�
 
 ## 총정리
 
-| 카테고리 | 도구 | 비용 | 절약 시간 |
+| 카테고리 | 도구 | 비용 | 맡긴 일 |
 |---|---|---|---|
-| 일상 | Apple 단축어 | ₩0 | 일 40분 |
-| 일상 | Make | ₩0 | 주 2시간 |
-| 개발 | Claude Code | $20 | 일 1시간 |
-| 개발 | Cursor | $20 | 일 30분 |
-| 지식 | Obsidian | ₩0 | 주 1시간 |
-| 지식 | Craft | ₩0 | 글당 30분 |
-| 배포 | Vercel | ₩0 | 글당 5분 |
-| 분석 | GA4 + GSC | ₩0 | 주 30분 |
+| 일상 | Apple 단축어 | ₩0 | 캡처·번역·요약·일정 |
+| 일상 | Make | ₩0 | 앱 간 알림·저장 |
+| 개발 | Claude Code | $20 (Claude Pro) | 기능 구현·발행 자동화 |
+| 개발 | Cursor | $20 | 짧은 수정·코드 탐색 |
+| 지식 | Obsidian | ₩0 | 기획·발행 추적 |
+| 지식 | Craft | ₩0 | 초안 작성 |
+| 배포 | Vercel | ₩0 | 자동 배포 |
+| 분석 | GA4 + GSC | ₩0 | 트래픽·검색 성과 |
 
-누적 절약 시간 = **주 15시간+**. 월 $40 투자해 주 15시간을 버는 ROI.
+절약한 시간을 정확히 측정하지는 않았다. 다만 "같은 일을 두 번 손으로 하지 않는다"는 기준으로 보면, 도구를 하나 들일 때마다 반복 작업이 하나씩 사라졌다.
 
 ## 자주 묻는 질문 (FAQ)
 
 ### 자동화 시작이 막막한데 뭐부터 해야 하나요?
 
-이번 주 매일 하는 일을 적어보라. 3번 이상 반복되는 것 중 가장 짧은 것부터 자동화. Apple 단축어가 가장 진입 장벽이 낮다.
+이번 주 매일 하는 일을 적어 보세요. 3번 이상 반복되는 것 중 가장 짧은 일부터 자동화하면 됩니다. Apple 단축어가 가장 진입 장벽이 낮고, 비용도 들지 않습니다.
 
 ### API 키 관리는 어떻게 하나요?
 
-`.env.local` 파일에 저장하고 git에는 올리지 않는다. 1Password 같은 비밀번호 관리자에 백업. Vercel은 환경변수 관리 기능 내장이라 그쪽에 등록해두면 프로덕션 빌드에서 바로 쓰인다.
+`.env.local` 파일에 저장하고 git에는 올리지 않습니다. 비밀번호 관리자에 백업해 두고, 배포 환경에서는 Vercel 같은 플랫폼의 환경 변수 기능에 등록하면 코드에 키를 넣지 않고도 프로덕션에서 쓸 수 있습니다.
 
 ### 월 비용 얼마나 드나요?
 
-실제 babipa 기준 월 ₩65,000 내외. Cursor 대신 무료 Copilot 쓰면 ₩37,000까지 가능.
+작성자 기준 월 6만 원대입니다. 유료는 Claude Pro와 Cursor 두 개이고 나머지는 무료 플랜입니다. Cursor 대신 GitHub Copilot 무료 플랜을 쓰면 더 줄일 수 있습니다.
 
 ### Claude Code가 필수인가요?
 
-필수는 아니다. Cursor만으로도 충분. 다만 "터미널에서 대화하듯 코드 작성"이 취향에 맞으면 생산성이 크게 오른다.
+필수는 아닙니다. Cursor만으로도 충분히 개발할 수 있습니다. 다만 "지시하고 결과를 검토하는" 방식이 편하다면 Claude Code가 잘 맞습니다. Claude Code는 Claude Pro 이상 유료 플랜에 포함됩니다.
 
 ### Obsidian과 Notion 둘 다 필요한가요?
 
-역할을 나누면 둘 다 쓸 수 있다. Obsidian=로컬·속도·버전관리, Notion=협업·DB. 혼자라면 Obsidian만으로 충분.
+역할을 나누면 둘 다 쓸 수 있습니다. Obsidian은 로컬 파일·버전 관리, Notion은 협업·데이터베이스에 강합니다. 혼자 작업한다면 Obsidian 하나로도 충분한 경우가 많습니다.
 
 ### 자동화로 놓치는 것은 없나요?
 
-있다. 자동화 세팅에 매몰되면 정작 "글 쓰기"를 못 한다. "이달에 자동화는 1개만" 규칙을 권한다.
+있습니다. 자동화 세팅에 매몰되면 정작 본업인 글쓰기나 개발을 못 합니다. "이달에 자동화는 1개만" 규칙을 두고, 자동화 결과는 주기적으로 직접 확인하세요.
 
 ### 추천 시작 순서는?
 
-Apple 단축어 → Obsidian → Claude Code → Make 순서. 비용 0원부터 시작해서 필요한 것만 추가.
+Apple 단축어 → Obsidian → Claude Code → Make 순서를 권합니다. 비용이 들지 않는 도구부터 시작해서 필요한 것만 추가하면, 쓰지 않는 구독이 쌓이지 않습니다.
 
 ### 번아웃 방지법이 있나요?
 
-자동화의 목적은 "시간 벌기"지 "더 많이 일하기"가 아니다. 벌어진 시간은 쉬는 데 쓴다. 02시 취침 규칙 + 주말 하루 완전 오프 + 분기 1회 강제 휴식 주.
+자동화의 목적은 "시간 벌기"이지 "더 많이 일하기"가 아닙니다. 작성자는 번 시간을 쉬는 데 쓰려고 취침 시간 규칙, 주말 하루 완전 오프, 분기 1회 휴식 주를 정해 두었습니다.
 
 ## 마무리
 

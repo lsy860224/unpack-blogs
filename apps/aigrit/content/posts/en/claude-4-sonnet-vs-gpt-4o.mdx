@@ -1,210 +1,115 @@
 ---
-title: "Claude 4 Sonnet vs GPT-4o: Korean, Coding, and Reasoning Benchmarks"
+title: "Claude Sonnet 4 vs GPT-4o: Specs, Pricing, Use Cases — and What to Check When Moving to Newer Models"
 date: "2026-04-17 03:00"
-updated: "2026-05-05 01:15"
+updated: "2026-10-21 11:47"
 slug: "claude-4-sonnet-vs-gpt-4o"
-description: "Claude 4 Sonnet and GPT-4o compared on Korean language quality, coding, reasoning, and creative writing — with per-token cost, latency, and context window data."
-tags: ["Claude 4 Sonnet", "GPT-4o", "LLM benchmark", "Korean AI"]
+description: "Claude Sonnet 4 and GPT-4o compared on official specs — context window, max output, API pricing, input types — plus a five-step method to test which model fits your own work, and what to check when moving to their successors."
+tags: ["Claude Sonnet 4", "GPT-4o", "LLM comparison", "Korean AI"]
 thumbnail: "/images/claude-4-sonnet-vs-gpt-4o/og-en.png"
 featured: true
-category: "LLM"
+category: "AI Tools"
 ---
+
+<Callout type="note" title="About this article">
+  Revised 2026-10-21: the earlier "14 days, 10 runs per task" score tables and latency figures could not be verified and were removed. Specs and prices come from Anthropic and OpenAI documentation. Per Anthropic's docs, Claude Sonnet 4 was retired on June 15, 2026, and OpenAI's docs mark GPT-4o as deprecated. If you are starting fresh, read the "Successor models" section first.
+</Callout>
 
 ## TL;DR
 
-For Korean-language work and long-document handling, **Claude 4 Sonnet** comes out ahead. For multimodal coverage and faster responses, **GPT-4o** wins. On a per-token basis the OpenAI model is a little cheaper through the API.
+If you needed to feed in very long documents at once, **Claude Sonnet 4** with its larger context was the natural starting point. If you needed to run the same task cheaply at volume, **GPT-4o** with its lower API price was. Quality differences vary by task, so the real answer comes from testing your own work.
 
-<Callout type="info" title="Test setup">
-  Window: April 1 – April 14, 2026 (14 days). Each task was run 10 times and averaged. API versions: `claude-sonnet-4-20250514` and `gpt-4o-2024-11-20`. Prompts were identical between models, in both Korean and English.
-</Callout>
+To see how these models fit into actual tools, read our <Link href="/en/blog/claude-code-vs-cursor">Claude Code vs Cursor comparison</Link>.
 
-If you want to see how these models actually slot into a working setup, our <Link href="/en/blog/claude-code-vs-cursor">Claude Code vs Cursor review</Link> walks through the IDE side of the same question. The benchmarks below focus on raw model behavior; tool integration is a separate problem.
+## Official specs
 
-## Claude 4 Sonnet vs GPT-4o — spec sheet
+![Claude Sonnet 4 vs GPT-4o official specs — context, max output, API pricing, input types](/images/claude-4-sonnet-vs-gpt-4o/01-spec-table-en.png)
 
-| Item | Claude 4 Sonnet | GPT-4o |
+| | Claude Sonnet 4 | GPT-4o |
 |------|----------------|--------|
-| **Vendor** | [Anthropic](https://www.anthropic.com/) | [OpenAI](https://openai.com/) |
+| **Developer** | [Anthropic](https://anthropic.com) | [OpenAI](https://openai.com) |
 | **Context window** | 200K tokens | 128K tokens |
-| **Max output** | 64K tokens | 16K tokens |
-| **Input price** | $3 / 1M tokens | $2.50 / 1M tokens |
-| **Output price** | $15 / 1M tokens | $10 / 1M tokens |
-| **Multimodal** | Text + image + PDF | Text + image + audio + video |
-| **Tool use** | Function calling | Function calling |
-| **Released** | May 2025 | May 2024 (rolling updates) |
+| **Max output** | 64K tokens | 16,384 tokens |
+| **API input price** | $3 / 1M tokens | $2.50 / 1M tokens |
+| **API output price** | $15 / 1M tokens | $10 / 1M tokens |
+| **API input types** | Text, image, PDF | Text, image |
+| **Released** | May 2025 | May 2024 |
+| **Status** | Retired 2026-06-15 | Marked deprecated |
 
-The headline gap is the context window. Claude carries 200K tokens against GPT-4o's 128K, and the output ceiling is four times larger. GPT-4o's edge is on the input side: lower price and broader modality coverage including audio and video.
+Sources: [Anthropic pricing](https://platform.claude.com/docs/en/about-claude/pricing), [OpenAI GPT-4o model page](https://developers.openai.com/api/docs/models/gpt-4o). The GPT-4o API takes text and image input and returns text; audio is handled by separate audio and realtime models.
 
-## Five real tasks, ten runs each
+Three differences stand out from the specs alone:
 
-![Claude 4 Sonnet vs GPT-4o — score comparison across five tasks](/images/claude-4-sonnet-vs-gpt-4o/02-benchmark-chart-en.png)
-<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  Average of 10 runs per task, scored out of 10.
-</figcaption>
+- **How much you can send** — 200K vs 128K. This matters when you paste in whole contracts, meeting-note bundles, or codebases
+- **How much you can get back** — 64K vs about 16K. This matters for long reports or large generated files
+- **Price** — GPT-4o is cheaper on both input and output
 
-### Task 1: Korean writing — natural-language quality
+## How to estimate cost
 
-**Prompt**: write a 500-character introduction for an "energy-based productivity app" in polite Korean (`-습니다` register), blog tone.
+API cost is `input tokens × input price + output tokens × output price`. **Assuming** 50K input and 10K output tokens per day:
 
-| Metric | Claude 4 Sonnet | GPT-4o |
+| | Claude Sonnet 4 | GPT-4o |
 |------|----------------|--------|
-| Naturalness (1–10) | **9** | 7 |
-| Honorific consistency | Perfect | Slipped once |
-| Awkward phrasing | 0 cases | 2 cases (literal-translation feel) |
-| Latency | 4.2s | 2.8s |
+| 50K input tokens | $0.15 | $0.125 |
+| 10K output tokens | $0.15 | $0.10 |
+| **Per day** | **$0.30** | **$0.225** |
+| **Per 30 days** | **$9.00** | **$6.75** |
 
-Claude's Korean reads cleaner. It held the formal register all the way through and avoided mixing `-합니다` and `-해요` endings, which is a frequent stumble for English-trained models. GPT-4o was readable but occasionally produced phrasings that felt grafted from English syntax — the kind of sentence a human editor would rewrite.
+At this volume the gap is a few dollars a month; at higher volume the price difference compounds. Subscription plans (Claude.ai, ChatGPT) are billed differently and don't follow this math.
 
-### Task 2: Coding — Flutter Dart generation
+## Test it on your own work — five steps
 
-**Prompt**: write a Riverpod `StateNotifier` provider that manages a momentum score, including a decay function.
+Broad labels like "Korean writing" or "coding" hide most of the variation. A report and an ad headline are both "Korean writing" but behave differently. A short test on your own tasks beats someone else's score table.
 
-| Metric | Claude 4 Sonnet | GPT-4o |
-|------|----------------|--------|
-| Compiles on first try | **Yes** | No (one type error) |
-| Code quality (1–10) | **9** | 8 |
-| Convention adherence | High | Medium |
-| Comment quality | Right amount | Excessive |
-| Latency | 6.1s | 4.3s |
+![Five steps to compare LLMs on your own tasks — pick tasks, same prompt, blind review, rubric, cost](/images/claude-4-sonnet-vs-gpt-4o/02-compare-method-en.png)
 
-Both models understood the assignment, but Claude was more disciplined about the modern Dart 3.x stack: it used the `@riverpod` annotation correctly and respected null-safety rules. GPT-4o reached for `late` keywords in places where they were not necessary, and its first attempt failed to compile due to a type mismatch. Neither model is unusable for Dart, but Claude needed less hand-holding per pass.
+1. **Pick 3–5 tasks** you actually do every week (report drafts, long-document summaries, code edits)
+2. **Run them with identical prompts and inputs** on both models
+3. **Hide which model wrote what** — label outputs A and B
+4. **Score with a short rubric** — factual errors, instruction-following, and time needed to fix the output
+5. **Weigh cost** — if the quality gap is small, the cheaper model wins
 
-### Task 3: Reasoning — multi-condition planning
+Running each task several times also shows you how consistent the outputs are.
 
-**Prompt**: a user is in a Low energy state and has 3 High-priority and 5 Low-priority tasks. Build today's recommended task list and explain your reasoning.
+## Which fit which work
 
-| Metric | Claude 4 Sonnet | GPT-4o |
-|------|----------------|--------|
-| Logical accuracy | **10/10** | 9/10 |
-| Reasoning depth | 3 steps (energy → filter → order) | 2 steps (energy → recommendation) |
-| Explanation clarity | High | High |
-| Edge case handling | Yes ("urgent tasks override energy") | No |
+Based on specs and feature scope:
 
-Claude went one step deeper. Without prompting, it raised the edge case where a Low-energy user still has to tackle a High-priority task that is due today, and explained why the rule has to bend. GPT-4o's answer was correct but flatter — it solved the literal problem without flagging the exception. For workflows where the rules need to bend in predictable ways, that extra layer matters.
+### Claude Sonnet 4 fit when you
 
-### Task 4: Summarization — long Korean document
+- needed to summarize or review very long documents in one pass
+- needed long outputs (large code files, long reports) in one response
+- wanted to send PDFs directly through the API
 
-**Prompt**: summarize a 15,000-character Korean technical document (`PROJECT_BRIEF.md`) into 500 characters or fewer.
+### GPT-4o fit when you
 
-| Metric | Claude 4 Sonnet | GPT-4o |
-|------|----------------|--------|
-| Key-point retention | **95%** | 85% |
-| Hallucinations | 0 | 1 (mentioned a feature not in the doc) |
-| Structure | Per-section bullets | Narrative paragraphs |
-| Latency | 8.4s | 5.1s |
+- ran the same task at high volume and price mattered
+- worked inside ChatGPT's GPTs ecosystem
+- had documents that comfortably fit within 128K tokens
 
-This is where the 200K context window earned its keep. Claude ingested the whole document in one pass and produced a structured, section-by-section summary. GPT-4o lost some material from the back half of the document and invented an "AI recommendation" feature that does not exist in the source. One hallucination in ten runs is not catastrophic, but it is the kind of error that quietly poisons downstream work.
+The author mainly uses Claude for blog drafts and app development, but that reflects one personal setup, not a general ranking.
 
-### Task 5: Translation — Korean to English (technical)
+## Successor models
 
-**Prompt**: translate an 800-character app store listing from Korean to English.
+Neither model is the default choice for new projects. When moving:
 
-| Metric | Claude 4 Sonnet | GPT-4o |
-|------|----------------|--------|
-| Translation accuracy | **9/10** | **9/10** |
-| Tone consistency | High | High |
-| Technical vocabulary | Accurate | Accurate |
-| Naturalness | High | High |
-| Latency | 3.8s | 2.5s |
-
-Effectively a tie. Both models rendered "에너지 체크인" as "energy check-in" and "모멘텀" as "momentum," held a consistent marketing tone, and avoided literal artifacts. If translation is your main use case, the speed and price difference matter more than quality at this length.
-
-## Cost — what 14 days actually billed
-
-Using the same workload across both APIs, here is what the spend looked like.
-
-| Item | Claude 4 Sonnet | GPT-4o |
-|------|----------------|--------|
-| Avg. input / day | ~50K tokens | ~50K tokens |
-| Avg. output / day | ~10K tokens | ~10K tokens |
-| Daily cost | $0.30 | $0.225 |
-| **Monthly est.** | **$9.00** | **$6.75** |
-
-![Token cost vs latency scatter](/images/claude-4-sonnet-vs-gpt-4o/03-cost-timeline-en.png)
-<figcaption style={{ textAlign: "center", fontSize: "0.9rem", color: "#64748b", marginTop: "-0.5rem", marginBottom: "2rem" }}>
-  Bottom-left = cheap and fast. Top-right = expensive and slow.
-</figcaption>
-
-<Callout type="warning" title="Note on pricing">
-  These numbers reflect direct API usage. If you are on Claude.ai Pro or ChatGPT Plus ($20/month each), the math looks completely different — flat fee, no per-token billing.
-</Callout>
-
-On the API, GPT-4o is roughly 25% cheaper for this workload. At individual scale that is a few dollars a month and not really decision-shaping. At service scale — say, a million requests a month — the gap turns into hundreds of dollars and the calculus changes. For up-to-date pricing, check the [Anthropic pricing page](https://www.anthropic.com/pricing) and the [OpenAI API pricing page](https://openai.com/api/pricing/) directly; both vendors adjust regularly.
-
-## Composite score
-
-![Composite score: Claude 4 Sonnet 8.6 vs GPT-4o 8.4 across five tasks](/images/claude-4-sonnet-vs-gpt-4o/04-score-comparison-en.png)
-
-| Task | Claude 4 Sonnet | GPT-4o | Winner |
-|--------|:--------------:|:------:|:----:|
-| Korean writing | 9 | 7 | Claude |
-| Coding | 9 | 8 | Claude |
-| Reasoning | 10 | 9 | Claude |
-| Long-doc summary | 9.5 | 8.5 | Claude |
-| Translation | 9 | 9 | Tie |
-| Latency | 7 | **9** | GPT-4o |
-| API cost | 7 | **8** | GPT-4o |
-| **Average** | **8.6** | **8.4** | Claude |
-
-The headline number is close — 8.6 vs 8.4 — but the shape of the gap matters more than the gap itself. Claude wins on quality dimensions (writing, reasoning, long context). GPT-4o wins on operational dimensions (latency, price). That maps cleanly onto two different jobs.
-
-## Who should pick which
-
-### Claude 4 Sonnet fits if you...
-
-- Write a lot of **Korean content** (or any language where literal-translation artifacts are noticeable)
-- Regularly handle **long documents** (10,000+ characters)
-- Care about **first-try coding accuracy** and clean conventions
-- Need **multi-step reasoning** with edge-case awareness — planning, analysis, strategy
-
-### GPT-4o fits if you...
-
-- Need **fast turnaround** for interactive or real-time work
-- Use **multimodal inputs** beyond images and PDFs — audio and video specifically
-- Want to **minimize API spend** at scale
-- Lean on the **ChatGPT plugin / GPTs ecosystem** for tool integrations
-
-There is also a both-camp: many working setups use Claude for drafting and reasoning while routing fast lookups or speech tasks to GPT-4o. The two models compose well precisely because their strengths are different.
-
-## Verdict
-
-<ProCon>
-  <Pros>
-    - Claude 4 Sonnet: natural Korean output, 200K context window, first-try coding accuracy, deeper reasoning
-    - GPT-4o: faster responses, audio/video modality, lower API price, mature plugin ecosystem
-  </Pros>
-  <Cons>
-    - Claude 4 Sonnet: slower, higher output cost, no audio or video support
-    - GPT-4o: occasional translation-artifact phrasing in Korean, smaller context window, hallucination risk on long documents
-  </Cons>
-</ProCon>
-
-In our daily workflow, Claude 4 Sonnet is the default. Korean writing, Flutter coding, and long-document analysis dominate the work, and the quality gap on those three tasks is consistent enough that the latency and price tradeoffs are worth it. GPT-4o stays in rotation as the fast second-opinion model and for anything involving audio.
+- **Anthropic** — per the [models overview](https://platform.claude.com/docs/en/models/overview), Claude Sonnet 5.5 costs $2 input / $10 output per million tokens, with a 1M-token context window and 128K max output — cheaper than Sonnet 4 with higher limits
+- **OpenAI** — if you use GPT-4o, check [OpenAI's model docs](https://developers.openai.com/api/docs/models) for the recommended successor and its price
+- **Re-test your prompts** — the same prompt can behave differently on a new model, so run the five-step comparison again
 
 ## FAQ
 
-### Which model handles Korean better?
+### Which is better for Korean, Claude Sonnet 4 or GPT-4o?
 
-Claude 4 Sonnet, consistently. It maintains honorific register across long outputs, avoids the literal-translation artifacts that English-trained models often produce, and keeps Korean stylistic conventions intact. GPT-4o is competent at Korean — it will not embarrass you — but Claude reads more like something a Korean writer would actually publish.
+The differences you can verify from official sources are context size and price. Korean output quality depends heavily on the task, so it's hard to generalize. The most reliable answer comes from running three to five of your real tasks through both models with identical prompts and comparing the results blind.
 
-### How big is the multimodal gap?
+### How much do the two models cost through the API?
 
-Both models read images and PDFs well. The real difference is that GPT-4o adds **audio and video**: voice transcription comparable to Whisper, and frame-level video analysis. If your work touches speech or video, GPT-4o is the better fit. If you only need text, images, and PDFs, Claude's 200K context window is the more useful axis.
+Per official docs, Claude Sonnet 4 is $3 input and $15 output per million tokens, and GPT-4o is $2.50 input and $10 output. GPT-4o is cheaper at the same usage. Claude Sonnet 4 was retired in June 2026, so new cost estimates should use the successor model's price.
 
-### Will the API cost difference actually show up on my bill?
+### What should I do with automations built on Claude Sonnet 4?
 
-For individual users running fewer than ~50,000 requests a month, no — both bills land in the single digits, and a few dollars of difference is not a forcing function. Once you cross into production scale (a million requests a month or more), GPT-4o's 25% pricing edge compounds into hundreds of dollars a month, and the choice gets more interesting.
+Anthropic's docs list Claude Sonnet 5.5 as the replacement. Often only the model ID needs to change, but output format and length can shift, so test your key prompts before switching production traffic.
 
-### What changed between Claude 3.5 Sonnet and Claude 4 Sonnet?
+## Wrap-up
 
-Claude 4 Sonnet improved noticeably on reasoning depth and code quality, especially for multi-step logic and long-context tracking. Pricing stayed the same, so there is no reason to stay on 3.5 if you are already paying for Sonnet. New users should start on the 4 series directly.
-
-### Pro subscription or pay-as-you-go API — which makes more sense?
-
-If you use chat for one or two hours daily, the $20/month flat plan (Claude.ai Pro or ChatGPT Plus) is the safer bet. If your workload is automation-heavy or batch-driven, the API's metered billing wins because idle hours cost nothing. Many builders end up running both: a chat subscription for daily use, and metered API access for scripts.
-
-## Closing
-
-This is not a "which model is better" question — it is a "which model fits this job" question. Claude 4 Sonnet is the model to reach for when output quality, Korean fluency, or long context is the constraint. GPT-4o is the model to reach for when speed, multimodal range, or unit economics dominate. The cleanest way to decide is to run your own week-long workload on both and look at the artifacts side by side.
-
-For the IDE-level comparison, see the Claude Code vs Cursor review linked at the top of this article. Korean readers may also find these adjacent posts useful: <Link href="/ko/blog/claude-mcp-guide">Claude MCP guide</Link>, <Link href="/ko/blog/claude-code-flutter-app-guide">Claude Code + Flutter case study</Link>, <Link href="/ko/blog/notion-ai-guide">Notion AI in real workflows</Link>, and <Link href="/ko/blog/perplexity-ai-guide">Perplexity vs Google search</Link>.
+The useful answer isn't "which model is better" but "which model fits my work." Check specs and prices in official docs, and check quality on your own tasks.

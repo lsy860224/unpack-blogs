@@ -16,7 +16,7 @@ const FOOTER_UI = {
   ko: {
     site: "사이트",
     social: "소셜",
-    copyrightTail: "실사용에 기반한 의견입니다.",
+    copyrightTail: "공식 자료와 사용 맥락에 기반한 의견입니다.",
     adsNotice:
       "이 사이트는 Google AdSense 광고와 제휴 마케팅 수익으로 운영됩니다.",
     seeDisclaimer: "자세한 내용은",
@@ -28,7 +28,7 @@ const FOOTER_UI = {
   en: {
     site: "Pages",
     social: "Social",
-    copyrightTail: "All reviews are opinions based on hands-on use.",
+    copyrightTail: "Opinions based on official sources and real-world use cases.",
     adsNotice:
       "This site is supported by Google AdSense and affiliate marketing.",
     seeDisclaimer: "See our",

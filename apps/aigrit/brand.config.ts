@@ -5,7 +5,7 @@ export const brandConfig: BrandConfig = {
   name: "AIGrit",
   tagline: "AI의 알맹이만 남긴다",
   description:
-    "AI 도구를 직접 며칠간 써보고 속도·비용·정확도를 숫자로 비교하는 한국어 리뷰 — 팔지 않고, 씁니다.",
+    "AI 도구를 공식 문서·가격·정책과 실제 쓰임새로 비교하는 한국어 가이드 — 팔지 않고, 씁니다.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://aigrit.dev",
   locale: "ko-KR",
   nav: [
@@ -20,7 +20,7 @@ export const brandConfig: BrandConfig = {
     ko: {
       tagline: "AI의 알맹이만 남긴다",
       description:
-        "AI 도구를 직접 며칠간 써보고 속도·비용·정확도를 숫자로 비교하는 한국어 리뷰 — 팔지 않고, 씁니다.",
+        "AI 도구를 공식 문서·가격·정책과 실제 쓰임새로 비교하는 한국어 가이드 — 팔지 않고, 씁니다.",
       nav: [
         { label: "홈", href: "/" },
         { label: "블로그", href: "/blog" },
@@ -32,7 +32,7 @@ export const brandConfig: BrandConfig = {
     en: {
       tagline: "AI essentials, distilled.",
       description:
-        "Hands-on AI tool reviews — we test each tool for days and compare speed, cost, and accuracy with numbers. We write, we don't sell.",
+        "Korean-language AI tool guides — compared by official docs, pricing, policy, and real use cases. We write, we don't sell.",
       nav: [
         { label: "Home", href: "/" },
         { label: "Blog", href: "/blog" },
