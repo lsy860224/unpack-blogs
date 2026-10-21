@@ -39,7 +39,8 @@ npx --no-install tsc --noEmit -p .        # 타입 체크
 
 1. `pnpm turbo run build` — 양쪽 빌드 통과
 2. `npx --no-install tsc --noEmit` — 타입 에러 0
-3. blog-core 수정 시 양쪽 사이트 로컬 확인
+3. `pnpm run check:mdx` — 예약 글 포함 전체 MDX 컴파일 (빌드는 발행된 글만 렌더링하므로 예약 글 문법 오류는 여기서만 잡힌다)
+4. blog-core 수정 시 양쪽 사이트 로컬 확인
 
 ## 자동화 (.claude/)
 

@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: MDX check (scheduled posts included)
+        run: pnpm run check:mdx
+
       - name: Typecheck
         run: pnpm turbo run typecheck
 
