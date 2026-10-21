@@ -293,6 +293,21 @@ AG_SUBTITLES = {
     "ai-cold-email-sales-automation": "Clay · Instantly와 보내기 전 법규 체크",
     "midjourney-pod-print-on-demand": "Redbubble · 마플 판매 조건과 저작권 체크",
     "replit-agent-vs-bolt": "운영까지 한 곳에서 vs 빠른 프로토타입",
+    "ai-translation-content-localization": "현지화와 hreflang 세팅",
+    "perplexity-vs-chatgpt-search-gemini": "Perplexity vs ChatGPT vs Gemini",
+    "gamma-vs-tome-vs-beautiful-ai": "Tome 종료 이후 AI 발표자료 도구",
+    "claude-discord-slack-bot": "공용 Claude 호출 + 플랫폼별 입출구",
+    "ai-social-content-calendar": "한 달치를 배치로 만드는 4단계",
+    "descript-video-podcast-editing": "팟캐스트 · 유튜브를 글처럼 편집하기",
+    "supabase-ai-saas-backend": "인증 · RLS · 타입 · 결제 웹훅",
+    "ai-data-analysis-tools-comparison": "ChatGPT vs Julius vs Claude",
+    "solo-saas-pricing-payments": "Stripe · MoR · 국내 PG, 한국 사업자 기준",
+    "ai-newsletter-automation-system": "Beehiiv · Substack · Kit + 검수 한 칸",
+    "ideogram-vs-recraft-text-image": "글자 들어간 AI 이미지 — 래스터 vs 벡터",
+    "cline-vs-roo-code": "단계별 승인 vs 역할별 모드",
+    "ai-ebook-kmong-talent-market": "제작 5단계 · 판매처 · 가격 역산",
+    "make-ai-automation-recipes": "트리거 → AI → 분기 → 출력 레시피",
+    "ai-voice-cloning-guide": "내 목소리 복제 절차와 넘으면 안 되는 선",
 }
 
 # AIGrit: shorten overly long titles for OG (title area)
@@ -353,6 +368,21 @@ AG_TITLE_OVERRIDES = {
     "ai-cold-email-sales-automation": "AI 콜드메일·세일즈 자동화",
     "midjourney-pod-print-on-demand": "Midjourney로 굿즈·POD 시작하기",
     "replit-agent-vs-bolt": "Replit Agent vs Bolt",
+    "ai-translation-content-localization": "AI 번역으로 콘텐츠 다국어화하기",
+    "perplexity-vs-chatgpt-search-gemini": "딥 리서치 비교",
+    "gamma-vs-tome-vs-beautiful-ai": "Gamma vs Beautiful.ai",
+    "claude-discord-slack-bot": "Claude로 디스코드·슬랙 봇 만들기",
+    "ai-social-content-calendar": "AI SNS 콘텐츠 캘린더 자동화",
+    "descript-video-podcast-editing": "Descript로 영상 편집 자동화",
+    "supabase-ai-saas-backend": "Supabase + AI로 SaaS 백엔드 구축",
+    "ai-data-analysis-tools-comparison": "AI 데이터 분석 도구 비교",
+    "solo-saas-pricing-payments": "1인 SaaS 가격·결제 붙이기",
+    "ai-newsletter-automation-system": "AI 뉴스레터 자동화 시스템",
+    "ideogram-vs-recraft-text-image": "Ideogram vs Recraft",
+    "cline-vs-roo-code": "Cline vs Roo Code",
+    "ai-ebook-kmong-talent-market": "AI 전자책 크몽·탈잉 판매",
+    "make-ai-automation-recipes": "Make로 AI 자동화 시나리오 10선",
+    "ai-voice-cloning-guide": "AI 음성 클로닝 가이드",
 }
 
 # babipanote: shorten overly long titles for OG if needed

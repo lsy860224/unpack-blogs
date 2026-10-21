@@ -3,7 +3,7 @@ title: "Claude로 자동화 봇 만들기 — 디스코드·슬랙 통합"
 date: "2027-04-13 09:00"
 updated: "2027-04-13 09:00"
 slug: "claude-discord-slack-bot"
-description: "Claude API로 디스코드·슬랙에 응답·요약 봇을 단계별로 만든다. 토큰 발급·이벤트 수신·Claude 호출·슬래시 커맨드까지 코드블록으로 따라 하며, 두 플랫폼 차이와 비용을 데이터로 정리했다."
+description: "Claude API로 디스코드 응답 봇과 슬랙 요약 봇을 만든다. 봇 토큰·권한 설정, 플랫폼 공용 Claude 호출 함수, discord.py·Slack Bolt 코드, 트리거 필터·레이트 리밋·호스팅 선택까지 단계별로 정리했다."
 tags: ["디스코드 AI 봇", "슬랙 봇 Claude", "Claude API", "챗봇 자동화", "AI 에이전트"]
 thumbnail: "/images/claude-discord-slack-bot/og.png"
 featured: false
@@ -16,8 +16,8 @@ cluster_role: cluster
 
 **Claude API** 하나만 있으면 디스코드와 슬랙 양쪽에 같은 봇 두뇌를 붙일 수 있다. 차이는 *두뇌*가 아니라 *입출구*다. 메시지를 받아 Claude에 넘기고 답을 돌려주는 골격은 동일하고, 디스코드는 [discord.py](https://discordpy.readthedocs.io)·[Discord.js](https://discord.js.org), 슬랙은 [Bolt](https://slack.dev/bolt-python/concepts) 라는 입출구만 갈린다. 이 글은 응답 봇과 스레드 요약 봇을 *처음부터 끝까지* 코드로 만든다.
 
-<Callout type="info" title="테스트 환경">
-  기간: 2027년 2월 16일 – 2월 22일 (7일) · 모델: claude-3-5-haiku(빠른 응답)·claude-sonnet-4(요약) · 런타임: Python 3.12, discord.py 2.4 / slack-bolt 1.21 · 호스팅: 로컬 + Fly.io 무료 티어 · 측정: 첫 응답까지 셋업 시간, 평균 응답 지연, 1,000메시지당 토큰 비용
+<Callout type="info" title="이 글의 기준">
+  런타임: Python 3.10+, discord.py 2.x, slack-bolt · Claude 호출: Anthropic Python SDK · 코드는 2026년 10월 각 라이브러리 문서 기준이며, 모델 ID와 가격은 바뀔 수 있으니 [Anthropic 모델 문서](https://docs.claude.com/en/docs/about-claude/models/overview)에서 최신 값을 확인하자. 응답 속도·비용 수치는 트래픽과 프롬프트에 따라 크게 달라 제시하지 않는다.
 </Callout>
 
 봇을 만든다고 하면 막연히 어렵게 느껴지지만, 실제 작업은 세 덩어리뿐이다. **(1) 플랫폼에서 봇 토큰 발급 → (2) 메시지 이벤트 수신 → (3) Claude 호출 후 응답.** 이 세 단계만 손에 익으면 디스코드든 슬랙이든 같은 패턴을 옮겨 붙이면 된다. Claude를 외부 도구와 연결하는 더 넓은 그림은 <Link href="/ko/blog/ai-agent-complete-guide-2026">AI 에이전트 완벽 가이드 2026</Link>에서 먼저 잡고 오면 이 글의 코드가 어디에 들어맞는지 선명해진다.
@@ -29,22 +29,22 @@ cluster_role: cluster
 | 항목 | 디스코드 봇 | 슬랙 봇 |
 |------|-----------|---------|
 | **주 라이브러리** | discord.py / Discord.js | slack-bolt(Bolt) |
-| **인증 방식** | Bot Token + Intents | Bot Token + Signing Secret |
+| **인증 방식** | Bot Token + Intents | Bot Token + App Token(Socket Mode) 또는 Signing Secret(HTTP) |
 | **이벤트 수신** | Gateway(WebSocket 상시) | Events API(HTTP) 또는 Socket Mode |
 | **슬래시 커맨드** | 앱 명령 등록 | `/command` 매핑 |
-| **셋업 난이도** | 토큰·Intent 켜면 끝 | 권한 스코프 다수 지정 |
-| **무료 호스팅 적합** | 상시 연결 필요(웹소켓) | Socket Mode면 동일, HTTP면 서버리스 가능 |
+| **설정 항목** | 토큰 발급·Intent 켜기 | 권한 스코프 여러 개 지정 |
+| **호스팅** | 상시 연결 필요 | Socket Mode면 상시, HTTP면 서버리스 가능 |
 | **주 사용처** | 커뮤니티·게임·취미 서버 | 사내 협업·업무 자동화 |
 
-두뇌는 같지만 입출구 성격이 다르다. **디스코드**는 WebSocket으로 상시 연결돼 실시간 대화에 강하고, **슬랙**은 HTTP 기반 Events API라 서버리스(Lambda·Cloud Functions)에도 잘 얹힌다. 사내 업무 자동화면 슬랙, 커뮤니티 운영이면 디스코드가 자연스럽다.
+두뇌는 같지만 입출구 성격이 다르다. **디스코드**는 Gateway(WebSocket)로 상시 연결되고, **슬랙**은 Socket Mode 또는 HTTP 기반 Events API로 이벤트를 받는다. HTTP 방식이면 서버리스 함수에도 얹을 수 있다. 사내 업무 자동화면 슬랙, 커뮤니티 운영이면 디스코드가 자연스럽다.
 
 ## 1단계 — 봇 토큰 발급과 권한
 
 어느 쪽이든 *봇 정체성*을 먼저 만든다.
 
-**디스코드**: [Discord Developer Portal](https://discord.com/developers/applications)에서 애플리케이션 생성 → Bot 탭에서 토큰 발급 → **Message Content Intent**를 켜야 본문을 읽을 수 있다(이걸 빼먹어 첫날 30분을 날렸다). OAuth2 URL로 서버에 초대한다.
+**디스코드**: [Discord Developer Portal](https://discord.com/developers/applications)에서 애플리케이션 생성 → Bot 탭에서 토큰 발급 → **Message Content Intent**를 켜야 본문을 읽을 수 있다. 가장 흔한 무응답 원인이 이 설정이다. OAuth2 URL로 서버에 초대한다.
 
-**슬랙**: [Slack API 콘솔](https://api.slack.com/apps)에서 앱 생성 → OAuth & Permissions에서 `chat:write`, `app_mentions:read`, `channels:history` 스코프 추가 → 워크스페이스에 설치하고 **Bot Token**(`xoxb-`)과 **Signing Secret**을 받는다.
+**슬랙**: [Slack API 콘솔](https://api.slack.com/apps)에서 앱 생성 → OAuth & Permissions에서 `chat:write`, `app_mentions:read`, `channels:history`, `commands` 스코프 추가 → 워크스페이스에 설치하고 **Bot Token**(`xoxb-`)을 받는다. Socket Mode를 쓰면 `connections:write` 권한의 **App-Level Token**(`xapp-`)도 만든다. HTTP 방식으로 운영할 때는 **Signing Secret**으로 요청을 검증한다.
 
 발급한 키는 코드에 박지 말고 환경변수로 둔다.
 
@@ -56,7 +56,7 @@ SLACK_BOT_TOKEN=xoxb-...
 SLACK_APP_TOKEN=xapp-...   # Socket Mode용
 ```
 
-키 관리·발급 흐름이 처음이라면 <Link href="/ko/blog/telegram-bot-chatgpt-api">텔레그램 봇 ChatGPT API 연동</Link>에서 다룬 토큰·웹훅 구조가 그대로 응용된다 — 플랫폼만 바뀌고 패턴은 동일하다.
+`.env` 파일은 `.gitignore`에 넣고, 운영 환경에서는 호스팅 서비스의 시크릿 설정으로 주입한다.
 
 ## 2단계 — Claude 호출 코어 (공용 두뇌)
 
@@ -71,7 +71,7 @@ client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 def ask_claude(prompt: str, system: str = "너는 간결한 한국어 도우미다.") -> str:
     msg = client.messages.create(
-        model="claude-3-5-haiku-latest",   # 빠른 응답용
+        model="claude-haiku-5-5",   # 빠른 응답용 — 최신 모델 ID는 공식 문서 확인
         max_tokens=600,
         system=system,
         messages=[{"role": "user", "content": prompt}],
@@ -85,7 +85,7 @@ def summarize(text: str) -> str:
     )
 ```
 
-모델은 용도로 가른다. **빠른 단답**은 `claude-3-5-haiku`로 비용·지연을 낮추고, **긴 스레드 요약**처럼 추론이 필요하면 `claude-sonnet-4`로 올린다. 모델 선택 기준 자체가 헷갈리면 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 완벽 가이드</Link>에서 도구 연결과 모델 분담을 함께 보면 정리가 된다.
+모델은 용도로 가른다. **빠른 단답**은 Haiku 계열로 비용·지연을 낮추고, **긴 스레드 요약**처럼 추론이 더 필요하면 `summarize`에서 Sonnet 계열로 바꿔 부르는 식이다. 모델별 토큰 단가는 [Anthropic 가격표](https://claude.com/pricing)에서 확인한다. Claude를 외부 도구와 연결하는 표준 방식은 <Link href="/ko/blog/claude-mcp-guide">Claude MCP 활용법</Link>에서 다뤘다.
 
 ## 3단계 — 디스코드 응답 봇
 
@@ -93,7 +93,7 @@ def summarize(text: str) -> str:
 
 ```python
 # discord_bot.py
-import os, discord
+import os, asyncio, discord
 from brain import ask_claude
 
 intents = discord.Intents.default()
@@ -107,13 +107,14 @@ async def on_message(message: discord.Message):
     if bot.user in message.mentions:     # 봇을 멘션했을 때만
         prompt = message.content.replace(f"<@{bot.user.id}>", "").strip()
         async with message.channel.typing():
-            answer = ask_claude(prompt)
-        await message.reply(answer)
+            # 동기 API 호출이 이벤트 루프를 막지 않도록 스레드에서 실행
+            answer = await asyncio.to_thread(ask_claude, prompt)
+        await message.reply(answer[:1900])  # 디스코드 메시지 길이 제한 대비
 
 bot.run(os.environ["DISCORD_BOT_TOKEN"])
 ```
 
-`typing()` 컨텍스트로 "입력 중…"을 띄우면 Claude가 답을 만드는 1~2초가 자연스럽게 메워진다. 멘션 필터를 두지 않으면 채널의 모든 메시지에 반응해 토큰이 순식간에 샌다 — 반드시 트리거 조건을 좁힌다.
+`typing()` 컨텍스트로 "입력 중…"을 띄우면 답을 기다리는 동안 사용자가 봇이 일하는 중임을 안다. Anthropic SDK의 동기 호출은 `asyncio.to_thread`로 감싸야 다른 메시지 처리가 멈추지 않는다(비동기 클라이언트 `AsyncAnthropic`을 써도 된다). 디스코드 메시지는 길이 제한(2,000자)이 있어 긴 답은 잘라 보내거나 나눠 보낸다. 멘션 필터를 두지 않으면 채널의 모든 메시지에 반응해 토큰이 빠르게 소모된다 — 반드시 트리거 조건을 좁힌다.
 
 ## 4단계 — 슬랙 요약 봇 + 슬래시 커맨드
 
@@ -139,29 +140,28 @@ def cmd_summarize(ack, command, client, say):
     history = client.conversations_history(
         channel=command["channel_id"], limit=30
     )
-    joined = "\n".join(m.get("text", "") for m in history["messages"])
+    # API는 최신 메시지부터 돌려주므로 시간 순으로 뒤집는다
+    joined = "\n".join(m.get("text", "") for m in reversed(history["messages"]))
     say(summarize(joined))
 
 SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
 ```
 
-**Socket Mode**를 쓰면 공개 URL·인증서 없이 로컬에서 바로 이벤트를 받아 개발이 빠르다. 운영 단계에서 서버리스로 옮길 땐 Events API(HTTP) 방식으로 바꿔 Lambda에 얹으면 상시 서버 비용이 0에 수렴한다.
+**Socket Mode**를 쓰면 공개 URL·인증서 없이 로컬에서 바로 이벤트를 받아 개발이 빠르다. 운영 단계에서는 Socket Mode를 그대로 상시 서버에서 돌리거나, Events API(HTTP) 방식으로 바꿔 서버리스 함수에 얹을 수 있다. 슬래시 커맨드는 3초 안에 `ack()`로 응답해야 하므로, 위 코드처럼 먼저 `ack()`를 호출하고 그다음 요약을 보낸다.
 
-## 응답 지연·비용 — 7일 실측
+## 디스코드 vs 슬랙 — 어디에 맞나
 
-![봇 응답 지연과 1,000메시지당 토큰 비용 비교 — Haiku 단답·Sonnet 요약](/images/claude-discord-slack-bot/02-scores.png)
+![디스코드 봇과 슬랙 봇 선택 기준 — 사용처, 연결 방식, 호스팅, 커맨드](/images/claude-discord-slack-bot/02-choice.png)
 
-7일간 두 봇을 돌려 본 체감을 5개 축으로 정리했다. 절대 평가가 아니라 *같은 작업에 놓고 본 상대 점수*다(5점 만점).
+| 기준 | 디스코드 봇 | 슬랙 봇 |
+|------|-----------|---------|
+| **잘 맞는 곳** | 커뮤니티·취미 서버 | 사내 협업·업무 자동화 |
+| **연결 방식** | Gateway 상시 연결 | Socket Mode 또는 HTTP Events API |
+| **호스팅** | 상시 실행 서버 | Socket Mode는 상시 서버, HTTP는 서버리스도 가능 |
+| **커맨드** | 앱 명령(슬래시) 등록 | `/command` 매핑, 3초 안에 ack |
+| **비용 관리** | 멘션 필터·레이트 리밋 | 커맨드 단위 호출로 통제 쉬움 |
 
-| 축 | 디스코드 봇 | 슬랙 봇 |
-|------|:----------:|:-------:|
-| 셋업 빠름 | 5 | 4 |
-| 실시간 응답 | 5 | 4 |
-| 업무 자동화 적합 | 3 | 5 |
-| 서버리스 호스팅 | 3 | 5 |
-| 슬래시 커맨드 UX | 4 | 5 |
-
-단답(Haiku)은 평균 0.9초, 30메시지 요약(Sonnet)은 평균 3.4초가 걸렸다. 비용은 Haiku 단답 1,000건이 대략 $0.3~0.5, Sonnet 요약 1,000건이 대략 $3~5 수준이었다 — 트래픽이 적은 개인·소규모 서버라면 사실상 무료에 가깝다. 요약 같은 고비용 작업만 Sonnet으로 분리하면 비용이 통제된다.
+비용은 호출 수 × 토큰 수로 정해진다. 빠른 단답은 가벼운 모델로, 긴 요약만 더 큰 모델로 나누고, 사용자별 호출 수를 제한하면 소규모 서버에서는 부담이 크지 않은 편이다. 실제 금액은 Anthropic 콘솔의 사용량 화면에서 확인하자.
 
 ## 봇 동작 파이프라인 — 메시지가 답이 되기까지
 
@@ -181,7 +181,7 @@ SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
 - **레이트 리밋**: 사용자별 분당 호출 수를 제한해 토큰 폭주를 막는다(간단한 in-memory 카운터로 충분)
 - **에러 핸들링**: Claude 호출을 `try/except`로 감싸 실패 시 "잠시 후 다시 시도해주세요"로 폴백
 - **컨텍스트 관리**: 대화 맥락이 필요하면 직전 N개 메시지만 messages 배열에 담아 토큰 절약
-- **상시 호스팅**: 디스코드는 웹소켓 상시 연결이라 Fly.io·Railway 같은 always-on이 맞고, 슬랙 HTTP 방식은 서버리스가 더 싸다
+- **상시 호스팅**: 디스코드는 Gateway 상시 연결이라 계속 실행되는 서버가 필요하고, 슬랙을 HTTP 방식으로 운영하면 서버리스 함수에도 얹을 수 있다
 
 봇을 자동화 파이프라인의 한 노드로 엮고 싶다면, 트리거·분기를 노코드로 처리하는 <Link href="/ko/blog/n8n-ai-agent-workflows">n8n AI 에이전트 워크플로우</Link>와 묶는 구성도 강력하다 — 코드는 Claude 호출만 남기고 나머지를 워크플로우로 뺄 수 있다.
 
@@ -190,36 +190,36 @@ SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
 <ProCon>
   <Pros>
     - 공용 `brain.py` 하나로 디스코드·슬랙 양쪽 재사용
-    - Haiku/Sonnet 모델 분담으로 비용·지연 동시 통제
+    - 가벼운 모델·큰 모델 분담으로 비용·지연 통제
     - 슬래시 커맨드·요약 등 업무 기능을 짧은 코드로 추가
   </Pros>
   <Cons>
     - Message Content Intent·권한 스코프 누락 시 무응답(디버깅 함정)
     - 트리거 필터 없으면 토큰 누수
-    - 상시 연결 봇은 무료 서버리스에 안 맞아 호스팅 비용 발생
+    - 상시 연결 봇은 서버리스에 맞지 않아 상시 서버가 필요
   </Cons>
 </ProCon>
 
-디스코드든 슬랙이든 봇의 *두뇌*는 Claude 호출 함수 하나다. 나머지는 메시지를 받아 그 함수에 넘기고 답을 돌려주는 입출구의 차이일 뿐이다. **커뮤니티·실시간이면 디스코드, 사내 업무·서버리스면 슬랙**으로 시작하고, 도구 연결이 필요해지면 에이전트로 키우면 된다. 더 넓은 도구 지형은 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 완벽 가이드</Link>에서 한눈에 확인할 수 있다.
+디스코드든 슬랙이든 봇의 *두뇌*는 Claude 호출 함수 하나다. 나머지는 메시지를 받아 그 함수에 넘기고 답을 돌려주는 입출구의 차이일 뿐이다. **커뮤니티·실시간이면 디스코드, 사내 업무·서버리스면 슬랙**으로 시작하고, 도구 연결이 필요해지면 에이전트로 키우면 된다. 더 넓은 도구 지형은 <Link href="/ko/blog/ai-tools-2026-guide">2026 AI 도구 가이드</Link>에서 볼 수 있다.
 
 ## 자주 묻는 질문 (FAQ)
 
 ### 디스코드 봇이 메시지에 응답하지 않는데 왜 그런가요?
 
-대부분 **Message Content Intent**가 꺼져 있어서다. Discord Developer Portal의 Bot 탭에서 이 Intent를 켜고, 코드에서도 `intents.message_content = True`로 활성화해야 본문을 읽을 수 있다. 그래도 안 되면 봇이 채널을 볼 권한이 있는지, 봇 자신의 메시지를 무시하는 필터가 정상인지 확인한다.
+가장 흔한 원인은 **Message Content Intent**가 꺼져 있는 경우입니다. Discord Developer Portal의 Bot 탭에서 이 Intent를 켜고, 코드에서도 `intents.message_content = True`로 활성화해야 본문을 읽을 수 있습니다. 그래도 안 되면 봇이 채널을 볼 권한이 있는지, 멘션 필터 조건이 맞는지 확인하세요.
 
 ### 슬랙 봇과 디스코드 봇 중 무엇부터 만드는 게 쉬운가요?
 
-순수 셋업 속도는 디스코드가 약간 빠르다. 토큰 발급 후 Intent 하나만 켜면 바로 메시지를 받는다. 슬랙은 권한 스코프를 여러 개 지정해야 해 첫 설정이 조금 길지만, Socket Mode를 쓰면 공개 URL 없이 로컬에서 바로 개발할 수 있어 실제 체감 난이도는 비슷하다. 사내 업무가 목적이면 슬랙부터가 합리적이다.
+디스코드는 봇 토큰 발급 후 Intent를 켜면 바로 메시지를 받을 수 있어 설정 항목이 적습니다. 슬랙은 권한 스코프를 여러 개 지정해야 하지만, Socket Mode를 쓰면 공개 URL 없이 로컬에서 바로 개발할 수 있습니다. 쓰려는 곳이 커뮤니티인지 사내 업무인지로 고르는 편이 합리적입니다.
 
 ### Claude API 봇 운영 비용은 얼마나 드나요?
 
-트래픽이 적으면 사실상 무료에 가깝다. 7일 테스트에서 Haiku 단답 1,000건이 대략 $0.3~0.5, Sonnet 요약 1,000건이 대략 $3~5였다. 빠른 단답은 저렴한 Haiku로, 비용이 큰 요약·분석만 Sonnet으로 분리하면 월 수천 건 규모도 몇 달러 안에서 운영된다. 레이트 리밋을 걸어 폭주만 막으면 된다.
+비용은 호출 수와 입력·출력 토큰 수로 정해지고, 모델마다 토큰 단가가 다릅니다. 빠른 단답은 가벼운 모델로, 긴 요약만 큰 모델로 나누고, 대화 맥락은 직전 몇 개 메시지만 넣으면 비용을 줄일 수 있습니다. 사용자별 레이트 리밋을 걸고, Anthropic 콘솔에서 사용량을 주기적으로 확인하세요.
 
 ### 봇을 24시간 돌리려면 어디에 호스팅해야 하나요?
 
-디스코드는 웹소켓 상시 연결이 필요해 Fly.io·Railway 같은 always-on 호스팅이 맞다. 슬랙은 Events API(HTTP) 방식이면 AWS Lambda·Cloud Functions 같은 서버리스에 얹어 상시 서버 비용을 0에 가깝게 줄일 수 있다. 개발·테스트 단계는 로컬이나 무료 티어로 충분하고, 트래픽이 늘면 옮기면 된다.
+디스코드 봇은 Gateway에 상시 연결돼야 하므로 계속 실행되는 서버(컨테이너·VPS 등)가 필요합니다. 슬랙은 Socket Mode면 마찬가지로 상시 실행이 필요하고, Events API(HTTP) 방식이면 서버리스 함수에도 얹을 수 있습니다. 개발 단계는 로컬에서 충분하고, 운영할 때 시크릿 관리가 되는 호스팅으로 옮기세요.
 
 ## 마무리
 
-Claude로 디스코드·슬랙 봇을 만드는 핵심은 *두뇌를 한 번만 만들고 입출구를 갈아 끼우는 것*이다. `brain.py`의 `ask_claude` 하나를 두 플랫폼이 공유하고, 디스코드는 멘션, 슬랙은 슬래시 커맨드로 호출만 다르게 연결했다. 응답 봇에서 시작해 도구·메모리를 붙이면 그대로 에이전트가 된다. 그 설계를 SDK 레벨로 끌어올리는 다음 단계는 <Link href="/ko/blog/claude-projects-vs-chatgpt-gpts">Claude Projects vs ChatGPT GPTs</Link>처럼 코드 없는 봇 구성과 비교해 보면 어디까지 코드로 갈지 기준이 잡힌다.
+Claude로 디스코드·슬랙 봇을 만드는 핵심은 *두뇌를 한 번만 만들고 입출구를 갈아 끼우는 것*이다. `brain.py`의 `ask_claude` 하나를 두 플랫폼이 공유하고, 디스코드는 멘션, 슬랙은 슬래시 커맨드로 호출만 다르게 연결했다. 응답 봇에서 시작해 도구·메모리를 붙이면 그대로 에이전트가 된다. 코드 없이 맞춤 어시스턴트를 만드는 방법과 비교해 보고 싶다면 <Link href="/ko/blog/claude-projects-vs-chatgpt-gpts">Claude Projects vs ChatGPT GPTs</Link>를 보자.
